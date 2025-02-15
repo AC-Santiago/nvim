@@ -100,45 +100,15 @@ lspconfig.lua_ls.setup({
 })
 
 -- Configuracion para python
-lspconfig.ruff.setup({
-    on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        client.server_capabilities.hoverProvider = false -- Desactiva hover en Ruff
-    end,
-    trace = "messages",
-    init_options = {
-        settings = {
-            logLevel = "warn",
-            lint = {
-                preview = true,
-            },
-            format = {
-                preview = true,
-            },
-        },
-    },
-})
-
 lspconfig.pyright.setup({
-    on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        client.server_capabilities.codeActionProvider = false
-    end,
-    handlers = {
-        ["textDocument/publishDiagnostics"] = function() end,
-    },
+    on_attach = on_attach,
+    on_init = on_init,
+    capabilities = capabilities,
+
     settings = {
-        pyright = {
-            -- Using Ruff's import organizer
-            disableOrganizeImports = true,
-        },
         python = {
             analysis = {
-                -- Ignore all files for analysis to exclusively use Ruff for linting
-                ignore = { "*" },
-                useLibraryCodeForTypes = true,
-                autoSearchPaths = true,
-                typeCheckingMode = "basic",
+                typeCheckingMode = "off", -- Disable type checking diagnostics
             },
         },
     },

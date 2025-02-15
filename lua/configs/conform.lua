@@ -5,7 +5,7 @@ local options = {
         -- cpp = { "clang-format" },
         -- go = { "gofumpt", "goimports-reviser", "golines" },
         -- haskell = { "fourmolu", "stylish-haskell" },
-        python = { "ruff" },
+        python = { "black" },
     },
 
     formatters = {
@@ -39,13 +39,13 @@ local options = {
         --     },
         -- },
         -- -- Python
-        -- black = {
-        --     prepend_args = {
-        --         "--fast",
-        --         "--line-length",
-        --         "80",
-        --     },
-        -- },
+        black = {
+            prepend_args = {
+                "--fast",
+                "--line-length",
+                "80",
+            },
+        },
         -- isort = {
         --     prepend_args = {
         --         "--profile",
