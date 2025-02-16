@@ -4,6 +4,17 @@
 ---@type ChadrcConfig
 local M = {}
 
+local api = vim.api
+local getNeoTreeWidth = function()
+    for _, win in pairs(api.nvim_tabpage_list_wins(0)) do
+        if vim.bo[api.nvim_win_get_buf(win)].ft == "neo-tree" then
+            -- print(api.nvim_get_color_by_name(win))
+            return api.nvim_win_get_width(win)
+        end
+    end
+    return 0
+end
+
 M.base46 = {
     theme = "catppuccin",
 
@@ -13,4 +24,26 @@ M.base46 = {
     -- },
 }
 
+M.ui = {
+    telescope = {
+        style = "bordered",
+    },
+    tabufline = {
+
+        order = {
+            "neotreeOffset",
+            "treeOffset",
+            "buffers",
+            "tabs",
+            "btns",
+        },
+        modules = {
+            neotreeOffset = function()
+                local w = getNeoTreeWidth()
+                return w == 0 and ""
+                    or "%#NeoTreeTabActive#" .. string.rep(" ", w) .. "%#NvimTreeWinSeparator#" .. "│"
+            end,
+        },
+    },
+}
 return M

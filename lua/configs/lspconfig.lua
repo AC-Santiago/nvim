@@ -29,50 +29,6 @@ for _, lsp in ipairs(default_servers) do
     })
 end
 
--- lspconfig.clangd.setup({
---     on_attach = function(client, bufnr)
---         client.server_capabilities.documentFormattingProvider = false
---         client.server_capabilities.documentRangeFormattingProvider = false
---         on_attach(client, bufnr)
---     end,
---     on_init = on_init,
---     capabilities = capabilities,
--- })
-
--- lspconfig.gopls.setup({
---     on_attach = function(client, bufnr)
---         client.server_capabilities.documentFormattingProvider = false
---         client.server_capabilities.documentRangeFormattingProvider = false
---         on_attach(client, bufnr)
---     end,
---     on_init = on_init,
---     capabilities = capabilities,
---     cmd = { "gopls" },
---     filetypes = { "go", "gomod", "gotmpl", "gowork" },
---     root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
---     settings = {
---         gopls = {
---             analyses = {
---                 unusedparams = true,
---             },
---             completeUnimported = true,
---             usePlaceholders = true,
---             staticcheck = true,
---         },
---     },
--- })
-
--- lspconfig.hls.setup({
---     on_attach = function(client, bufnr)
---         client.server_capabilities.documentFormattingProvider = false
---         client.server_capabilities.documentRangeFormattingProvider = false
---         on_attach(client, bufnr)
---     end,
---
---     on_init = on_init,
---     capabilities = capabilities,
--- })
-
 lspconfig.lua_ls.setup({
     on_attach = on_attach,
     on_init = on_init,
@@ -100,6 +56,26 @@ lspconfig.lua_ls.setup({
 })
 
 -- Configuracion para python
+--
+lspconfig.ruff.setup({
+    on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        client.server_capabilities.hoverProvider = false -- Desactiva hover en Ruff
+    end,
+    trace = "messages",
+    init_options = {
+        settings = {
+            logLevel = "warn",
+            lint = {
+                preview = true,
+            },
+            format = {
+                preview = true,
+            },
+        },
+    },
+})
+
 lspconfig.pyright.setup({
     on_attach = on_attach,
     on_init = on_init,

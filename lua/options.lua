@@ -11,3 +11,6 @@ o.softtabstop = 4
 
 -- set filetype for .CBL COBOL files.
 -- vim.cmd([[ au BufRead,BufNewFile *.CBL set filetype=cobol ]])
+
+o.relativenumber = true
+o.termguicolors = true
