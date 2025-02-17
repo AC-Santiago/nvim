@@ -3,7 +3,6 @@ return {
     event = "VeryLazy",
     dependencies = {
         {
-
             -- snippet plugin
             "L3MON4D3/LuaSnip",
             dependencies = "rafamadriz/friendly-snippets",
@@ -57,6 +56,15 @@ return {
                         },
                     }),
                 })
+            end,
+        },
+        {
+            "zbirenbaum/copilot-cmp",
+            dependecies = "copilot.lua",
+            event = { "InsertEnter" },
+            fix_pairs = true,
+            config = function()
+                require("copilot_cmp").setup()
             end,
         },
 
