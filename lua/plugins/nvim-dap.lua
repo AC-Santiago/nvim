@@ -1,5 +1,8 @@
 local M = {
     "mfussenegger/nvim-dap",
+    event = {
+        "VeryLazy",
+    },
 
     dependencies = {
         -- Este muestra en el debug el contenido de la variable

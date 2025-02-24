@@ -1,6 +1,6 @@
 return {
     "hrsh7th/nvim-cmp",
-    event = "VeryLazy",
+    event = { "InsertEnter", "InsertLeave" },
     dependencies = {
         {
             -- snippet plugin
@@ -60,11 +60,22 @@ return {
         },
         {
             "zbirenbaum/copilot-cmp",
-            dependecies = "copilot.lua",
-            event = { "InsertEnter" },
+            dependecies = { "zbirenbaum/copilot.lua" },
+            event = { "InsertEnter", "LspAttach" },
             fix_pairs = true,
             config = function()
                 require("copilot_cmp").setup()
+                local cmp = require("cmp")
+                cmp.setup.buffer({
+                    sources = cmp.config.sources({
+                        { name = "copilot" },
+                        { name = "nvim_lsp" },
+                        { name = "luasnip" },
+                        { name = "buffer" },
+                        { name = "nvim_lua" },
+                        { name = "path" },
+                    }),
+                })
             end,
         },
 

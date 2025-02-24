@@ -8,7 +8,6 @@ local api = vim.api
 local getNeoTreeWidth = function()
     for _, win in pairs(api.nvim_tabpage_list_wins(0)) do
         if vim.bo[api.nvim_win_get_buf(win)].ft == "neo-tree" then
-            -- print(api.nvim_get_color_by_name(win))
             return api.nvim_win_get_width(win)
         end
     end
@@ -45,5 +44,9 @@ M.ui = {
             end,
         },
     },
+}
+
+M.ui.cmp = {
+    style = "atom_colored",
 }
 return M
