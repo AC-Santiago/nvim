@@ -58,26 +58,26 @@ return {
                 })
             end,
         },
-        {
-            "zbirenbaum/copilot-cmp",
-            dependecies = { "zbirenbaum/copilot.lua" },
-            event = { "InsertEnter", "LspAttach" },
-            fix_pairs = true,
-            config = function()
-                require("copilot_cmp").setup()
-                local cmp = require("cmp")
-                cmp.setup.buffer({
-                    sources = cmp.config.sources({
-                        { name = "copilot" },
-                        { name = "nvim_lsp" },
-                        { name = "luasnip" },
-                        { name = "buffer" },
-                        { name = "nvim_lua" },
-                        { name = "path" },
-                    }),
-                })
-            end,
-        },
+        -- {
+        --     "zbirenbaum/copilot-cmp",
+        --     dependecies = { "zbirenbaum/copilot.lua" },
+        --     event = { "InsertEnter", "LspAttach" },
+        --     fix_pairs = true,
+        --     config = function()
+        --         require("copilot_cmp").setup()
+        --         local cmp = require("cmp")
+        --         cmp.setup.buffer({
+        --             sources = cmp.config.sources({
+        --                 { name = "copilot", group = 1, priority = 100 },
+        --                 { name = "nvim_lsp" },
+        --                 { name = "luasnip" },
+        --                 { name = "buffer" },
+        --                 { name = "nvim_lua" },
+        --                 { name = "path" },
+        --             }),
+        --         })
+        --     end,
+        -- },
 
         -- cmp sources plugins
         {
