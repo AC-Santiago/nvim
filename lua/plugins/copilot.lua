@@ -12,8 +12,8 @@ M.opts = {
         markdown = true,
         ["*"] = false,
     },
-    panel = { enabled = true },
-    suggestion = { enabled = true },
+    panel = { enabled = false },
+    suggestion = { enabled = false },
 }
 
 return M

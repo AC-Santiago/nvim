@@ -58,27 +58,21 @@ return {
                 })
             end,
         },
-        -- {
-        --     "zbirenbaum/copilot-cmp",
-        --     dependecies = { "zbirenbaum/copilot.lua" },
-        --     event = { "InsertEnter", "LspAttach" },
-        --     fix_pairs = true,
-        --     config = function()
-        --         require("copilot_cmp").setup()
-        --         local cmp = require("cmp")
-        --         cmp.setup.buffer({
-        --             sources = cmp.config.sources({
-        --                 { name = "copilot", group = 1, priority = 100 },
-        --                 { name = "nvim_lsp" },
-        --                 { name = "luasnip" },
-        --                 { name = "buffer" },
-        --                 { name = "nvim_lua" },
-        --                 { name = "path" },
-        --             }),
-        --         })
-        --     end,
-        -- },
-
+        {
+            "zbirenbaum/copilot-cmp",
+            dependencies = {
+                "zbirenbaum/copilot.lua",
+                config = function()
+                    require("copilot").setup({
+                        suggestion = { enabled = false },
+                        panel = { enabled = false },
+                    })
+                end,
+            },
+            config = function()
+                require("copilot_cmp").setup()
+            end,
+        },
         -- cmp sources plugins
         {
             "saadparwaiz1/cmp_luasnip",
@@ -90,6 +84,12 @@ return {
         },
     },
     opts = function()
-        return require("nvchad.configs.cmp")
+        local base = require("nvchad.configs.cmp")
+        local custom = require("custom.configs.cmp")
+
+        base.sources = custom.sources
+        base.sorting = custom.sorting
+
+        return base
     end,
 }
