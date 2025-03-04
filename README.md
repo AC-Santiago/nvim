@@ -1,6 +1,6 @@
 # Configuración Personal de Neovim
 
-Esta es mi configuración personal de Neovim optimizada para desarrollo en Linux. Esta configuración esta basado en la configuración de NvChad junto a la modificación  de ProgrammingRainbow, solo ha sido porbada en Fedora.
+Esta es mi configuración personal de Neovim optimizada para desarrollo en Linux. Esta configuración esta basado en la configuración de NvChad junto a la modificación  de ProgrammingRainbow, solo ha sido probada en Fedora.
 
 ## Requisitos Previos
 
