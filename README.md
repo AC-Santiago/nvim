@@ -20,13 +20,13 @@ Antes de comenzar, asegúrate de tener instalado:
 
 ```bash
 sudo dnf install -y neovim git nodejs npm python3-pip gcc make ripgrep fd-find
-
+```
 ## Instalación
 
 1. Clona este repositorio en tu directorio de configuración de Neovim:
 
 ```bash
-git clone https://github.com/TU_USUARIO/nvim-config.git ~/.config/nvim
+git clone https://github.com/AC-Santiago/nvim.git ~/.config/nvim
 ```
 
 2. La primera vez que abras Neovim, el gestor de plugins Lazy.nvim se instalará automáticamente y comenzará a instalar todos los plugins configurados.
@@ -90,7 +90,3 @@ Si encuentras algún problema:
 ## Contribuciones
 
 Las contribuciones son bienvenidas. Por favor, siente libre de hacer un fork y enviar pull requests.
-
-## Licencia
-
-Este proyecto está bajo la licencia MIT.
