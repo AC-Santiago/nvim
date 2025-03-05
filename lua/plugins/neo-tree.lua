@@ -22,7 +22,7 @@ return {
             },
         },
         keys = {
-            { "<localleader>e", ":Neotree toggle<CR>", { noremap = true, silent = true, desc = ":Neotree toggle" } },
+            { "<localleader>e", "<cmd>Neotree toggle<CR>", { noremap = true, silent = true, desc = "Toggle Neotree" } },
         },
     },
 }

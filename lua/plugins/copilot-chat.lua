@@ -42,7 +42,7 @@ return {
                 question_header = "  " .. user .. " ",
                 answer_header = "  Copilot ",
                 window = {
-                    layout = "float",
+                    width = 0.4,
                 },
             }
         end,

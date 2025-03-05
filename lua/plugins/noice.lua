@@ -8,6 +8,20 @@ return {
                 ["vim.lsp.util.stylize_markdown"] = true,
                 ["cmp.entry.get_documentation"] = true,
             },
+            signature = {
+                enabled = false,
+            },
+            hover = {
+                enabled = true,
+                silent = true,
+                view = nil,
+                opts = {
+                    size = {
+                        max_height = 15,
+                        max_width = 80,
+                    },
+                },
+            },
         },
         routes = {
             {
@@ -17,6 +31,7 @@ return {
                         { find = "%d+L, %d+B" },
                         { find = "; after #%d+" },
                         { find = "; before #%d+" },
+                        { find = "No signature help available" },
                     },
                 },
                 view = "mini",
@@ -26,6 +41,24 @@ return {
             bottom_search = true,
             command_palette = true,
             long_message_to_split = true,
+            inc_rename = false,
+            lsp_doc_border = true,
+        },
+        views = {
+            hover = {
+                border = {
+                    style = "rounded",
+                },
+                size = {
+                    max_height = 15,
+                    max_width = 80,
+                },
+            },
+            mini = {
+                win_options = {
+                    winblend = 0,
+                },
+            },
         },
     },
   -- stylua: ignore
@@ -41,9 +74,6 @@ return {
     { "<c-b>", function() if not require("noice.lsp").scroll(-4) then return "<c-b>" end end, silent = true, expr = true, desc = "Scroll Backward", mode = {"i", "n", "s"}},
   },
     config = function(_, opts)
-        -- HACK: noice shows messages from before it was enabled,
-        -- but this is not ideal when Lazy is installing plugins,
-        -- so clear the messages in this case.
         if vim.o.filetype == "lazy" then
             vim.cmd([[messages clear]])
         end
