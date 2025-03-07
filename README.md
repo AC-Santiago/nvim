@@ -22,6 +22,13 @@ Antes de comenzar, asegúrate de tener instalado:
 ```bash
 sudo dnf install -y neovim python3-neovim git nodejs npm python3-pip gcc make ripgrep fd-find luarocks
 ```
+
+### Instalación de Dependencias en Arch
+
+```bash
+sudo pacman -S --needed neovim python-pynvim unzip luarocks xclip wl-clipboard
+```
+
 ## Instalación
 
 1. Clona este repositorio en tu directorio de configuración de Neovim:
@@ -63,21 +70,39 @@ nvim
 
 Puedes personalizar la configuración editando los archivos en `~/.config/nvim/lua/`:
 
+- `chadrc.lua` - Configuraciones visuales
 - `options.lua` - Configuraciones generales de Neovim
 - `mappings.lua` - Atajos de teclado personalizados
-- `plugins/` - Configuraciones específicas de plugins
+- `plugins/` - Configuraciones específicas o sencillas de plugins
+- `configs/` - Configuraciones adicionales de los plugins
 
 ## Estructura del Proyecto
 
 ```
 ~/.config/nvim/
 ├── init.lua
-├── lua/
-│   ├── options.lua
-│   ├── mappings.lua
-│   └── plugins/
-│       ├── avante.lua
-│       └── ...
+├── lazy-lock.json
+├── LICENSE
+├── lua
+│   ├── chadrc.lua
+│   ├── configs
+│   │   ├── conform.lua
+│   │   ├── DAP
+│   │   │   ├── init.lua
+│   │   │   └── lang
+│   │   │       ├── python.lua
+│   │   │       └── ...
+│   │   ├── lazy.lua
+│   │   └── ...
+│   ├── custom
+│   │   └── configs
+│   │       └── ...
+│   ├── mappings.lua
+│   ├── options.lua
+│   └── plugins
+│       ├── init.lua
+│       └── ...
+└── README.md
 ```
 
 ## Solución de Problemas
