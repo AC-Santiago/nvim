@@ -20,7 +20,7 @@ Antes de comenzar, asegúrate de tener instalado:
 ### Instalación de Dependencias en Fedora
 
 ```bash
-sudo dnf install -y neovim python3-neovim git nodejs npm python3-pip gcc make ripgrep fd-find luarocks
+sudo dnf install -y python3-neovim git nodejs npm python3-pip gcc make ripgrep fd-find luarocks
 ```
 
 ### Instalación de Dependencias en Arch
