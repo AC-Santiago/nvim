@@ -55,16 +55,15 @@ nvim
 - 🎨 Resaltado de sintaxis mejorado
 - 📝 Autocompletado inteligente con nvim-cmp
 
-## Atajos de Teclado Principales
+## Atajos de Teclado
 
-### General
+Para ver una lista completa de todos los atajos de teclado disponibles, consulta [KEYBINDINGS.md](KEYBINDINGS.md).
+
+Algunos atajos importantes:
 - `<Space>` es la tecla líder
 
-### IA Assistant (Avante)
 - `<leader>ac` - Iniciar chat con IA
-- `<leader>ae` - Editar con IA
-- `<leader>ai` - Chat en línea con IA
-- `<leader>ax` - Explicar código con IA
+- `<leader>ff` - Buscar archivos
 
 ## Personalización
 
