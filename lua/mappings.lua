@@ -29,6 +29,10 @@ end, { desc = "general format file" })
 
 -- global lsp mappings
 map("n", "<leader>ds", vim.diagnostic.setloclist, { desc = "LSP diagnostic loclist" })
+map({ "v", "n" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "LSP code action" })
+map("n", "gr", vim.lsp.buf.references, { desc = "LSP references" })
+map("n", "gi", vim.lsp.buf.implementation, { desc = "LSP implementation" })
+map("n", "<leader>sh", vim.lsp.buf.signature_help, { desc = "LSP signature help" })
 
 -- tabufline
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })

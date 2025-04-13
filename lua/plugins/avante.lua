@@ -129,7 +129,7 @@ return {
                     prompt_for_file_name = false,
                     drag_and_drop = {
                         enabled = false,
-                        insert_mode = true,
+                        insert_mode = false,
                     },
                     -- required for Windows users
                     use_absolute_path = true,
