@@ -22,6 +22,9 @@ local options = {
         "vim",
         "vimdoc",
         "yaml",
+
+        "rust",
+        "ron",
     },
 
     highlight = {

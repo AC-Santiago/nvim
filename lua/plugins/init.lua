@@ -1,5 +1,4 @@
 return {
-
     {
         "nvim-treesitter/nvim-treesitter",
         event = { "BufReadPre", "BufNewFile" },
@@ -48,5 +47,8 @@ return {
         config = function()
             require("configs.mason-dap")
         end,
+
+        { import = "plugins.lang.rust" },
+        { import = "plugins.lang.python" },
     },
 }
