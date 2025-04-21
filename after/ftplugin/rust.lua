@@ -46,11 +46,11 @@ vim.keymap.set("n", "<localleader>rj", function()
 end, { silent = true, buffer = bufnr, desc = "Join lines" })
 
 vim.keymap.set("n", "<localleader>rd", function()
-    vim.cmd.RustLsp("renderDiagnostic")
+    vim.cmd.RustLsp({ "renderDiagnostic", "current" })
 end, { silent = true, buffer = bufnr, desc = "Render diagnostic" })
 
 vim.keymap.set("n", "<localleader>ree", function()
-    vim.cmd.RustLsp("explainError")
+    vim.cmd.RustLsp({ "explainError", "current" })
 end, { silent = true, buffer = bufnr, desc = "Explain error" })
 
 -- Documentation
