@@ -14,7 +14,7 @@ local function table_contains(table, value)
 end
 
 -- Build a list of lsp servers to install minus the ignored list.
-local all_servers = {}
+local all_servers = { "rust_analyzer" }
 for _, s in ipairs(lspconfig.servers) do
     if not table_contains(ignore_install, s) then
         table.insert(all_servers, s)
