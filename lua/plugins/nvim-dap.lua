@@ -1,22 +1,5 @@
 local M = {
     "mfussenegger/nvim-dap",
-    event = {
-        "VeryLazy",
-    },
-
-    dependencies = {
-        -- Este muestra en el debug el contenido de la variable
-        "theHamsta/nvim-dap-virtual-text",
-
-        -- Interfaz de usuario del DAP
-        "rcarriga/nvim-dap-ui",
-        "nvim-telescope/telescope-dap.nvim", -- Integracion de Telescope
-        -- Para trabajos asincronicos como APIs
-        "nvim-neotest/nvim-nio",
-
-        -- Integracion de CMP para DAP
-        "rcarriga/cmp-dap",
-    },
     -- stylua: ignore
     keys = {
         { "<localleader>d",  "",desc = "+debug",mode = { "n", "v" } },
@@ -38,6 +21,20 @@ local M = {
         { "<localleader>dt", function() require("dap").terminate() end,desc = "Terminate" },
         { "<localleader>dw", function() require("dap.ui.widgets").hover() end,desc = "Widgets" },
     },
+    dependencies = {
+        -- Este muestra en el debug el contenido de la variable
+        "theHamsta/nvim-dap-virtual-text",
+
+        -- Interfaz de usuario del DAP
+        "rcarriga/nvim-dap-ui",
+        "nvim-telescope/telescope-dap.nvim", -- Integracion de Telescope
+        -- Para trabajos asincronicos como APIs
+        "nvim-neotest/nvim-nio",
+
+        -- Integracion de CMP para DAP
+        "rcarriga/cmp-dap",
+    },
+
     config = function()
         require("configs.DAP")
         local ok_telescope, telescope = pcall(require, "telescope")
