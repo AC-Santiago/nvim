@@ -1,7 +1,13 @@
 return {
     "yetone/avante.nvim",
-    event = "VeryLazy",
     version = false, -- set this if you want to always pull the latest change
+    event = { "VeryLazy" },
+    keys = {
+        { "<leader>ac", "<cmd>AvanteChat<cr>", desc = "Chat with AI" },
+        { "<leader>ae", "<cmd>AvanteEdit<cr>", desc = "Edit with AI" },
+        { "<leader>ai", "<cmd>AvanteInlineChat<cr>", desc = "Inline AI Chat" },
+        { "<leader>ax", "<cmd>AvanteExplain<cr>", desc = "Explain with AI" },
+    },
     cmd = {
         "AvanteAsk",
         "AvanteChat",
@@ -10,12 +16,6 @@ return {
         "AvanteExplain",
         "AvanteInlineChat",
         "AvanteToggle",
-    },
-    keys = {
-        { "<leader>ac", "<cmd>AvanteChat<cr>", desc = "Chat with AI" },
-        { "<leader>ae", "<cmd>AvanteEdit<cr>", desc = "Edit with AI" },
-        { "<leader>ai", "<cmd>AvanteInlineChat<cr>", desc = "Inline AI Chat" },
-        { "<leader>ax", "<cmd>AvanteExplain<cr>", desc = "Explain with AI" },
     },
     opts = {
         ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
