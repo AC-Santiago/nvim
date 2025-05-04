@@ -15,6 +15,7 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
+    transparency = true,
     theme = "catppuccin",
 
     -- hl_override = {
@@ -39,7 +40,7 @@ M.ui = {
         modules = {
             neotreeOffset = function()
                 local w = getNeoTreeWidth()
-                return w == 0 and "" or "%#NeoTreeNormal#" .. string.rep(" ", w) .. "%#NvimTreeWinSeparator#" .. "│"
+                return w == 0 and "" or "%#NeoTreeNormal#" .. string.rep(" ", w) .. "%#NeoTreeWinSeparator#" .. "│"
             end,
         },
     },
