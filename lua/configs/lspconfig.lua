@@ -6,19 +6,16 @@ local lspconfig = require("lspconfig")
 
 -- list of all servers configured.
 lspconfig.servers = {
+    -- Lua
     "lua_ls",
-    -- "clangd",
-    -- "gopls",
-    -- "hls",
-    -- "ols",
+    -- Python
     "pyright",
+    --Typst
+    "tinymist",
 }
 
 -- list of servers configured with default config.
-local default_servers = {
-    -- "ols",
-    -- "pyright",
-}
+local default_servers = {}
 
 -- lsps with default config
 for _, lsp in ipairs(default_servers) do
@@ -88,4 +85,46 @@ lspconfig.pyright.setup({
             },
         },
     },
+})
+
+lspconfig.tinymist.setup({
+    on_attach = on_attach,
+    on_init = on_init,
+    capabilities = capabilities,
+    settings = {
+        systemFonts = true,
+
+        semanticTokens = "enable",
+        formatterMode = "typstyle",
+        formatterPrintWidth = 120,
+        formatterIndentSize = 2,
+
+        completion = {
+            triggerOnSnippetPlaceholders = true,
+            symbol = "stepless",
+            postfix = true,
+            postfixUfcs = true,
+            postfixUfcsLeft = true,
+            postfixUfcsRight = true,
+        },
+
+        preview = {
+            browsing = {
+                args = {
+                    "--data-plane-host=127.0.0.1:0",
+                    "--invert-colors=auto",
+                    "--open",
+                },
+            },
+            background = {
+                enabled = false,
+            },
+        },
+
+        typstExtraArgs = {},
+
+        compileStatus = "disable",
+    },
+
+    filetypes = { "typst" },
 })

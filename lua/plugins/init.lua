@@ -49,6 +49,7 @@ return {
         end,
 
         { import = "plugins.lang.rust" },
+        { import = "plugins.lang.typst" },
         { import = "plugins.lang.python" },
     },
 }

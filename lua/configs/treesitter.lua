@@ -25,6 +25,7 @@ local options = {
 
         "rust",
         "ron",
+        "typst",
     },
 
     highlight = {
