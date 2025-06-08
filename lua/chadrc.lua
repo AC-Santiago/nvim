@@ -39,8 +39,7 @@ M.ui = {
         modules = {
             neotreeOffset = function()
                 local w = getNeoTreeWidth()
-                return w == 0 and ""
-                    or "%#NeoTreeTabActive#" .. string.rep(" ", w) .. "%#NvimTreeWinSeparator#" .. "│"
+                return w == 0 and "" or "%#NeoTreeTabActive#" .. string.rep(" ", w) .. "%#NeoTreeWinSeparator#" .. "│"
             end,
         },
     },
