@@ -15,7 +15,7 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "catppuccin",
+    theme = "tokyonight",
 
     -- hl_override = {
     -- 	Comment = { italic = true },

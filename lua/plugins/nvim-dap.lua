@@ -13,9 +13,6 @@ local M = {
         "nvim-telescope/telescope-dap.nvim", -- Integracion de Telescope
         -- Para trabajos asincronicos como APIs
         "nvim-neotest/nvim-nio",
-
-        -- Integracion de CMP para DAP
-        "rcarriga/cmp-dap",
     },
     -- stylua: ignore
     keys = {
@@ -43,17 +40,6 @@ local M = {
         local ok_telescope, telescope = pcall(require, "telescope")
         if ok_telescope then
             telescope.load_extension("dap")
-        end
-
-        local ok_cmp, cmp = pcall(require, "cmp")
-        if ok_cmp then
-            cmp.setup.filetype({ "dap-repl", "dapui_watches" }, {
-                sources = cmp.config.sources({
-                    { name = "dap" },
-                }, {
-                    { name = "buffer" },
-                }),
-            })
         end
     end,
 }

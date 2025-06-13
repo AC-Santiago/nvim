@@ -47,9 +47,9 @@ return {
         config = function()
             require("configs.mason-dap")
         end,
-
-        { import = "plugins.lang.rust" },
-        { import = "plugins.lang.python" },
-        { import = "plugins.lang.typst" },
     },
+    { import = "plugins.lang.rust" },
+    { import = "plugins.lang.python" },
+    { import = "plugins.lang.typst" },
+    { import = "plugins.blink" },
 }
