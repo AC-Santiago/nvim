@@ -131,8 +131,15 @@ end, { desc = "whichkey query lookup" })
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
--- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
--- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
-
 map({ "n", "v" }, "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
 map({ "n", "v" }, "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
+
+-- Minty Color Picker
+map("n", "<leader>cp", function()
+    require("plenary.reload").reload_module("minty.huefy")
+    require("minty.huefy").open()
+end, { desc = "Minty Color Picker" })
+
+map("n", "<localleader>cp", function()
+    require("minty.shades").open()
+end, { desc = "Minty save_color" })
