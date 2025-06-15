@@ -15,8 +15,14 @@ return {
         },
         opts = {
             sources = {
-                default = { "lazydev", "copilot", "avante", "lsp", "path", "snippets", "buffer", "dap" },
-
+                default = function()
+                    local sources = { "lazydev", "copilot", "avante", "lsp", "path", "snippets", "buffer" }
+                    if require("cmp_dap").is_dap_buffer() then
+                        return sources.concat({ "dap" })
+                    else
+                        return sources
+                    end
+                end,
                 providers = {
                     lazydev = {
                         name = "LazyDev",
@@ -38,9 +44,6 @@ return {
                     dap = {
                         name = "dap",
                         module = "blink.compat.source",
-                        enabled = function()
-                            return require("cmp_dap").is_dap_buffer()
-                        end,
                     },
                 },
             },
