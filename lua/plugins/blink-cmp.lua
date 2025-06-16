@@ -34,6 +34,10 @@ return {
                         module = "blink-copilot",
                         score_offset = 100,
                         async = true,
+                        opts = {
+                            max_completions = 1,
+                            max_attempts = 2,
+                        },
                     },
                     avante = {
                         module = "blink-cmp-avante",
