@@ -1,6 +1,6 @@
 return {
     "mrcjkb/rustaceanvim",
-    version = "^6",
+    version = "^6", -- Recommended
     ft = { "rust" },
     config = function()
         vim.g.rustaceanvim = {
@@ -9,49 +9,42 @@ return {
                 hover_actions = {
                     auto_focus = true,
                 },
-                inlay_hints = {
-                    highlight = "NonText",
+                code_actions = {
+                    ui_select_fallback = true,
                 },
-                on_initialized = function()
-                    vim.lsp.inlay_hint.enable(true)
-                end,
-                test_executor = "background",
+                -- Ejecutar tests en background y mostrar los resultados como diagnósticos
+                test_executor = "background", -- Puede ser "background", "quickfix" o "terminal"
+                -- float term settings
+                float_win_config = {
+                    border = "rounded",
+                    -- Ajuste de estilo para las ventanas flotantes
+                    style = "minimal",
+                    row = 1,
+                    col = 1,
+                    width = math.floor(vim.o.columns * 0.8),
+                    height = math.floor(vim.o.lines * 0.8),
+                },
             },
+            -- Configuración del servidor LSP
             server = {
                 on_attach = function(client, bufnr)
-                    vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
-
-                    if client.server_capabilities.documentHighlightProvider then
-                        vim.cmd([[
-                            augroup lsp_document_highlight
-                                autocmd! * <buffer>
-                                autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-                                autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-                            augroup END
-                        ]])
-                    end
+                    -- Habilitar completion activada por el servidor LSP
+                    vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
                 end,
+
+                -- Configuración por defecto de rust-analyzer
                 default_settings = {
-                    -- rust-analyzer language server configuration
                     ["rust-analyzer"] = {
                         cargo = {
                             allFeatures = true,
                             loadOutDirsFromCheck = true,
                             runBuildScripts = true,
                         },
-                        -- Habilitar checkOnSave
-                        checkOnSave = true,
-                        check = {
+                        -- Habilitar características experimentales
+                        checkOnSave = {
                             command = "clippy",
-                            extraArgs = { "--all-targets", "--all-features" },
+                            allFeatures = true,
                         },
-                        diagnostics = {
-                            enable = true,
-                            experimental = {
-                                enable = true,
-                            },
-                        },
-                        -- Habilitar procMacros
                         procMacro = {
                             enable = true,
                             ignored = {
@@ -60,41 +53,44 @@ return {
                                 ["async-recursion"] = { "async_recursion" },
                             },
                         },
-                        -- Configuraciones adicionales
-                        lens = {
+                        diagnostics = {
                             enable = true,
-                            debug = true,
-                            implementations = true,
-                            run = true,
-                            methodReferences = true,
-                            references = true,
-                        },
-                        files = {
-                            excludeDirs = {
-                                ".direnv",
-                                ".git",
-                                ".github",
-                                ".gitlab",
-                                "bin",
-                                "node_modules",
-                                "target",
-                                "venv",
-                                ".venv",
+                            experimental = {
+                                enable = true,
                             },
                         },
-                        workspace = {
-                            symbol = {
-                                search = {
-                                    scope = "workspace_and_dependencies",
-                                },
+                        inlayHints = {
+                            enable = true,
+                            typeHints = true,
+                            parameterHints = true,
+                            chainingHints = true,
+                        },
+                        hover = {
+                            actions = {
+                                enable = true,
+                                debug = true,
+                                gotoTypeDef = true,
+                                implementations = true,
+                                run = true,
+                            },
+                        },
+                        completion = {
+                            autoimport = {
+                                enable = true,
+                            },
+                            autoself = {
+                                enable = true,
+                            },
+                            postfix = {
+                                enable = true,
                             },
                         },
                     },
                 },
             },
-            -- DAP configuration
+            -- Configuración del DAP (Debug Adapter Protocol)
             dap = {
-                autoload_configurations = true,
+                autoload_configurations = true, -- Cargar configuraciones DAP automáticamente
             },
         }
     end,
