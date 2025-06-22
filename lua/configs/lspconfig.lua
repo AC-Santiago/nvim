@@ -7,18 +7,11 @@ local lspconfig = require("lspconfig")
 -- list of all servers configured.
 lspconfig.servers = {
     "lua_ls",
-    -- "clangd",
-    -- "gopls",
-    -- "hls",
-    -- "ols",
     "pyright",
 }
 
 -- list of servers configured with default config.
-local default_servers = {
-    -- "ols",
-    -- "pyright",
-}
+local default_servers = {}
 
 -- lsps with default config
 for _, lsp in ipairs(default_servers) do
@@ -40,6 +33,11 @@ lspconfig.lua_ls.setup({
                 enable = false, -- Disable all diagnostics from lua_ls
                 -- globals = { "vim" },
             },
+            hint = {
+                enable = true, -- Enable inlay hints
+                setType = true, -- Set type hints
+                semicolon = "All",
+            },
             workspace = {
                 library = {
                     vim.fn.expand("$VIMRUNTIME/lua"),
@@ -56,7 +54,6 @@ lspconfig.lua_ls.setup({
 })
 
 -- Configuracion para python
---
 lspconfig.ruff.setup({
     on_attach = function(client, bufnr)
         on_attach(client, bufnr)

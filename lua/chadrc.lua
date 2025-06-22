@@ -43,6 +43,9 @@ M.ui = {
             end,
         },
     },
+    statusline = {
+        theme = "vscode_colored",
+    },
 }
 
 M.ui.cmp = {

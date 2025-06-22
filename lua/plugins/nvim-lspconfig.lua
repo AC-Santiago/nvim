@@ -3,7 +3,8 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     dependencies = { "saghen/blink.cmp" },
     config = function()
-        require("nvchad.configs.lspconfig").defaults()
+        dofile(vim.g.base46_cache .. "lsp")
+        require("nvchad.lsp").diagnostic_config()
         require("configs.lspconfig")
     end,
 }

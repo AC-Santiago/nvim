@@ -34,6 +34,12 @@ map("n", "gr", vim.lsp.buf.references, { desc = "LSP references" })
 map("n", "gi", vim.lsp.buf.implementation, { desc = "LSP implementation" })
 map("n", "<leader>sh", vim.lsp.buf.signature_help, { desc = "LSP signature help" })
 
+if vim.lsp.inlay_hint then
+    map("n", "<leader>ih", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+    end, { desc = "LSP inlay hint toggle" })
+end
+
 -- tabufline
 map("n", "<leader>b", "<cmd>enew<CR>", { desc = "buffer new" })
 
@@ -96,6 +102,22 @@ map("n", "<leader>fp", function()
     })
 end, { desc = "telescope find plugins" })
 
+map("n", "<leader>fc", function()
+    require("telescope.builtin").find_files({
+        prompt_title = "Config",
+        cwd = vim.fn.stdpath("config") .. "/lua",
+        attach_mappings = function(_, map)
+            local actions = require("telescope.actions")
+            local action_state = require("telescope.actions.state")
+            map("i", "<c-y>", function(prompt_bufnr)
+                local new_config = action_state.get_current_line()
+                actions.close(prompt_bufnr)
+                vim.cmd(string.format("edit ~/.config/nvim/lua/%s.lua", new_config))
+            end)
+            return true
+        end,
+    })
+end, { desc = "telescope find config" })
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })
 
