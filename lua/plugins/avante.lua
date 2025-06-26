@@ -21,7 +21,7 @@ return {
         ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
         providers = {
             copilot = {
-                model = "claude-3.5-sonnet", -- o1-preview | o1-mini | claude-3.5-sonnet
+                model = "claude-sonnet-4",
             },
         },
         provider = "copilot", -- Recommend using Claude
