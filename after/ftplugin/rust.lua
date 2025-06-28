@@ -25,12 +25,12 @@ end, { silent = true, buffer = bufnr, desc = "Run tests" })
 
 -- Navegación
 vim.keymap.set("n", "gd", function()
-    vim.cmd.RustLsp("definition")
-end, { silent = true, buffer = bufnr, desc = "Go to definition" })
+    vim.lsp.buf.definition()
+end, { silent = true, buffer = bufnr, desc = "Jump to next" })
 
-vim.keymap.set("n", "gr", function()
-    vim.cmd.RustLsp("references")
-end, { silent = true, buffer = bufnr, desc = "Go to references" })
+vim.keymap.set("n", "gD", function()
+    vim.lsp.buf.declaration()
+end, { silent = true, buffer = bufnr, desc = "Jump to next" })
 
 vim.keymap.set("n", "<localleader>rpm", function()
     vim.cmd.RustLsp("parentModule")
@@ -38,7 +38,7 @@ end, { silent = true, buffer = bufnr, desc = "Go to parent module" })
 
 -- Code actions y herramientas
 vim.keymap.set("n", "<localleader>rca", function()
-    vim.cmd.RustLsp('codeAction')
+    vim.cmd.RustLsp("codeAction")
 end, { silent = true, buffer = bufnr, desc = "Code actions" })
 
 vim.keymap.set("n", "<localleader>rr", function()
@@ -64,5 +64,5 @@ end, { silent = true, buffer = bufnr, desc = "Explain error" })
 
 -- Cargo
 vim.keymap.set("n", "<localleader>rc", function()
-    vim.cmd.RustLsp('openCargo')
+    vim.cmd.RustLsp("openCargo")
 end, { silent = true, buffer = bufnr, desc = "Open Cargo.toml" })
