@@ -38,9 +38,6 @@ vim.g.python3_host_prog = "/usr/bin/python3"
 
 require("nvchad.autocmds")
 
--- Configurar autocommands personalizados para blink.cmp
-require("configs.blink.blink-autocmds").setup()
-
 vim.schedule(function()
     require("mappings")
 end)

@@ -15,7 +15,7 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "embark",
+    theme = "catppuccin",
     integrations = {
         "blink",
     },

@@ -185,8 +185,8 @@ return {
                     },
                 },
                 menu = {
-                    border = "rounded",
-                    winblend = 0, -- Transparencia de la ventana
+                    border = "single",
+                    winblend = 1, -- Transparencia de la ventana
                     scrollbar = true,
                     direction_priority = { "s", "n" },
                     auto_show = true,
