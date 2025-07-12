@@ -15,7 +15,10 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "tokyonight",
+    theme = "embark",
+    integrations = {
+        "blink",
+    },
 
     -- hl_override = {
     -- 	Comment = { italic = true },
@@ -48,7 +51,4 @@ M.ui = {
     },
 }
 
-M.ui.cmp = {
-    style = "atom_colored",
-}
 return M
