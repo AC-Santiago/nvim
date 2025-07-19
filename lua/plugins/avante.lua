@@ -22,6 +22,10 @@ return {
         providers = {
             copilot = {
                 model = "claude-sonnet-4",
+                extra_request_body = {
+                    temperature = 0.75,
+                    max_tokens = 20480,
+                },
             },
         },
         provider = "copilot", -- Recommend using Claude
@@ -119,27 +123,24 @@ return {
         "MunifTanjim/nui.nvim",
         --- The below dependencies are optional,
         "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-        {
-            -- support for image pasting
-            "HakonHarnes/img-clip.nvim",
-            event = "VeryLazy",
-            opts = {
-                -- recommended settings
-                default = {
-                    embed_image_as_base64 = false,
-                    prompt_for_file_name = false,
-                    drag_and_drop = {
-                        enabled = false,
-                        insert_mode = false,
-                    },
-                    -- required for Windows users
-                    use_absolute_path = true,
-                },
-                disable_not_image_warning = true,
-                show_not_image_warning = false, -- Deshabilitar advertencias cuando el contenido no es una imagen
-                notify_on_error = false, -- Deshabilitar notificaciones de error
-            },
-        },
+        "HakonHarnes/img-clip.nvim", -- support for image pasting
+        -- {
+        --     -- support for image pasting
+        --     "HakonHarnes/img-clip.nvim",
+        --     event = "VeryLazy",
+        --     opts = {
+        --         -- recommended settings
+        --         default = {
+        --             embed_image_as_base64 = false,
+        --             prompt_for_file_name = false,
+        --             drag_and_drop = {
+        --                 insert_mode = true,
+        --             },
+        --             -- required for Windows users
+        --             use_absolute_path = true,
+        --         },
+        --     },
+        -- },
         {
             -- Make sure to set this up properly if you have lazy=true
             "MeanderingProgrammer/render-markdown.nvim",
