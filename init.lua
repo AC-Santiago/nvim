@@ -32,6 +32,10 @@ require("lazy").setup({
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 
+-- load neovide settings
+vim.g.neovide_opacity = 0.8
+vim.g.neovide_normal_opacity = 0.8
+
 -- Providers
 vim.g.loaded_python3_provider = 1
 vim.g.python3_host_prog = "/usr/bin/python3"

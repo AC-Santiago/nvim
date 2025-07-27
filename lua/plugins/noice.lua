@@ -45,6 +45,18 @@ return {
             lsp_doc_border = true,
         },
         views = {
+            cmdline_popup = {
+                border = {
+                    style = "none",
+                    padding = { 1, 2 },
+                },
+                filter_options = {},
+                win_options = {
+                    winhighlight = "NormalFloat:Normal,FloatBorder:Normal",
+                    winblend = 20,
+                    winbar = "",
+                },
+            },
             hover = {
                 border = {
                     style = "rounded",
@@ -56,7 +68,22 @@ return {
             },
             mini = {
                 win_options = {
-                    winblend = 0,
+                    winblend = 20,
+                },
+            },
+            popup = {
+                win_options = {
+                    winblend = 20,
+                },
+            },
+            split = {
+                win_options = {
+                    winblend = 20,
+                },
+            },
+            notify = {
+                win_options = {
+                    winblend = 20,
                 },
             },
         },
