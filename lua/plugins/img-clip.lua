@@ -23,10 +23,13 @@ return {
                 template = [[
 #figure(
   image("$FILE_PATH",),
-  caption: [$CURSOR],
+  caption: [$CURSOR]
 ) <fig-$LABEL>
     ]], ---@type string | fun(context: table): string
             },
         },
+    },
+    keys = {
+        { "<localleader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
     },
 }
