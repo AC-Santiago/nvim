@@ -15,7 +15,7 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "catppuccin",
+    theme = "chadracula-evondev",
     integrations = {
         "blink",
     },
@@ -28,7 +28,7 @@ M.base46 = {
 
 M.ui = {
     telescope = {
-        style = "bordered",
+        style = "borderless",
     },
     tabufline = {
 
@@ -48,6 +48,20 @@ M.ui = {
     },
     statusline = {
         theme = "vscode_colored",
+    },
+}
+
+M.nvdash = {
+    load_on_startup = true,
+    header = {
+        " ███╗   ██╗ ███████╗ ██████╗  ██╗   ██╗ ██╗ ███╗   ███╗",
+        " ████╗  ██║ ██╔════╝██╔═══██╗ ██║   ██║ ██║ ████╗ ████║",
+        " ██╔██╗ ██║ █████╗  ██║   ██║ ██║   ██║ ██║ ██╔████╔██║",
+        " ██║╚██╗██║ ██╔══╝  ██║   ██║ ╚██╗ ██╔╝ ██║ ██║╚██╔╝██║",
+        " ██║ ╚████║ ███████╗╚██████╔╝  ╚████╔╝  ██║ ██║ ╚═╝ ██║",
+        " ╚═╝  ╚═══╝ ╚══════╝ ╚═════╝    ╚═══╝   ╚═╝ ╚═╝     ╚═╝",
+        "  Powered By  eovim ",
+        "                      ",
     },
 }
 

@@ -165,3 +165,6 @@ end, { desc = "Minty Color Picker" })
 map("n", "<localleader>cp", function()
     require("minty.shades").open()
 end, { desc = "Minty save_color" })
+
+-- Oil keymaps
+map("n", "-", "<cmd>Oil<CR>", { desc = "oil open parent directory" })
