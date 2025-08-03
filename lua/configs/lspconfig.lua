@@ -7,7 +7,6 @@ local lspconfig = require("lspconfig")
 -- list of all servers configured.
 lspconfig.servers = {
     "lua_ls",
-    "pyright",
 }
 
 -- list of servers configured with default config.
@@ -53,42 +52,7 @@ lspconfig.lua_ls.setup({
     },
 })
 
--- Configuracion para python
-lspconfig.ruff.setup({
-    on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        client.server_capabilities.hoverProvider = false -- Desactiva hover en Ruff
-    end,
-    trace = "messages",
-    init_options = {
-        settings = {
-            logLevel = "warn",
-            lint = {
-                preview = true,
-            },
-            format = {
-                preview = true,
-            },
-        },
-    },
-})
-
-lspconfig.pyright.setup({
-    on_attach = on_attach,
-    on_init = on_init,
-    capabilities = capabilities,
-
-    settings = {
-        python = {
-            analysis = {
-                typeCheckingMode = "off", -- Disable type checking diagnostics
-            },
-        },
-    },
-})
-
 -- .config/nvim/lua/configs/lspconfig.lua
--- ...
 vim.diagnostic.config({
     underline = false,
     virtual_text = false,
