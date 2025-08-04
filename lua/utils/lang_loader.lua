@@ -4,30 +4,30 @@ local M = {}
 -- Función para cargar automáticamente todas las configuraciones de un lenguaje
 function M.load_lang_configs(lang_name)
     local lang_config = require("configs.languages")
-    
+
     -- Verificar si el lenguaje está habilitado
     if not lang_config.is_enabled(lang_name) then
         return {}
     end
-    
+
     local base_path = "plugins.lang." .. lang_name
     local configs = {}
-    
+
     -- Lista de archivos de configuración que SOLO retornan plugin specs
     -- Excluimos lsp y lint porque son configuración directa
     local config_files = {
-        "nvim-dap-python", -- Para mantener compatibilidad con el nombre actual
+        -- "nvim-dap-python", -- Para mantener compatibilidad con el nombre actual
         "dap",
         "format",
         "conform",
-        "treesitter"
+        "treesitter",
     }
-    
+
     -- Intentar cargar cada archivo de configuración que debe retornar plugin specs
     for _, config_file in ipairs(config_files) do
         local module_path = base_path .. "." .. config_file
         local ok, config = pcall(require, module_path)
-        
+
         if ok and config then
             -- Solo procesar si es una tabla válida para plugin specs
             if type(config) == "table" and config ~= vim.empty_dict() then
@@ -42,21 +42,21 @@ function M.load_lang_configs(lang_name)
             end
         end
     end
-    
+
     return configs
 end
 
 -- Función para aplicar configuraciones específicas que ejecutan directamente
 function M.apply_direct_configs(lang_name)
     local lang_config = require("configs.languages")
-    
+
     if not lang_config.is_enabled(lang_name) then
         return
     end
-    
+
     -- Solo aplicar configuraciones que ejecutan directamente (no retornan plugin specs)
     local direct_config_files = { "lsp", "lint" }
-    
+
     for _, config_file in ipairs(direct_config_files) do
         local config_path = "plugins.lang." .. lang_name .. "." .. config_file
         local ok, err = pcall(require, config_path)
@@ -77,14 +77,14 @@ end
 function M.get_install_list(tool_type)
     local lang_config = require("configs.languages")
     local install_list = {}
-    
+
     for _, lang in ipairs(lang_config.get_enabled_languages()) do
         local config = lang_config.get_config(lang)
         if config[tool_type] then
             vim.list_extend(install_list, config[tool_type])
         end
     end
-    
+
     return install_list
 end
 

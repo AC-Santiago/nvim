@@ -48,7 +48,6 @@ return {
             require("configs.mason-dap")
         end,
     },
-    { import = "plugins.lang.rust" },
-    { import = "plugins.lang.python" },
+    { import = "plugins.lang.python.init" },
     { import = "plugins.lang.typst" },
 }
