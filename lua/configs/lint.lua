@@ -22,9 +22,3 @@ local lang_config = require("configs.languages")
 for _, lang in ipairs(lang_config.get_enabled_languages()) do
     lang_loader.apply_direct_configs(lang)
 end
-
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-    callback = function()
-        lint.try_lint()
-    end,
-})

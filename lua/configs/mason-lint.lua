@@ -34,8 +34,6 @@ for _, v in pairs(lint.linters_by_ft) do
     end
 end
 
-print("Linters to be installed: " .. vim.inspect(all_linters))
-
 require("mason-nvim-lint").setup({
     ensure_installed = all_linters,
     automatic_installation = false,

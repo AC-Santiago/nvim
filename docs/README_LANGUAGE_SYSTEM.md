@@ -98,7 +98,7 @@ local M = {
 -- En lua/plugins/init.lua
 return {
     -- ...
-    { import = "plugins.lang.nuevo_lenguaje" },
+    { import = "plugins.lang.nuevo_lenguaje.init" },
 }
 ```
 
@@ -112,7 +112,6 @@ lua/plugins/lang/python/
 ├── lsp.lua           # Configuración LSP
 ├── lint.lua          # Configuración de linting
 ├── dap.lua           # Configuración de debug
-├── format.lua        # Configuración de formateo
 ├── conform.lua       # Configuración de conform
 ├── treesitter.lua    # Configuración de treesitter
 └── cualquier_otro.lua # Configuraciones personalizadas
@@ -151,10 +150,3 @@ end
 
 return {}
 ```
-
-### Ejemplo 3: Configuración personalizada por proyecto
-```lua
--- En tu proyecto específico, crea .nvim.lua
--- y sobrescribe configuraciones según necesites
-```
-

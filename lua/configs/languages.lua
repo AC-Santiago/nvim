@@ -1,8 +1,8 @@
 local M = {
     -- Lenguajes habilitados
     python = true,
-    rust = true,
-    typst = true,
+    rust = false,
+    typst = false,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -15,7 +15,7 @@ local M = {
         rust = {
             lsp_servers = { "rust_analyzer" },
             linters = {},
-            formatters = { "rustfmt" },
+            formatters = {},
             dap_adapters = { "codelldb" },
         },
         typst = {

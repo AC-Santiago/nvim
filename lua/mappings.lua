@@ -168,3 +168,18 @@ end, { desc = "Minty save_color" })
 
 -- Oil keymaps
 map("n", "-", "<cmd>Oil<CR>", { desc = "oil open parent directory" })
+
+-- Configuración para clipboard en Neovide
+if vim.g.neovide then
+    map("v", "<C-S-C>", '"+y') -- Copy
+    map("n", "<C-S-V>", '"+P') -- Paste normal mode
+    map("v", "<C-S-V>", '"+P') -- Paste visual mode
+    map("c", "<C-S-V>", "<C-R>+") -- Paste command mode
+    map("i", "<C-S-V>", '<ESC>l"+Pli') -- Paste insert mode
+end
+
+-- Configuración para clipboard en Neovim
+vim.api.nvim_set_keymap("", "<C-S-V>", "+p<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("!", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("t", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("v", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
