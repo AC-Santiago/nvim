@@ -2,7 +2,9 @@ local M = {
     -- Lenguajes habilitados
     python = true,
     rust = false,
-    typst = false,
+    typst = true,
+    html = false,
+    css = false,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -22,6 +24,18 @@ local M = {
             lsp_servers = { "tinymist" },
             linters = {},
             formatters = {},
+            dap_adapters = {},
+        },
+        html = {
+            lsp_servers = { "html" },
+            linters = {},
+            formatters = { "prettier" },
+            dap_adapters = {},
+        },
+        css = {
+            lsp_servers = { "cssls" },
+            linters = {},
+            formatters = { "prettier" },
             dap_adapters = {},
         },
     },

@@ -29,7 +29,7 @@ return {
         opts = {
             sources = {
                 default = function()
-                    local sources = { "lazydev", "copilot", "avante", "lsp", "path", "snippets", "buffer" }
+                    local sources = { "lazydev", "copilot", "avante", "lsp", "path", "snippets", "buffer", "html-css" }
                     -- Add spell source when spell is enabled in the buffer
                     if vim.wo.spell then
                         table.insert(sources, "spell")
@@ -142,6 +142,15 @@ return {
                             return items
                         end,
                     },
+                    ["html-css"] = {
+                        name = "html-css",
+                        module = "blink.compat.source",
+                        opts = {
+                            filetypes = { "html", "css", "javascript", "typescript" },
+                            max_items = 10,
+                            max_items_per_source = 5,
+                        },
+                    },
                 },
             },
 
@@ -246,6 +255,7 @@ return {
                                         buffer = "Buffer",
                                         snippets = "Snippet",
                                         lsp = "LSP",
+                                        ["html-css"] = "HTML/CSS",
                                         lazydev = "Dev",
                                         dap = "DAP",
                                     }

@@ -1,0 +1,24 @@
+-- Project-specific HTML/CSS configuration
+vim.g.html_css = {
+    enable_on = { "html", "jsx" }, -- File types for this project only
+    handlers = {
+        definition = {
+            bind = "gd",
+        },
+        hover = {
+            bind = "K",
+            wrap = true,
+            border = "none",
+            position = "cursor",
+        },
+    },
+    documentation = {
+        auto_show = true,
+    },
+    style_sheets = {
+        -- Project-specific stylesheets
+        "./src/styles/main.css",
+        "./src/styles/components.css",
+        "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css",
+    },
+}
