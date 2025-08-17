@@ -14,3 +14,10 @@ autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
         require("lint").try_lint()
     end,
 })
+
+autocmd("BufEnter", {
+    pattern = "oil://*",
+    callback = function()
+        require("oil-git").refresh()
+    end,
+})

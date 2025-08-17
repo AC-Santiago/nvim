@@ -23,7 +23,7 @@ local M = {
         typst = {
             lsp_servers = { "tinymist" },
             linters = {},
-            formatters = {},
+            formatters = { "typstyle" },
             dap_adapters = {},
         },
         html = {

@@ -35,6 +35,8 @@ dofile(vim.g.base46_cache .. "statusline")
 -- load neovide settings
 vim.g.neovide_opacity = 1
 vim.g.neovide_normal_opacity = 1
+vim.g.neovide_refresh_rate = 144
+vim.g.neovide_confirm_quit = true
 
 -- Providers
 vim.g.loaded_python3_provider = 1
