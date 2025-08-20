@@ -45,6 +45,8 @@ vim.g.python3_host_prog = "/usr/bin/python3"
 require("nvchad.autocmds")
 require("autocmds")
 
+-- Cargar comandos de limpieza
+
 vim.schedule(function()
     require("mappings")
 end)

@@ -66,3 +66,8 @@ end, { silent = true, buffer = bufnr, desc = "Explain error" })
 vim.keymap.set("n", "<localleader>rc", function()
     vim.cmd.RustLsp("openCargo")
 end, { silent = true, buffer = bufnr, desc = "Open Cargo.toml" })
+
+-- TreeSitter configuración
+vim.treesitter.start()
+vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"

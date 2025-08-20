@@ -14,13 +14,6 @@ M.base_config = {
         "vimdoc",
         "yaml",
     },
-
-    highlight = {
-        enable = true,
-        use_languagetree = true,
-    },
-
-    indent = { enable = true },
 }
 
 function M.add_langs_extend()
@@ -66,7 +59,7 @@ function M.setup()
     end
     final_config.ensure_installed = unique_installed
 
-    require("nvim-treesitter.configs").setup(final_config)
+    require("nvim-treesitter").install(final_config.ensure_installed)
 end
 
 M.setup()
