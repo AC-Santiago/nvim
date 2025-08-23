@@ -44,4 +44,6 @@ return {
     { import = "plugins.lang.python.init" },
     { import = "plugins.lang.typst.init" },
     { import = "plugins.lang.rust.init" },
+    { import = "plugins.lang.css.init" },
+    { import = "plugins.lang.html.init" },
 }

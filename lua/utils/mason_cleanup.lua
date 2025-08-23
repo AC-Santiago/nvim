@@ -8,6 +8,7 @@ local protected_tools = {
     -- Herramientas esenciales
     "lua_ls", -- Neovim configuración
     "stylua", -- Neovim configuración
+    "prettier", -- Formateador común
 }
 
 -- Configuración del sistema de limpieza

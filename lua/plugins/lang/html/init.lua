@@ -1,5 +1,5 @@
 local lang_loader = require("utils.lang_loader")
-local configs = lang_loader.load_lang_configs("html")
+lang_loader.load_lang_configs("html")
 local language_config = require("configs.languages")
 
 if language_config.is_enabled("html") then
@@ -7,5 +7,3 @@ if language_config.is_enabled("html") then
 else
     return {}
 end
-
-return configs

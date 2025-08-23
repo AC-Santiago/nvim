@@ -3,8 +3,9 @@ local M = {
     python = true,
     rust = false,
     typst = true,
-    html = false,
-    css = false,
+    html = true,
+    css = true,
+    javascript = false,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -35,6 +36,12 @@ local M = {
         css = {
             lsp_servers = { "cssls" },
             linters = {},
+            formatters = { "prettier" },
+            dap_adapters = {},
+        },
+        javascript = {
+            lsp_servers = { "vtls" },
+            linters = { "eslint" },
             formatters = { "prettier" },
             dap_adapters = {},
         },
