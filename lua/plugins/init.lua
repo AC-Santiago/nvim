@@ -46,4 +46,5 @@ return {
     { import = "plugins.lang.rust.init" },
     { import = "plugins.lang.css.init" },
     { import = "plugins.lang.html.init" },
+    { import = "plugins.lang.javascript.init" },
 }

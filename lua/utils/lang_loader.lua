@@ -15,26 +15,17 @@ function M.load_lang_configs(lang_name)
     local base_path = "plugins.lang." .. lang_name
     local configs = {}
 
-    local ok, names_plugins_files_request = pcall(require, base_path .. ".name_plugins_files")
-    local names_plugins_files = nil
-    if ok then
-        names_plugins_files = names_plugins_files_request.name_plugins_files or {}
-    else
-        names_plugins_files = {}
-    end
-
     -- Lista de archivos de configuración que SOLO retornan plugin specs
     local config_files = {
         "conform",
         "dap",
     }
-    vim.list_extend(config_files, names_plugins_files or {})
     -- Intentar cargar cada archivo de configuración que debe retornar plugin specs
     for _, config_file in ipairs(config_files) do
         local module_path = base_path .. "." .. config_file
-        local ok, config = pcall(require, module_path)
+        local status, config = pcall(require, module_path)
 
-        if ok and config then
+        if status and config then
             -- Solo procesar si es una tabla válida para plugin specs
             if type(config) == "table" and config ~= vim.empty_dict() then
                 -- Si es una tabla, agregarla a las configuraciones

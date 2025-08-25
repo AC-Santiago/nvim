@@ -5,7 +5,7 @@ local M = {
     typst = true,
     html = true,
     css = true,
-    javascript = false,
+    javascript = true,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -40,10 +40,10 @@ local M = {
             dap_adapters = {},
         },
         javascript = {
-            lsp_servers = { "vtls" },
-            linters = { "eslint" },
+            lsp_servers = { "vtsls" },
+            linters = { "oxlint" },
             formatters = { "prettier" },
-            dap_adapters = {},
+            dap_adapters = { "js-debug-adapter" },
         },
     },
 }
