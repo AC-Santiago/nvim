@@ -37,7 +37,26 @@ function M.add_langs_extend()
     return langs_init
 end
 
--- Función para combinar configuraciones de lenguajes específicos
+function M.langs_unistall()
+    local langs_unistall = {}
+    local disable_languages = require("configs.languages").get_disable_languages()
+    local parser_list = require("nvim-treesitter").get_installed()
+
+    for _, lang in ipairs(disable_languages) do
+        local module_name = "plugins.lang." .. lang .. ".treesitter"
+        local ok, lang_config = pcall(require, module_name)
+        if ok and lang_config.ensure_installed and type(lang_config.ensure_installed) == "table" then
+            for _, parser in ipairs(lang_config.ensure_installed) do
+                if vim.tbl_contains(parser_list, parser) then
+                    table.insert(langs_unistall, parser)
+                end
+            end
+        end
+    end
+    require("nvim-treesitter.install").uninstall(langs_unistall)
+    print("Parsers uninstalled: " .. table.concat(langs_unistall, ", "))
+end
+
 function M.setup()
     local final_config = vim.deepcopy(M.base_config)
     local new_ensure_installed_status = require("configs.languages").get_enabled_languages()
@@ -48,7 +67,6 @@ function M.setup()
         final_config.ensure_installed = M.base_config.ensure_installed
     end
 
-    -- Remover duplicados de ensure_installed
     local seen = {}
     local unique_installed = {}
     for _, parser in ipairs(final_config.ensure_installed) do
@@ -60,6 +78,7 @@ function M.setup()
     final_config.ensure_installed = unique_installed
 
     require("nvim-treesitter").install(final_config.ensure_installed)
+    M.langs_unistall()
 end
 
 M.setup()

@@ -50,3 +50,5 @@ require("autocmds")
 vim.schedule(function()
     require("mappings")
 end)
+
+print(require("nvim-treesitter").get_installed())

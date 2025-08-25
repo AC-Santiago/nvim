@@ -3,9 +3,9 @@ local M = {
     python = true,
     rust = false,
     typst = true,
-    html = true,
-    css = true,
-    javascript = true,
+    html = false,
+    css = false,
+    javascript = false,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -66,6 +66,16 @@ function M.get_enabled_languages()
         end
     end
     return enabled
+end
+
+function M.get_disable_languages()
+    local disabled = {}
+    for lang, enabled_status in pairs(M) do
+        if type(enabled_status) == "boolean" and not enabled_status and lang ~= "configs" then
+            table.insert(disabled, lang)
+        end
+    end
+    return disabled
 end
 
 return M
