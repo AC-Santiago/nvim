@@ -70,39 +70,28 @@ M.polish_hl = {
         CursorLine = { bg = M.base_30.darker_black },
         CursorColumn = { bg = M.base_30.darker_black },
         ColorColumn = { bg = M.base_30.one_bg },
-        StatusLine = { bg = M.base_30.statusline_bg, fg = M.base_30.white },
+        -- StatusLine = { bg = M.base_30.statusline_bg, fg = M.base_30.white },
         Visual = { bg = M.base_30.one_bg2 },
-        Pmenu = { bg = M.base_30.pmenu_bg, fg = M.base_30.white },
+        -- Pmenu = { bg = M.base_30.pmenu_bg, fg = M.base_30.white },
         PmenuSel = { bg = M.base_30.one_bg3, fg = M.base_30.white },
 
         Function = { fg = M.base_30.nord_blue },
         Keyword = { fg = M.base_30.yellow, bold = true },
         Type = { fg = M.base_30.pink },
         Constant = { fg = M.base_30.pink },
-        Identifier = { fg = M.base_30.white },
+        -- Identifier = { fg = M.base_30.white },
 
         DiagnosticError = { fg = M.base_30.red },
         DiagnosticWarn = { fg = M.base_30.orange },
         DiagnosticInfo = { fg = M.base_30.nord_blue },
         DiagnosticHint = { fg = M.base_30.cyan },
-
-        -- UI integrations
-        TelescopeBorder = { fg = M.base_30.black2 },
-        TelescopePromptTitle = { fg = M.base_30.nord_blue },
-        TelescopePreviewTitle = { fg = M.base_30.white },
-        TelescopeResultsTitle = { fg = M.base_30.white },
-
-        CmpItemKind = { fg = M.base_30.white },
-        CmpBorder = { fg = M.base_30.black2 },
-
-        NvimTreeRootFolder = { fg = M.base_30.folder_bg },
-        NvimTreeFolderName = { fg = M.base_30.folder_bg },
-        NvimTreeFile = { fg = M.base_30.white },
     },
 
     treesitter = {
+        -- Comentarios
         ["@comment"] = { fg = M.base_30.green, italic = true }, -- comentarios en verde
         ["@comment.documentation"] = { fg = M.base_30.grey_fg, italic = true },
+
         ["@string"] = { fg = M.base_30.teal },
         ["@function"] = { fg = M.base_30.nord_blue },
         ["@keyword"] = { fg = M.base_30.yellow, bold = true },
@@ -115,6 +104,8 @@ M.polish_hl = {
         ["@field"] = { fg = M.base_30.white },
         ["@keyword.function"] = { fg = M.base_30.yellow, bold = true },
         ["@constructor"] = { fg = M.base_30.nord_blue },
+
+        ["@variable.member"] = { fg = M.base_30.vibrant_green },
     },
 }
 
