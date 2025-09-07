@@ -179,7 +179,19 @@ if vim.g.neovide then
 end
 
 -- Configuración para clipboard en Neovim
-vim.api.nvim_set_keymap("", "<C-S-V>", "+p<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("!", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("t", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("v", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
+map("", "<C-S-V>", "+p<CR>", { noremap = true, silent = true })
+map("!", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
+map("t", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
+map("v", "<C-S-V>", "<C-R>+", { noremap = true, silent = true })
+
+-- Configuración para cambiar el tamaño de la fuente en Neovide
+local change_scale_factor = function(delta)
+    vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * delta
+end
+
+map("n", "<C-=>", function()
+    change_scale_factor(1.25)
+end)
+map("n", "<C-->", function()
+    change_scale_factor(1 / 1.25)
+end)

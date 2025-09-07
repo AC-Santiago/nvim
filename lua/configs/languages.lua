@@ -1,7 +1,7 @@
 local M = {
     -- Lenguajes habilitados
     python = true,
-    rust = false,
+    rust = true,
     typst = true,
     html = false,
     css = false,

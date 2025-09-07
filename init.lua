@@ -37,6 +37,7 @@ vim.g.neovide_opacity = 1
 vim.g.neovide_normal_opacity = 1
 vim.g.neovide_refresh_rate = 144
 vim.g.neovide_confirm_quit = true
+vim.g.neovide_scale_factor = 1.0
 
 -- Providers
 vim.g.loaded_python3_provider = 1
@@ -50,5 +51,3 @@ require("autocmds")
 vim.schedule(function()
     require("mappings")
 end)
-
-print(require("nvim-treesitter").get_installed())
