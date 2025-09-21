@@ -2,11 +2,16 @@ local dap = require("dap")
 
 local dap_ui = require("dapui")
 
+local lang_config = require("configs.languages")
+
 -- Inicio de Virtual text
 require("nvim-dap-virtual-text").setup({})
 
 for _, ft_path in pairs(vim.api.nvim_get_runtime_file("lua/configs/DAP/lang/*.lua", true)) do
-    loadfile(ft_path)()
+    local lang_name = ft_path:match("lang/(.-)%.lua$")
+    if lang_config.is_enabled(lang_name) then
+        loadfile(ft_path)()
+    end
 end
 
 -- Simbolos del Debug
