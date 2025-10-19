@@ -21,7 +21,7 @@ return {
         ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
         providers = {
             copilot = {
-                model = "claude-sonnet-4",
+                model = "gpt-5-mini",
                 extra_request_body = {
                     temperature = 0.75,
                     max_tokens = 20480,
@@ -124,23 +124,6 @@ return {
         --- The below dependencies are optional,
         "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
         "HakonHarnes/img-clip.nvim", -- support for image pasting
-        -- {
-        --     -- support for image pasting
-        --     "HakonHarnes/img-clip.nvim",
-        --     event = "VeryLazy",
-        --     opts = {
-        --         -- recommended settings
-        --         default = {
-        --             embed_image_as_base64 = false,
-        --             prompt_for_file_name = false,
-        --             drag_and_drop = {
-        --                 insert_mode = true,
-        --             },
-        --             -- required for Windows users
-        --             use_absolute_path = true,
-        --         },
-        --     },
-        -- },
         {
             -- Make sure to set this up properly if you have lazy=true
             "MeanderingProgrammer/render-markdown.nvim",
