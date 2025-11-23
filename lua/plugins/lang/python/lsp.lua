@@ -32,7 +32,7 @@ vim.lsp.config("ruff", {
     },
 })
 
-vim.lsp.config("pyright", {
+vim.lsp.config("pyrefly", {
     on_attach = on_attach,
     on_init = on_init,
     capabilities = capabilities,
@@ -40,8 +40,17 @@ vim.lsp.config("pyright", {
     settings = {
         python = {
             analysis = {
-                typeCheckingMode = "off", -- Disable type checking diagnostics
-                diagnosticMode = "off",
+                inlayHints = {
+                    variableTypes = true,
+                    callArgumentNames = "all",
+                    functionReturnTypes = true,
+                    genericTypes = true,
+                    pytestParameters = true,
+                },
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+                autoImportCompletions = true,
+                diagnosticMode = "workspace",
             },
         },
     },

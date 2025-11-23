@@ -37,6 +37,7 @@ map("n", "<leader>sh", vim.lsp.buf.signature_help, { desc = "LSP signature help"
 if vim.lsp.inlay_hint then
     map("n", "<leader>ih", function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+        vim.notify(vim.lsp.inlay_hint.is_enabled() and "Inlay Hints Enabled" or "Inlay Hints Disabled")
     end, { desc = "LSP inlay hint toggle" })
 end
 

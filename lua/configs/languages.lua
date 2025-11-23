@@ -10,7 +10,7 @@ local M = {
     -- Configuraciones específicas por lenguaje
     configs = {
         python = {
-            lsp_servers = { "pyright", "ruff" },
+            lsp_servers = { "pyrefly", "ruff" },
             linters = { "ruff" },
             formatters = { "ruff" },
             dap_adapters = { "debugpy" },
