@@ -1,11 +1,12 @@
 local M = {
     -- Lenguajes habilitados
     python = true,
-    rust = true,
+    rust = false,
     typst = true,
     html = false,
     css = false,
     javascript = false,
+    sql = true,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -44,6 +45,12 @@ local M = {
             linters = { "oxlint" },
             formatters = { "prettier" },
             dap_adapters = { "js-debug-adapter" },
+        },
+        sql = {
+            lsp_servers = { "sqlls" },
+            linters = {},
+            formatters = { "sql-formatter" },
+            dap_adapters = {},
         },
     },
 }

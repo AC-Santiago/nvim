@@ -19,6 +19,7 @@ return {
             "rcarriga/cmp-dap",
             "Kaiser-Yang/blink-cmp-avante",
             "ribru17/blink-cmp-spell",
+            { "MattiasMTS/cmp-dbee", opts = {} },
             {
                 "saghen/blink.compat",
                 version = "2.*",
@@ -40,6 +41,9 @@ return {
                         return sources
                     end
                 end,
+                per_filetype = {
+                    sql = { "dbee", "lsp", "path", "snippets", "buffer" },
+                },
                 providers = {
                     lazydev = {
                         name = "LazyDev",
@@ -150,6 +154,10 @@ return {
                             max_items = 10,
                             max_items_per_source = 5,
                         },
+                    },
+                    dbee = {
+                        name = "cmp-dbee",
+                        module = "blink.compat.source",
                     },
                 },
             },

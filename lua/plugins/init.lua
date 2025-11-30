@@ -47,4 +47,5 @@ return {
     { import = "plugins.lang.css.init" },
     { import = "plugins.lang.html.init" },
     { import = "plugins.lang.javascript.init" },
+    { import = "plugins.lang.sql.init" },
 }
