@@ -1,20 +1,19 @@
 local sql_options = {
-    formatters = {
-        ["sql-formatter"] = function()
-            return {
-                exe = "sql-formatter",
-                args = {},
-                stdin = true,
-            }
-        end,
-    },
     formatters_by_ft = {
         sql = { "sql-formatter" },
     },
-    format_on_save = {
-        timeout_ms = 500,
-        lsp_fallback = true,
+    formatters = {
+        ["sql-formatter"] = {
+            command = "sql-formatter",
+            -- Añade argumentos de línea de comandos para sql-formatter
+            -- Para una lista completa de opciones, visita: https://github.com/sql-formatter-org/sql-formatter
+            args = {
+                "--config",
+                vim.fn.stdpath("config") .. "/.sqlformatterrc.json",
+                "--language",
+                "postgresql", -- Puedes cambiarlo a "mysql", "bigquery", "sqlite", etc.
+            },
+        },
     },
 }
-
--- require("conform").setup(sql_options)
+require("conform").setup(sql_options)
