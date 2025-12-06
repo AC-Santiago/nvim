@@ -58,9 +58,9 @@ function M.apply_direct_configs(lang_name)
         local config_path = "plugins.lang." .. lang_name .. "." .. config_file
         local ok, err = pcall(require, config_path)
         if ok then
-            vim.notify("Loaded " .. config_file .. " config for " .. lang_name, vim.log.levels.DEBUG)
+            -- vim.notify("Loaded " .. config_file .. " config for " .. lang_name, vim.log.levels.DEBUG)
         elseif err and not string.find(err, "module .* not found") then
-            vim.notify("Error loading " .. config_file .. " for " .. lang_name .. ": " .. err, vim.log.levels.WARN)
+            -- vim.notify("Error loading " .. config_file .. " for " .. lang_name .. ": " .. err, vim.log.levels.WARN)
         end
     end
 end
