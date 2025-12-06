@@ -54,7 +54,7 @@ function M.langs_unistall()
         end
     end
     require("nvim-treesitter.install").uninstall(langs_unistall)
-    print("Parsers uninstalled: " .. table.concat(langs_unistall, ", "))
+    -- print("Parsers uninstalled: " .. table.concat(langs_unistall, ", "))
 end
 
 function M.setup()
