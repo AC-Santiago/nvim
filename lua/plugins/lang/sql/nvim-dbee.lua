@@ -66,13 +66,14 @@ return {
         },
     },
     config = function()
+        local url_mcp_db = os.getenv("MCP_DB_URL") or "[URL DE CONEXIÓN A LA BASE DE DATOS]"
         require("dbee").setup({
             sources = {
                 require("dbee.sources").MemorySource:new({
                     {
                         name = "MCP-Requerimientos DB",
                         type = "postgres",
-                        url = "[URL DE CONEXIÓN A LA BASE DE DATOS]",
+                        url = url_mcp_db,
                     },
                 }),
             },
