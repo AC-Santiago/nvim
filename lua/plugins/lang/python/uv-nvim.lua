@@ -6,5 +6,8 @@ return {
     },
     opts = {
         picker_integration = true,
+        keymaps = {
+            prefix = "<localleader>x", -- Main prefix for uv commands
+        },
     },
 }
