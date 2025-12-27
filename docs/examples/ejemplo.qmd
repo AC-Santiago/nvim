@@ -1,0 +1,87 @@
+---
+title: "Ejemplo de Documento Quarto"
+author: "Tu Nombre"
+format: 
+  html:
+    code-fold: true
+    toc: true
+jupyter: python3
+---
+
+## Introducción
+
+Este es un documento de ejemplo que muestra cómo usar Quarto con Neovim.
+
+## Análisis de Datos con Python
+
+Podemos incluir código Python ejecutable:
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Crear datos de ejemplo
+np.random.seed(42)
+datos = pd.DataFrame({
+    'x': np.arange(0, 100),
+    'y': np.random.randn(100).cumsum()
+})
+
+# Mostrar primeras filas
+print(datos.head())
+```
+
+## Visualización
+
+Podemos crear gráficos:
+
+```{python}
+#| label: fig-grafico
+#| fig-cap: "Gráfico de ejemplo"
+
+plt.figure(figsize=(10, 6))
+plt.plot(datos['x'], datos['y'])
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Gráfico de Ejemplo')
+plt.grid(True)
+plt.show()
+```
+
+## Uso en Neovim
+
+### Atajos de teclado:
+
+1. **Inicializar kernel de Jupyter**: `<leader>mi`
+2. **Ejecutar línea actual**: `<leader>ml`
+3. **Ejecutar selección visual**: `<leader>mv` (en modo visual)
+4. **Ver salida**: `<leader>mo`
+5. **Navegación entre celdas**: `]c` (siguiente), `[c` (anterior)
+
+### Workflow recomendado:
+
+1. Abre este archivo en Neovim: `nvim ejemplo.qmd`
+2. Inicializa el kernel: `<leader>mi` y selecciona `python3`
+3. Navega a un bloque de código
+4. Ejecuta el código con `<leader>ml` o selecciona y usa `<leader>mv`
+5. Ve los resultados con `<leader>mo`
+
+## Renderizar el documento
+
+Para generar el HTML final:
+
+```bash
+quarto render ejemplo.qmd
+```
+
+O para previsualizar con recarga automática:
+
+```bash
+quarto preview ejemplo.qmd
+```
+
+## Conclusión
+
+Quarto permite combinar texto, código y resultados en un solo documento,
+ideal para análisis de datos, reportes y documentación científica.
