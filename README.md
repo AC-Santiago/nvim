@@ -17,16 +17,53 @@ Antes de comenzar, asegúrate de tener instalado:
 - fd-find
 - luarocks
 
+### Requisitos para Jupyter y Quarto
+
+Para usar las funcionalidades de Jupyter Notebook y Quarto:
+
+- **uv** - Gestor de paquetes de Python (recomendado):
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
+
+- **Jupyter** - Para soporte de notebooks:
+  ```bash
+  uv tool install jupyter
+  # O con pip: pip install jupyter
+  ```
+
+- **Quarto** - Para publicación científica y técnica:
+  ```bash
+  # Descargar desde https://quarto.org/docs/get-started/
+  # O en Fedora:
+  sudo dnf install quarto
+  ```
+
+- **pynvim** - Proveedor de Python para Neovim:
+  ```bash
+  uv tool install pynvim
+  # O con pip: pip install pynvim
+  ```
+
+- **Opcional - Terminal con soporte de imágenes** (para visualización de gráficos):
+  - Kitty (recomendado)
+  - WezTerm
+  - iTerm2 (macOS)
+
 ### Instalación de Dependencias en Fedora
 
 ```bash
-sudo dnf install -y python3-neovim git nodejs npm python3-pip gcc make ripgrep fd-find luarocks
+sudo dnf install -y python3-neovim git nodejs npm python3-pip gcc make ripgrep fd-find luarocks quarto
+# Instalar uv para gestión de paquetes Python
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ### Instalación de Dependencias en Arch
 
 ```bash
-sudo pacman -S --needed neovim python-pynvim unzip luarocks xclip wl-clipboard
+sudo pacman -S --needed neovim python-pynvim unzip luarocks xclip wl-clipboard quarto
+# Instalar uv para gestión de paquetes Python
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 ## Instalación
@@ -54,16 +91,92 @@ nvim
 - 🛠️ Depuración integrada con nvim-dap
 - 🎨 Resaltado de sintaxis mejorado
 - 📝 Autocompletado inteligente con nvim-cmp
+- 📓 **Soporte para Jupyter Notebooks** con Molten.nvim
+- 📊 **Soporte para Quarto** - Publicación científica y técnica
+- 🐍 Integración con **uv** para gestión de paquetes Python
+
+## Uso de Jupyter Notebooks y Quarto
+
+### Configuración de un proyecto con uv
+
+```bash
+# Crear un nuevo proyecto
+uv init mi-proyecto
+cd mi-proyecto
+
+# Crear entorno virtual
+uv venv
+
+# Instalar dependencias de Jupyter
+uv add jupyter ipykernel
+
+# Activar el entorno (opcional, Neovim lo detectará automáticamente)
+source .venv/bin/activate
+```
+
+### Trabajar con Jupyter en Neovim
+
+1. Abre un archivo Python o Quarto (.qmd)
+2. Inicializa Molten: `<leader>mi`
+3. Ejecuta código:
+   - `<leader>ml` - Ejecutar línea actual
+   - `<leader>mv` - Ejecutar selección visual
+   - `<leader>me` - Ejecutar operador
+4. Ver resultados: `<leader>mo`
+5. Navegación entre celdas: `]c` (siguiente), `[c` (anterior)
+
+### Crear documentos Quarto
+
+```bash
+# Crear un nuevo documento Quarto
+nvim documento.qmd
+```
+
+En el documento `.qmd`, puedes mezclar Markdown con bloques de código ejecutables:
+
+````markdown
+---
+title: "Mi Análisis"
+format: html
+---
+
+## Introducción
+
+Este es un documento Quarto.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Tu código aquí
+```
+````
+
+Para renderizar el documento:
+```bash
+quarto render documento.qmd
+```
 
 ## Atajos de Teclado
 
 Para ver una lista completa de todos los atajos de teclado disponibles, consulta [KEYBINDINGS.md](KEYBINDINGS.md).
 
-Algunos atajos importantes:
+### Atajos Generales
 - `<Space>` es la tecla líder
-
 - `<leader>ac` - Iniciar chat con IA
 - `<leader>ff` - Buscar archivos
+
+### Atajos para Jupyter/Molten
+- `<leader>mi` - Inicializar Molten (kernel de Jupyter)
+- `<leader>ml` - Ejecutar línea actual
+- `<leader>mv` - Ejecutar selección visual
+- `<leader>me` - Ejecutar con operador
+- `<leader>mr` - Re-ejecutar celda
+- `<leader>mo` - Mostrar salida
+- `<leader>mh` - Ocultar salida
+- `<leader>md` - Eliminar celda
+- `]c` - Ir a la siguiente celda
+- `[c` - Ir a la celda anterior
 
 ## Personalización
 
