@@ -157,6 +157,12 @@ Para renderizar el documento:
 quarto render documento.qmd
 ```
 
+Para una guía completa de Jupyter y Quarto, consulta [docs/JUPYTER_QUARTO_GUIDE.md](docs/JUPYTER_QUARTO_GUIDE.md).
+
+**Archivos de ejemplo**:
+- [ejemplo_jupyter.py](docs/examples/ejemplo_jupyter.py) - Ejemplo de uso de Jupyter con Python
+- [ejemplo.qmd](docs/examples/ejemplo.qmd) - Ejemplo de documento Quarto
+
 ## Atajos de Teclado
 
 Para ver una lista completa de todos los atajos de teclado disponibles, consulta [KEYBINDINGS.md](KEYBINDINGS.md).
