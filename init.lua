@@ -39,9 +39,31 @@ vim.g.neovide_refresh_rate = 144
 vim.g.neovide_confirm_quit = true
 vim.g.neovide_scale_factor = 1.0
 
--- Providers
+-- Providers - Auto-detect uv virtual environments
+local function get_python_path()
+    local cwd = vim.fn.getcwd()
+    if not cwd then
+        return "/usr/bin/python3"
+    end
+    
+    -- Check for uv virtual environment
+    local uv_venv = vim.fs.joinpath(cwd, ".venv", "bin", "python")
+    if vim.fn.filereadable(uv_venv) == 1 then
+        return uv_venv
+    end
+    
+    -- Check for VIRTUAL_ENV environment variable
+    local venv = vim.env.VIRTUAL_ENV
+    if venv then
+        return vim.fs.joinpath(venv, "bin", "python")
+    end
+    
+    -- Fallback to system python
+    return "/usr/bin/python3"
+end
+
 vim.g.loaded_python3_provider = 1
-vim.g.python3_host_prog = "/usr/bin/python3"
+vim.g.python3_host_prog = get_python_path()
 
 require("nvchad.autocmds")
 require("autocmds")
