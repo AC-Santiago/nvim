@@ -41,8 +41,13 @@ vim.g.neovide_scale_factor = 1.0
 
 -- Providers - Auto-detect uv virtual environments
 local function get_python_path()
+    local cwd = vim.fn.getcwd()
+    if not cwd then
+        return "/usr/bin/python3"
+    end
+    
     -- Check for uv virtual environment
-    local uv_venv = vim.fn.getcwd() .. "/.venv/bin/python"
+    local uv_venv = vim.fs.joinpath(cwd, ".venv", "bin", "python")
     if vim.fn.filereadable(uv_venv) == 1 then
         return uv_venv
     end
@@ -50,7 +55,7 @@ local function get_python_path()
     -- Check for VIRTUAL_ENV environment variable
     local venv = vim.env.VIRTUAL_ENV
     if venv then
-        return venv .. "/bin/python"
+        return vim.fs.joinpath(venv, "bin", "python")
     end
     
     -- Fallback to system python

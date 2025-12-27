@@ -9,6 +9,11 @@ vim.lsp.config("quarto", {
     capabilities = capabilities,
     filetypes = { "quarto", "qmd" },
     root_dir = function(fname)
-        return vim.fs.dirname(vim.fs.find({ "_quarto.yml", ".git" }, { upward = true, path = fname })[1])
+        local found = vim.fs.find({ "_quarto.yml", ".git" }, { upward = true, path = fname })
+        if found and #found > 0 then
+            return vim.fs.dirname(found[1])
+        end
+        -- Fallback to current directory
+        return vim.fn.getcwd()
     end,
 })
