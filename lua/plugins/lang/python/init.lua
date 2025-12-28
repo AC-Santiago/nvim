@@ -4,6 +4,10 @@ local language_config = require("configs.languages")
 
 if language_config.is_enabled("python") then
     table.insert(configs, { import = "plugins.lang.python.uv-nvim" })
+    table.insert(configs, { import = "plugins.lang.python.jupytext-nvim" })
+    table.insert(configs, { import = "plugins.lang.python.otter-nvim" })
+    table.insert(configs, { import = "plugins.lang.python.molten-nvim" })
+    table.insert(configs, { import = "plugins.lang.python.quarto-nvim" })
     return configs
 else
     return {}

@@ -40,30 +40,48 @@ vim.g.neovide_confirm_quit = true
 vim.g.neovide_scale_factor = 1.0
 
 -- Providers - Auto-detect uv virtual environments
+-- Función para detectar el Python del entorno virtual
 local function get_python_path()
+    -- Primero intentar con variable de entorno VIRTUAL_ENV (venv estándar)
+    local venv_path = os.getenv("VIRTUAL_ENV")
+    if venv_path then
+        local venv_python = venv_path .. "/bin/python"
+        if vim.fn.executable(venv_python) == 1 then
+            return venv_python
+        end
+    end
+
+    -- Intentar con uv (buscar .venv en el directorio actual o padres)
     local cwd = vim.fn.getcwd()
-    if not cwd then
-        return "/usr/bin/python3"
+    local venv_dirs = { ".venv", "venv", ".virtualenv" }
+
+    for _, venv_dir in ipairs(venv_dirs) do
+        local path = cwd .. "/" .. venv_dir .. "/bin/python"
+        if vim.fn.executable(path) == 1 then
+            return path
+        end
+
+        -- Buscar en directorios padres
+        local parent = vim.fn.fnamemodify(cwd, ":h")
+        while parent ~= "/" do
+            path = parent .. "/" .. venv_dir .. "/bin/python"
+            if vim.fn.executable(path) == 1 then
+                return path
+            end
+            parent = vim.fn.fnamemodify(parent, ":h")
+        end
     end
-    
-    -- Check for uv virtual environment
-    local uv_venv = vim.fs.joinpath(cwd, ".venv", "bin", "python")
-    if vim.fn.filereadable(uv_venv) == 1 then
-        return uv_venv
-    end
-    
-    -- Check for VIRTUAL_ENV environment variable
-    local venv = vim.env.VIRTUAL_ENV
-    if venv then
-        return vim.fs.joinpath(venv, "bin", "python")
-    end
-    
-    -- Fallback to system python
-    return "/usr/bin/python3"
+
+    -- Fallback: usar el Python del sistema
+    return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python3"
 end
 
-vim.g.loaded_python3_provider = 1
+-- Configurar el Python host
+vim.g.loaded_python3_provider = nil
 vim.g.python3_host_prog = get_python_path()
+vim.api.nvim_create_user_command("PythonPath", function()
+    vim.notify("Python host: " .. vim.g.python3_host_prog, vim.log.levels.INFO)
+end, {})
 
 require("nvchad.autocmds")
 require("autocmds")

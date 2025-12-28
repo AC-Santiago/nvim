@@ -2,9 +2,15 @@ vim.opt.spell = true
 vim.opt.spelllang = "es,en"
 
 -- TreeSitter configuración
-vim.treesitter.start()
-vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.b.molten_cell_delimiter = "```"
+vim.b["quarto_is_r_mode"] = nil
+vim.b["reticulate_running"] = false
 
--- Quarto specific settings
-vim.opt_local.wrap = true
-vim.opt_local.linebreak = true
+vim.bo.commentstring = "<!-- %s -->"
+
+-- wrap text, but by word no character
+-- indent the wrappped line
+vim.wo.wrap = true
+vim.wo.linebreak = true
+vim.wo.breakindent = true
+vim.wo.showbreak = "|"

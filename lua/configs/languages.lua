@@ -7,7 +7,6 @@ local M = {
     css = false,
     javascript = false,
     sql = true,
-    quarto = true,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -51,12 +50,6 @@ local M = {
             lsp_servers = { "sqlls" },
             linters = {},
             formatters = { "sql-formatter" },
-            dap_adapters = {},
-        },
-        quarto = {
-            lsp_servers = { "quarto" },
-            linters = {},
-            formatters = {},
             dap_adapters = {},
         },
     },

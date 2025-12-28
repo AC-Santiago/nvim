@@ -9,6 +9,7 @@ M.base_config = {
         "lua",
         "luadoc",
         "markdown",
+        "markdown_inline",
         "toml",
         "vim",
         "vimdoc",
