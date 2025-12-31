@@ -1,6 +1,10 @@
 return {
     "3rd/image.nvim",
     build = false,
+    enabled = not vim.g.neovide,
+    cond = function()
+        return not vim.g.neovide
+    end,
     ft = { "markdown", "quarto", "qmd", "python" },
     opts = {
         backend = "sixel", -- Works with Kitty, WezTerm, and iTerm2
