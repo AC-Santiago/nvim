@@ -196,3 +196,10 @@ end)
 map("n", "<C-->", function()
     change_scale_factor(1 / 1.25)
 end)
+
+-- Obsidian.nvim keymaps
+local wk = require("which-key")
+wk.add({ { "<leader>o" }, group = "Obsidian" })
+map("n", "<leader>oc", "<cmd>Obsidian check<CR>", { desc = "Obsidian Check Checkbox" })
+map("n", "<leader>ot", "<cmd>Obsidian template<CR>", { desc = "Insert Obsidian Template" })
+map("n", "<leader>oo", "<cmd>Obsidian open<CR>", { desc = "Open in Obsidian App" })
