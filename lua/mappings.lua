@@ -1,5 +1,6 @@
 -- add yours here
 local map = vim.keymap.set
+local wk = require("which-key")
 
 -- Keymaps nvchad with any maps differents
 map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
@@ -198,8 +199,23 @@ map("n", "<C-->", function()
 end)
 
 -- Obsidian.nvim keymaps
-local wk = require("which-key")
-wk.add({ { "<leader>o" }, group = "Obsidian" })
-map("n", "<leader>oc", "<cmd>Obsidian check<CR>", { desc = "Obsidian Check Checkbox" })
-map("n", "<leader>ot", "<cmd>Obsidian template<CR>", { desc = "Insert Obsidian Template" })
-map("n", "<leader>oo", "<cmd>Obsidian open<CR>", { desc = "Open in Obsidian App" })
+if pcall(require, "obsidian") then
+    wk.add({ { "<leader>o" }, group = "Obsidian" })
+    map("n", "<leader>oc", "<cmd>Obsidian check<CR>", { desc = "Obsidian Check Checkbox" })
+    map("n", "<leader>ot", "<cmd>Obsidian template<CR>", { desc = "Insert Obsidian Template" })
+    map("n", "<leader>oo", "<cmd>Obsidian open<CR>", { desc = "Open in Obsidian App" })
+end
+
+if pcall(require, "telekasten") then
+    wk.add({ { "<leader>z" }, group = "Telekasten" })
+    map("n", "<leader>zz", "<cmd>Telekasten panel<CR>", { desc = "Telekasten Panel" })
+    map("n", "<leader>zf", "<cmd>Telekasten find_notes<CR>", { desc = "Telekasten Find Notes" })
+    map("n", "<leader>zg", "<cmd>Telekasten search_notes<CR>", { desc = "Telekasten Search Notes" })
+    map("n", "<leader>zd", "<cmd>Telekasten daily_notes<CR>", { desc = "Telekasten Daily Notes" })
+    map("n", "<leader>zw", "<cmd>Telekasten week_notes<CR>", { desc = "Telekasten Week Notes" })
+    map("n", "<leader>zn", "<cmd>Telekasten new_note<CR>", { desc = "Telekasten New Note" })
+    map("n", "<leader>zN", "<cmd>Telekasten new_templated_note<CR>", { desc = "Telekasten New Templated Note" })
+    map("n", "<leader>zy", "<cmd>Telekasten yank_note_link<CR>", { desc = "Telekasten Yank Note Link" })
+    map("n", "<leader>zl", "<cmd>Telekasten insert_link<CR>", { desc = "Telekasten Insert Link" })
+    map("n", "<leader>zt", "<cmd>Telekasten toggle_todo<CR>", { desc = "Telekasten Toggle Todo" })
+end

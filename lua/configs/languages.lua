@@ -7,6 +7,7 @@ local M = {
     css = false,
     javascript = false,
     sql = true,
+    markdown = true,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -50,6 +51,12 @@ local M = {
             lsp_servers = { "sqlls" },
             linters = {},
             formatters = { "sql-formatter" },
+            dap_adapters = {},
+        },
+        markdown = {
+            lsp_servers = { "marksman" },
+            linters = {},
+            formatters = {},
             dap_adapters = {},
         },
     },

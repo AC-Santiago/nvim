@@ -1,8 +1,11 @@
 return {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
-    lazy = true,
-    ft = "markdown",
+    enable = function()
+        return vim.fn.isdirectory(vim.fn.expand("~/Escritorio/Notas/SantiagoAC-vault/")) == 1
+    end,
+    cmd = { "Obsidian" },
+    -- ft = "markdown",
     dependencies = {
         "nvim-lua/plenary.nvim",
     },

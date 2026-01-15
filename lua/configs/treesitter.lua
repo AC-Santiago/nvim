@@ -8,8 +8,6 @@ M.base_config = {
         "fish",
         "lua",
         "luadoc",
-        "markdown",
-        "markdown_inline",
         "toml",
         "vim",
         "vimdoc",
