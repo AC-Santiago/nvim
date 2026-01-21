@@ -102,12 +102,14 @@ return {
         preferred_link_style = "wiki",
 
         wiki_link_func = function(opts)
-            if opts.id == nil then
+            local link_text = opts.label or opts.id
+
+            if link_text == nil then
                 return string.format("[[%s]]", opts.label)
-            elseif opts.label ~= opts.id then
-                return string.format("[[%s|%s]]", opts.id, opts.label)
+            elseif opts.label ~= link_text then
+                return string.format("[[%s|%s]]", link_text, opts.label)
             else
-                return string.format("[[%s]]", opts.id)
+                return string.format("[[%s]]", link_text)
             end
         end,
 

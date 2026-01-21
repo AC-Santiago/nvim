@@ -6,4 +6,4 @@ vim.treesitter.start()
 vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
-vim.opt.conceallevel = 1
+vim.opt.conceallevel = 2

@@ -1,8 +1,8 @@
-# Sistema Modular de Lenguajes para Neovim
+# Sistema Modular de Lenguajes para mi configuración de Neovim
 
 ## Descripción
 
-Este sistema te permite gestionar configuraciones de lenguajes de programación de manera modular y automática. Puedes habilitar/deshabilitar lenguajes completos y agregar nuevas configuraciones fácilmente.
+Este sistema permite gestionar configuraciones de lenguajes de programación de manera modular y automática. Puedes habilitar/deshabilitar lenguajes completos y agregar nuevas configuraciones fácilmente.
 
 ## Archivos principales
 
