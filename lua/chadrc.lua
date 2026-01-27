@@ -15,7 +15,7 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "ashes",
+    theme = "chadracula-evondev",
     integrations = {
         "blink",
     },

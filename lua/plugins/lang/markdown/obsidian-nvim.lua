@@ -1,8 +1,8 @@
 return {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
-    enable = function()
-        return vim.fn.isdirectory(vim.fn.expand("~/Escritorio/Notas/SantiagoAC-vault/")) == 1
+    enabled = function()
+        return vim.fn.isdirectory(vim.fn.expand("~/Escritorio/Notas/SantiagoAC-Vault/")) == 1
     end,
     cmd = { "Obsidian" },
     -- ft = "markdown",
@@ -17,7 +17,7 @@ return {
         workspaces = {
             {
                 name = "SantiagoAC",
-                path = vim.fn.expand("~/Escritorio/Notas/SantiagoAC-vault/"),
+                path = vim.fn.expand("~/Escritorio/Notas/SantiagoAC-Vault/"),
             },
         },
 
