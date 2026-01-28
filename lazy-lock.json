@@ -3,7 +3,6 @@
   "LuaSnip": { "branch": "master", "commit": "3732756842a2f7e0e76a7b0487e9692072857277" },
   "NvChad": { "branch": "v2.5", "commit": "30e75dbbdf33f393430d6e7612dd32ef84e2a710" },
   "base46": { "branch": "v3.0", "commit": "45b336ec52615dd1a3aa47848d894616dd6293a5" },
-  "blink-cmp-avante": { "branch": "master", "commit": "4f494c6e124acbe31a8f5d58effa0c14aa38a6d5" },
   "blink-cmp-spell": { "branch": "master", "commit": "2bd0e0d5e7735c047e72b6918a0458f3e8fadaba" },
   "blink-copilot": { "branch": "main", "commit": "7ad8209b2f880a2840c94cdcd80ab4dc511d4f39" },
   "blink.cmp": { "branch": "main", "commit": "b19413d214068f316c78978b08264ed1c41830ec" },

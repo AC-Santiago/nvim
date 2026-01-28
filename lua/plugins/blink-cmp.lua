@@ -17,7 +17,6 @@ return {
         dependencies = {
             "fang2hou/blink-copilot",
             "rcarriga/cmp-dap",
-            "Kaiser-Yang/blink-cmp-avante",
             "ribru17/blink-cmp-spell",
             { "MattiasMTS/cmp-dbee", opts = {} },
             {
@@ -30,7 +29,7 @@ return {
         opts = {
             sources = {
                 default = function()
-                    local sources = { "lazydev", "copilot", "avante", "lsp", "path", "snippets", "buffer", "html-css" }
+                    local sources = { "lazydev", "copilot", "lsp", "path", "snippets", "buffer", "html-css" }
                     -- Add spell source when spell is enabled in the buffer
                     if vim.wo.spell then
                         table.insert(sources, "spell")
@@ -59,11 +58,6 @@ return {
                             max_completions = 1,
                             max_attempts = 2,
                         },
-                    },
-                    avante = {
-                        module = "blink-cmp-avante",
-                        name = "Avante",
-                        opts = {},
                     },
                     dap = {
                         name = "dap",
@@ -219,8 +213,6 @@ return {
                                     -- Iconos personalizados por fuente
                                     if ctx.source_id == "spell" then
                                         return ctx.item.preselect and "✓" or "📝"
-                                    elseif ctx.source_id == "avante" then
-                                        return "🧠"
                                     end
                                     return ctx.kind_icon .. ctx.icon_gap
                                 end,
@@ -258,7 +250,6 @@ return {
                                     local source_names = {
                                         spell = "Spell",
                                         copilot = "Copilot",
-                                        avante = "AI",
                                         path = "Path",
                                         buffer = "Buffer",
                                         snippets = "Snippet",

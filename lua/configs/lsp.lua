@@ -90,3 +90,10 @@ vim.diagnostic.config({
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     virtual_text = false,
 })
+
+-- Load language-specific LSP configurations
+local lang_loader = require("utils.lang_loader")
+local lang_config = require("configs.languages")
+for _, lang in ipairs(lang_config.get_enabled_languages()) do
+    lang_loader.apply_direct_configs(lang, "lsp")
+end
