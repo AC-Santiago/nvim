@@ -67,6 +67,7 @@ return {
     },
     config = function()
         local url_mcp_db = os.getenv("MCP_DB_URL") or "[URL DE CONEXIÓN A LA BASE DE DATOS]"
+        local url_oracle_sql_db = os.getenv("ORACLE_CURSO_SQL_DB_URL") or "[URL DE CONEXIÓN A LA BASE DE DATOS]"
         require("dbee").setup({
             sources = {
                 require("dbee.sources").MemorySource:new({
@@ -74,6 +75,11 @@ return {
                         name = "MCP-Requerimientos DB",
                         type = "postgres",
                         url = url_mcp_db,
+                    },
+                    {
+                        name = "OracleDB CursoSQL",
+                        type = "oracle",
+                        url = url_oracle_sql_db,
                     },
                 }),
             },

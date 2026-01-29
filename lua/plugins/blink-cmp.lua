@@ -18,6 +18,7 @@ return {
             "fang2hou/blink-copilot",
             "rcarriga/cmp-dap",
             "ribru17/blink-cmp-spell",
+            "kristijanhusak/vim-dadbod-completion",
             { "MattiasMTS/cmp-dbee", opts = {} },
             {
                 "saghen/blink.compat",
@@ -41,7 +42,7 @@ return {
                     end
                 end,
                 per_filetype = {
-                    sql = { "dbee", "lsp", "path", "snippets", "buffer" },
+                    sql = { "dbee", "dadbod", "lsp", "path", "snippets", "buffer" },
                 },
                 providers = {
                     lazydev = {
@@ -153,6 +154,7 @@ return {
                         name = "cmp-dbee",
                         module = "blink.compat.source",
                     },
+                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
                 },
             },
 
