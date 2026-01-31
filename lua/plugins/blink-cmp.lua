@@ -19,7 +19,7 @@ return {
             "rcarriga/cmp-dap",
             "ribru17/blink-cmp-spell",
             "kristijanhusak/vim-dadbod-completion",
-            { "MattiasMTS/cmp-dbee", opts = {} },
+            -- { "MattiasMTS/cmp-dbee", opts = {} },
             {
                 "saghen/blink.compat",
                 version = "2.*",
@@ -35,15 +35,19 @@ return {
                     if vim.wo.spell then
                         table.insert(sources, "spell")
                     end
+                    if pcall(require, "vim_dadbod_completion") then
+                        table.insert(sources, "dadbod")
+                    end
                     if require("cmp_dap").is_dap_buffer() then
                         return vim.list_extend(sources, { "dap" })
                     else
                         return sources
                     end
                 end,
-                per_filetype = {
-                    sql = { "dbee", "dadbod", "lsp", "path", "snippets", "buffer" },
-                },
+                -- per_filetype = {
+                --     -- sql = { "dbee", "dadbod", "lsp", "path", "snippets", "buffer" },
+                --     sql = { "snippets", "dadbod", "buffer" },
+                -- },
                 providers = {
                     lazydev = {
                         name = "LazyDev",
@@ -150,10 +154,10 @@ return {
                             max_items_per_source = 5,
                         },
                     },
-                    dbee = {
-                        name = "cmp-dbee",
-                        module = "blink.compat.source",
-                    },
+                    -- dbee = {
+                    --     name = "cmp-dbee",
+                    --     module = "blink.compat.source",
+                    -- },
                     dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
                 },
             },
