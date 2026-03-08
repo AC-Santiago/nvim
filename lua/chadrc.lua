@@ -19,6 +19,7 @@ M.base46 = {
     integrations = {
         "blink",
     },
+    transparency = true,
 
     -- hl_override = {
     -- 	Comment = { italic = true },

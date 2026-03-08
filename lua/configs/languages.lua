@@ -6,7 +6,7 @@ local M = {
     html = false,
     css = false,
     javascript = false,
-    sql = true,
+    sql = false,
     markdown = true,
 
     -- Configuraciones específicas por lenguaje
