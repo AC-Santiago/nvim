@@ -67,6 +67,7 @@ vim.lsp.config("lua_ls", {
 })
 
 vim.lsp.enable("lua_ls")
+vim.lsp.enable("copilot")
 
 -- Store configured servers for compatibility
 vim.g.configured_lsp_servers = configured_servers
