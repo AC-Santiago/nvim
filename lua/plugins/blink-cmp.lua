@@ -38,7 +38,8 @@ return {
                     if pcall(require, "vim_dadbod_completion") then
                         table.insert(sources, "dadbod")
                     end
-                    if require("cmp_dap").is_dap_buffer() then
+                    local dap_ok, cmp_dap = pcall(require, "cmp_dap")
+                    if dap_ok and cmp_dap.is_dap_buffer() then
                         return vim.list_extend(sources, { "dap" })
                     else
                         return sources

@@ -1,6 +1,5 @@
 -- add yours here
 local map = vim.keymap.set
-local wk = require("which-key")
 
 -- Keymaps nvchad with any maps differents
 map("i", "<C-b>", "<ESC>^i", { desc = "move beginning of line" })
@@ -25,7 +24,7 @@ map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
 map("n", "<leader>ch", "<cmd>NvCheatsheet<CR>", { desc = "toggle nvcheatsheet" })
 
 map("n", "<leader>fm", function()
-    require("conform").format({ lsp_fallback = true })
+    require("conform").format({ lsp_format = "fallback" })
 end, { desc = "general format file" })
 
 -- global lsp mappings
@@ -61,9 +60,9 @@ end, { desc = "buffer close" })
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
--- nvimtree
-map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
-map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
+-- neo-tree
+map("n", "<C-n>", "<cmd>Neotree toggle<CR>", { desc = "neo-tree toggle window" })
+map("n", "<leader>e", "<cmd>Neotree focus<CR>", { desc = "neo-tree focus window" })
 
 -- telescope
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
@@ -155,8 +154,8 @@ end, { desc = "whichkey query lookup" })
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
-map({ "n", "v" }, "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
-map({ "n", "v" }, "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
+map({ "n", "v" }, "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
+map({ "n", "v" }, "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
 -- Minty Color Picker
 map("n", "<leader>cp", function()
@@ -198,24 +197,21 @@ map("n", "<C-->", function()
     change_scale_factor(1 / 1.25)
 end)
 
--- Obsidian.nvim keymaps
-if pcall(require, "obsidian") then
-    wk.add({ { "<leader>o" }, group = "Obsidian" })
-    map("n", "<leader>oc", "<cmd>Obsidian check<CR>", { desc = "Obsidian Check Checkbox" })
-    map("n", "<leader>ot", "<cmd>Obsidian template<CR>", { desc = "Insert Obsidian Template" })
-    map("n", "<leader>oo", "<cmd>Obsidian open<CR>", { desc = "Open in Obsidian App" })
-end
+-- Obsidian.nvim keymaps (cmd-based, lazy.nvim loads plugin on first use)
+require("which-key").add({ { "<leader>o", group = "Obsidian" } })
+map("n", "<leader>oc", "<cmd>Obsidian check<CR>", { desc = "Obsidian Check Checkbox" })
+map("n", "<leader>ot", "<cmd>Obsidian template<CR>", { desc = "Insert Obsidian Template" })
+map("n", "<leader>oo", "<cmd>Obsidian open<CR>", { desc = "Open in Obsidian App" })
 
-if pcall(require, "telekasten") then
-    wk.add({ { "<leader>z" }, group = "Telekasten" })
-    map("n", "<leader>zz", "<cmd>Telekasten panel<CR>", { desc = "Telekasten Panel" })
-    map("n", "<leader>zf", "<cmd>Telekasten find_notes<CR>", { desc = "Telekasten Find Notes" })
-    map("n", "<leader>zg", "<cmd>Telekasten search_notes<CR>", { desc = "Telekasten Search Notes" })
-    map("n", "<leader>zd", "<cmd>Telekasten daily_notes<CR>", { desc = "Telekasten Daily Notes" })
-    map("n", "<leader>zw", "<cmd>Telekasten week_notes<CR>", { desc = "Telekasten Week Notes" })
-    map("n", "<leader>zn", "<cmd>Telekasten new_note<CR>", { desc = "Telekasten New Note" })
-    map("n", "<leader>zN", "<cmd>Telekasten new_templated_note<CR>", { desc = "Telekasten New Templated Note" })
-    map("n", "<leader>zy", "<cmd>Telekasten yank_note_link<CR>", { desc = "Telekasten Yank Note Link" })
-    map("n", "<leader>zl", "<cmd>Telekasten insert_link<CR>", { desc = "Telekasten Insert Link" })
-    map("n", "<leader>zt", "<cmd>Telekasten toggle_todo<CR>", { desc = "Telekasten Toggle Todo" })
-end
+-- Telekasten keymaps (cmd-based, lazy.nvim loads plugin on first use)
+require("which-key").add({ { "<leader>z", group = "Telekasten" } })
+map("n", "<leader>zz", "<cmd>Telekasten panel<CR>", { desc = "Telekasten Panel" })
+map("n", "<leader>zf", "<cmd>Telekasten find_notes<CR>", { desc = "Telekasten Find Notes" })
+map("n", "<leader>zg", "<cmd>Telekasten search_notes<CR>", { desc = "Telekasten Search Notes" })
+map("n", "<leader>zd", "<cmd>Telekasten daily_notes<CR>", { desc = "Telekasten Daily Notes" })
+map("n", "<leader>zw", "<cmd>Telekasten week_notes<CR>", { desc = "Telekasten Week Notes" })
+map("n", "<leader>zn", "<cmd>Telekasten new_note<CR>", { desc = "Telekasten New Note" })
+map("n", "<leader>zN", "<cmd>Telekasten new_templated_note<CR>", { desc = "Telekasten New Templated Note" })
+map("n", "<leader>zy", "<cmd>Telekasten yank_note_link<CR>", { desc = "Telekasten Yank Note Link" })
+map("n", "<leader>zl", "<cmd>Telekasten insert_link<CR>", { desc = "Telekasten Insert Link" })
+map("n", "<leader>zt", "<cmd>Telekasten toggle_todo<CR>", { desc = "Telekasten Toggle Todo" })

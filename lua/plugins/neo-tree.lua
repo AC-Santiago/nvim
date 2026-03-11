@@ -2,7 +2,7 @@ return {
     {
         "nvim-neo-tree/neo-tree.nvim",
         branch = "v3.x",
-        cmd = { "Neotree toggle" },
+        cmd = { "Neotree" },
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-tree/nvim-web-devicons", -- Opcional, pero recomendado
@@ -11,7 +11,7 @@ return {
         opts = {
             window = {
                 position = "left", -- Posición de la ventana
-                width = "30",
+                width = 30,
             },
             filesystem = {
                 filtered_items = {

@@ -1,15 +1,9 @@
-local typst_options = {
-    formatters_by_ft = {
-        typst = { "typstyle" },
-    },
+local conform = require("conform")
 
-    formatters = {
-        typstyle = {
-            command = "typstyle",
-            args = { "-i", "$FILENAME" },
-            stdin = false,
-        },
-    },
+conform.formatters_by_ft.typst = { "typstyle" }
+
+conform.formatters.typstyle = {
+    command = "typstyle",
+    args = { "-i", "$FILENAME" },
+    stdin = false,
 }
-
-require("conform").setup(typst_options)
