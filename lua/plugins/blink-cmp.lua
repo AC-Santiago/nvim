@@ -204,7 +204,7 @@ return {
                 },
                 menu = {
                     border = "single",
-                    winblend = 1, -- Transparencia de la ventana
+                    winblend = 0,
                     scrollbar = true,
                     direction_priority = { "s", "n" },
                     auto_show = true,

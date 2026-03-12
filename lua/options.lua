@@ -15,6 +15,7 @@ o.softtabstop = 4
 
 o.relativenumber = true
 o.termguicolors = true
+o.pumblend = 20 -- Transparencia del popup menu nativo (coherente con winblend de plugins)
 -- Database options
 
 if pcall(require, "vim_dadbod_completion") then
