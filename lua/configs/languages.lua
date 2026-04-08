@@ -8,6 +8,7 @@ local M = {
     javascript = false,
     sql = false,
     markdown = true,
+    astro = true,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -57,6 +58,12 @@ local M = {
             lsp_servers = { "marksman" },
             linters = {},
             formatters = {},
+            dap_adapters = {},
+        },
+        astro = {
+            lsp_servers = { "astro" },
+            linters = {},
+            formatters = { "prettier" },
             dap_adapters = {},
         },
     },
