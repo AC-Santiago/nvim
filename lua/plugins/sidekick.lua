@@ -28,9 +28,15 @@ M.opts = {
                 height = 20,
             },
         },
-        -- Sin tmux/zellij disponible, desactivar persistencia de sesiones
+        -- Tmux mux: persistencia de sesiones en tmux
         mux = {
-            enabled = false,
+            enabled = true,
+            backend = "tmux",
+            create = "split", -- crear en nuevo split de tmux
+            split = {
+                vertical = true,
+                size = 0.5,
+            },
         },
         -- Herramientas AI disponibles en el sistema
         tools = {
