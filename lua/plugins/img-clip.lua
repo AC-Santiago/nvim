@@ -19,6 +19,10 @@ return {
         notify_on_error = false, -- Deshabilitar notificaciones de error
 
         filetypes = {
+            markdown = {
+                url_encode_path = true,
+                template = "![$CURSOR]($FILE_PATH)",
+            },
             typst = {
                 template = [[
 #figure(

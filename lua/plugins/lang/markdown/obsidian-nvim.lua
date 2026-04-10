@@ -50,7 +50,7 @@ return {
                 local out = {
                     tipo = note.metadata and note.metadata.tipo or "permanente",
                     fuente = note.metadata and note.metadata.fuente or "",
-                    estado = note.metadata and note.metadata.estado or "borrador",
+                    estado = note.metadata and note.metadata.estado or "activo",
                     creado = note.metadata and note.metadata.creado or now_full,
                     actualizado = now_full, -- Siempre se actualiza
                     tags = note.tags or {},
@@ -95,21 +95,17 @@ return {
             date_format = "%Y-%m-%d-%a",
             alias_format = "%A, %d de %B de %Y",
             default_tags = { "daily", "journal" },
-            template = "daily. md",
+            template = "daily.md",
             workdays_only = false,
         },
 
         preferred_link_style = "wiki",
 
         wiki_link_func = function(opts)
-            local link_text = opts.label or opts.id
-
-            if link_text == nil then
-                return string.format("[[%s]]", opts.label)
-            elseif opts.label ~= link_text then
-                return string.format("[[%s|%s]]", link_text, opts.label)
+            if opts.label and opts.label ~= opts.id then
+                return string.format("[[%s|%s]]", opts.id, opts.label)
             else
-                return string.format("[[%s]]", link_text)
+                return string.format("[[%s]]", opts.id)
             end
         end,
 

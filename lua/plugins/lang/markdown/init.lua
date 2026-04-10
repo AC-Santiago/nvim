@@ -7,7 +7,6 @@ if language_config.is_enabled("markdown") then
         { import = "plugins.lang.markdown.markview" },
         { import = "plugins.lang.markdown.obsidian-nvim" },
         { import = "plugins.lang.markdown.render-markdown-nvim" },
-        { import = "plugins.lang.markdown.telekasten" },
     }
 else
     return {}
