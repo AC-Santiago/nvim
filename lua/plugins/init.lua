@@ -48,4 +48,5 @@ return {
     { import = "plugins.lang.html.init" },
     { import = "plugins.lang.javascript.init" },
     { import = "plugins.lang.sql.init" },
+    { import = "plugins.lang.markdown.init" },
 }

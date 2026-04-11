@@ -1,6 +1,6 @@
 # 🧹 Sistema de Limpieza Automática de Mason
 
-Este sistema permite desinstalar automáticamente herramientas de Mason cuando se desactivan lenguajes, manteniendo limpio tu entorno de desarrollo.
+Este sistema permite desinstalar automáticamente herramientas de Mason cuando se desactivan lenguajes, manteniendo limpio el entorno de desarrollo solo con los adicionales necesarios sin tener de otros lenguajes que están deshabilitados.
 
 ## 🚀 Características
 

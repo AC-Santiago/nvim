@@ -1,12 +1,13 @@
 local M = {
     -- Lenguajes habilitados
     python = true,
-    rust = false,
+    rust = true,
     typst = true,
     html = false,
     css = false,
     javascript = false,
-    sql = true,
+    sql = false,
+    markdown = true,
 
     -- Configuraciones específicas por lenguaje
     configs = {
@@ -50,6 +51,12 @@ local M = {
             lsp_servers = { "sqlls" },
             linters = {},
             formatters = { "sql-formatter" },
+            dap_adapters = {},
+        },
+        markdown = {
+            lsp_servers = { "marksman" },
+            linters = {},
+            formatters = {},
             dap_adapters = {},
         },
     },

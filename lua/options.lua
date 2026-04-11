@@ -1,6 +1,7 @@
 require("nvchad.options")
 
 local o = vim.o
+local g = vim.g
 
 -- Indenting
 o.shiftwidth = 4
@@ -14,3 +15,18 @@ o.softtabstop = 4
 
 o.relativenumber = true
 o.termguicolors = true
+o.pumblend = 20 -- Transparencia del popup menu nativo (coherente con winblend de plugins)
+-- Database options
+
+if pcall(require, "vim_dadbod_completion") then
+    g.dbs = {
+        {
+            name = "Oracle SQL HR DB",
+            url = function()
+                local url_oracle_sql_db = os.getenv("ORACLE_CURSO_SQL_DB_HR_URL")
+                    or "[URL DE CONEXIÓN A LA BASE DE DATOS]"
+                return url_oracle_sql_db
+            end,
+        },
+    }
+end

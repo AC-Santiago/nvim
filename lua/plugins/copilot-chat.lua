@@ -32,12 +32,12 @@ return {
             { "<leader>cs", "<cmd>CopilotChatSummarize<CR>", desc = "Resumir texto", mode = { "n", "v" } },
         },
         opts = function()
-            local user = vim.env.USER or "User"
+            local user = vim.env.USER or "SantiagoAC"
             user = user:sub(1, 1):upper() .. user:sub(2)
             return {
                 prompts = prompts,
                 system_prompt = "Soy un estudiante de ingeniería de sistemas y ciencia de datos. Por favor, proporciona respuestas claras y concisas, enfocándote en buenas prácticas de programación y explicaciones técnicas precisas. Cuando expliques conceptos: \n\n2. Usa ejemplos prácticos en Python o Java cuando sea relevante\n2. Incluye referencias a librerías comunes de ciencia de datos (pandas, numpy, scikit-learn, etc.) cuando sea apropiado\n3. Si la respuesta involucra matemáticas o estadística, proporciona explicaciones intuitivas junto con la teoría\n4. Para documentación extensa, sugiere estructuras en LaTeX\n5. Prioriza métodos modernos y eficientes en tus sugerencias de código\n6. Incluye consideraciones sobre complejidad computacional cuando sea relevante\n7. Sugiere pruebas unitarias cuando sea apropiado\n\nPrefiero explicaciones directas y prácticas con ejemplos concretos.",
-                model = "gpt-4o",
+                model = "claude-sonnet-4.5",
                 auto_insert_mode = true,
                 question_header = "  " .. user .. " ",
                 answer_header = "  Copilot ",

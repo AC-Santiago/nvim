@@ -24,7 +24,7 @@ map("n", "<leader>rn", "<cmd>set rnu!<CR>", { desc = "toggle relative number" })
 map("n", "<leader>ch", "<cmd>NvCheatsheet<CR>", { desc = "toggle nvcheatsheet" })
 
 map("n", "<leader>fm", function()
-    require("conform").format({ lsp_fallback = true })
+    require("conform").format({ lsp_format = "fallback" })
 end, { desc = "general format file" })
 
 -- global lsp mappings
@@ -60,9 +60,9 @@ end, { desc = "buffer close" })
 map("n", "<leader>/", "gcc", { desc = "toggle comment", remap = true })
 map("v", "<leader>/", "gc", { desc = "toggle comment", remap = true })
 
--- nvimtree
-map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
-map("n", "<leader>e", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
+-- neo-tree
+map("n", "<C-n>", "<cmd>Neotree toggle<CR>", { desc = "neo-tree toggle window" })
+map("n", "<leader>e", "<cmd>Neotree focus<CR>", { desc = "neo-tree focus window" })
 
 -- telescope
 map("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "telescope live grep" })
@@ -154,8 +154,8 @@ end, { desc = "whichkey query lookup" })
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
-map({ "n", "v" }, "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
-map({ "n", "v" }, "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
+map({ "n", "v" }, "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
+map({ "n", "v" }, "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
 -- Minty Color Picker
 map("n", "<leader>cp", function()
@@ -196,3 +196,6 @@ end)
 map("n", "<C-->", function()
     change_scale_factor(1 / 1.25)
 end)
+
+-- Obsidian.nvim which-key group (keybindings are in obsidian-nvim.lua)
+require("which-key").add({ { "<leader>o", group = "Obsidian" } })

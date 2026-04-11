@@ -15,15 +15,33 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "catppuccin",
+    theme = "toby-theme",
     integrations = {
         "blink",
     },
+    transparency = true,
 
-    -- hl_override = {
-    -- 	Comment = { italic = true },
-    -- 	["@comment"] = { italic = true },
-    -- },
+    hl_override = {
+        FloatTitle = { bg = "NONE" },
+        PmenuSbar = { bg = "NONE" },
+        PmenuThumb = { bg = "NONE" },
+    },
+
+    hl_add = {
+        -- Noice (sin integración en base46)
+        NoiceMini = { bg = "NONE" },
+        NoicePopup = { bg = "NONE" },
+        NoicePopupBorder = { fg = "grey", bg = "NONE" },
+        NoiceCmdlinePopup = { bg = "NONE" },
+        NoiceCmdlinePopupBorder = { fg = "grey", bg = "NONE" },
+        -- nvim-notify body/background
+        NotifyBackground = { bg = "NONE" },
+        NotifyINFOBody = { bg = "NONE" },
+        NotifyWARNBody = { bg = "NONE" },
+        NotifyERRORBody = { bg = "NONE" },
+        NotifyDEBUGBody = { bg = "NONE" },
+        NotifyTRACEBody = { bg = "NONE" },
+    },
 }
 
 M.ui = {

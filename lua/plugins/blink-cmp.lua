@@ -17,9 +17,9 @@ return {
         dependencies = {
             "fang2hou/blink-copilot",
             "rcarriga/cmp-dap",
-            "Kaiser-Yang/blink-cmp-avante",
             "ribru17/blink-cmp-spell",
-            { "MattiasMTS/cmp-dbee", opts = {} },
+            "kristijanhusak/vim-dadbod-completion",
+            -- { "MattiasMTS/cmp-dbee", opts = {} },
             {
                 "saghen/blink.compat",
                 version = "2.*",
@@ -30,20 +30,25 @@ return {
         opts = {
             sources = {
                 default = function()
-                    local sources = { "lazydev", "copilot", "avante", "lsp", "path", "snippets", "buffer", "html-css" }
+                    local sources = { "lazydev", "copilot", "lsp", "path", "snippets", "buffer", "html-css" }
                     -- Add spell source when spell is enabled in the buffer
                     if vim.wo.spell then
                         table.insert(sources, "spell")
                     end
-                    if require("cmp_dap").is_dap_buffer() then
+                    if pcall(require, "vim_dadbod_completion") then
+                        table.insert(sources, "dadbod")
+                    end
+                    local dap_ok, cmp_dap = pcall(require, "cmp_dap")
+                    if dap_ok and cmp_dap.is_dap_buffer() then
                         return vim.list_extend(sources, { "dap" })
                     else
                         return sources
                     end
                 end,
-                per_filetype = {
-                    sql = { "dbee", "lsp", "path", "snippets", "buffer" },
-                },
+                -- per_filetype = {
+                --     -- sql = { "dbee", "dadbod", "lsp", "path", "snippets", "buffer" },
+                --     sql = { "snippets", "dadbod", "buffer" },
+                -- },
                 providers = {
                     lazydev = {
                         name = "LazyDev",
@@ -59,11 +64,6 @@ return {
                             max_completions = 1,
                             max_attempts = 2,
                         },
-                    },
-                    avante = {
-                        module = "blink-cmp-avante",
-                        name = "Avante",
-                        opts = {},
                     },
                     dap = {
                         name = "dap",
@@ -155,10 +155,11 @@ return {
                             max_items_per_source = 5,
                         },
                     },
-                    dbee = {
-                        name = "cmp-dbee",
-                        module = "blink.compat.source",
-                    },
+                    -- dbee = {
+                    --     name = "cmp-dbee",
+                    --     module = "blink.compat.source",
+                    -- },
+                    dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
                 },
             },
 
@@ -203,7 +204,7 @@ return {
                 },
                 menu = {
                     border = "single",
-                    winblend = 1, -- Transparencia de la ventana
+                    winblend = 0,
                     scrollbar = true,
                     direction_priority = { "s", "n" },
                     auto_show = true,
@@ -219,8 +220,6 @@ return {
                                     -- Iconos personalizados por fuente
                                     if ctx.source_id == "spell" then
                                         return ctx.item.preselect and "✓" or "📝"
-                                    elseif ctx.source_id == "avante" then
-                                        return "🧠"
                                     end
                                     return ctx.kind_icon .. ctx.icon_gap
                                 end,
@@ -258,7 +257,6 @@ return {
                                     local source_names = {
                                         spell = "Spell",
                                         copilot = "Copilot",
-                                        avante = "AI",
                                         path = "Path",
                                         buffer = "Buffer",
                                         snippets = "Snippet",

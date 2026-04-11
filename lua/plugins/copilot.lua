@@ -11,6 +11,7 @@ M.opts = {
         lua = true,
         rust = true,
         markdown = true,
+        toml = true,
         ["*"] = false,
     },
     panel = { enabled = false },

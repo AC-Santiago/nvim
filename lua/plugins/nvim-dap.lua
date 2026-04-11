@@ -1,3 +1,11 @@
+local function get_args()
+    local args = vim.fn.input("DAP Args: ")
+    if args == "" then
+        return {}
+    end
+    return vim.split(args, " ", { trimempty = true })
+end
+
 local M = {
     "mfussenegger/nvim-dap",
     event = {

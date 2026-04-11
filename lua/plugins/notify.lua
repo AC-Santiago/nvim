@@ -5,7 +5,7 @@ return {
     config = function()
         local notify = require("notify")
         -- this for transparency
-        notify.setup({ background_colour = "#000000", opacity = 0, render = "simple" })
+        notify.setup({ background_colour = "#000000", render = "simple" })
         -- this overwrites the vim notify function
         vim.notify = notify.notify
     end,

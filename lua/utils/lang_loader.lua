@@ -44,7 +44,7 @@ function M.load_lang_configs(lang_name)
 end
 
 -- Función para aplicar configuraciones específicas que ejecutan directamente
-function M.apply_direct_configs(lang_name)
+function M.apply_direct_configs(lang_name, specific_type)
     local lang_config = require("configs.languages")
 
     if not lang_config.is_enabled(lang_name) then
@@ -52,15 +52,16 @@ function M.apply_direct_configs(lang_name)
     end
 
     -- Solo aplicar configuraciones que ejecutan directamente (no retornan plugin specs)
-    local direct_config_files = { "lsp", "lint" }
+    -- Si se especifica un tipo, usar solo ese. Si no, usar ambos (comportamiento legacy)
+    local direct_config_files = specific_type and { specific_type } or { "lsp", "lint" }
 
     for _, config_file in ipairs(direct_config_files) do
         local config_path = "plugins.lang." .. lang_name .. "." .. config_file
         local ok, err = pcall(require, config_path)
         if ok then
-            -- vim.notify("Loaded " .. config_file .. " config for " .. lang_name, vim.log.levels.DEBUG)
+            vim.notify("Loaded " .. config_file .. " config for " .. lang_name, vim.log.levels.DEBUG)
         elseif err and not string.find(err, "module .* not found") then
-            -- vim.notify("Error loading " .. config_file .. " for " .. lang_name .. ": " .. err, vim.log.levels.WARN)
+            vim.notify("Error loading " .. config_file .. " for " .. lang_name .. ": " .. err, vim.log.levels.WARN)
         end
     end
 end
