@@ -1,4 +1,4 @@
--- Canine Green
+-- Toby Theme
 ---@type Base46Table
 local M = {}
 
