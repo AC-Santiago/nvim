@@ -29,8 +29,9 @@ M.base_30 = {
     teal          = "#8BC47A", -- verde-media: comentarios             9.36:1 ✅ AAA
 
     -- FUNCIONES Y TIPOS ESPECIALES
-    blue = "#7DDFC4", -- verde-teal pastel: funciones, métodos  12.05:1 ✅ AAA
-    cyan = "#9FEADB", -- verde-menta más claro: escape, regex   13.91:1 ✅ AAA
+    -- hue rotado ~20° hacia verde (~145°) para preservar identidad verdosa
+    blue = "#7DD4A3", -- verde-teal pastel: funciones, métodos  ~11.5:1 ✅ AAA
+    cyan = "#9ADABB", -- verde-menta más claro: escape, regex   ~13.0:1 ✅ AAA
 
     -- STRINGS (máximo contraste perceptivo — amarillo dorado pastel)
     purple = "#F0E080", -- amarillo-dorado suavizado: strings, tipos  14.29:1 ✅ AAA
@@ -47,8 +48,8 @@ M.base_30 = {
     sun       = "#D4E8C2", -- alias de yellow/white
 
     -- SINÓNIMOS DE INTERFAZ
-    nord_blue    = "#7DDFC4", -- alias de blue
-    seablue      = "#7DDFC4", -- alias de blue
+    nord_blue    = "#7DD4A3", -- alias de blue
+    seablue      = "#7DD4A3", -- alias de blue
     forest_green = "#222A21", -- bg_highlight
 
     -- INTERFAZ
@@ -71,8 +72,8 @@ M.base_16 = {
     base09 = "#E8B07A", -- naranja — warnings               9.95:1 ✅ AAA
     base0A = "#F0E080", -- amarillo-dorado — clases         14.29:1 ✅ AAA
     base0B = "#A3D97A", -- verde — success, diff+           11.63:1 ✅ AAA
-    base0C = "#9FEADB", -- verde-menta — regex, soporte     13.91:1 ✅ AAA
-    base0D = "#7DDFC4", -- verde-teal — funciones           12.05:1 ✅ AAA
+    base0C = "#9ADABB", -- verde-salvia — regex, soporte    ~13.0:1 ✅ AAA
+    base0D = "#7DD4A3", -- verde-teal — funciones           ~11.5:1 ✅ AAA
     base0E = "#A8D66B", -- verde saturado — keywords        11.39:1 ✅ AAA
     base0F = "#657A55", -- overlay — deprecated              4.07:1 decorativo
 }
@@ -129,7 +130,7 @@ M.polish_hl = {
 
         -- SINTAXIS BASE
         Comment    = { fg = M.base_30.teal, italic = true },        -- verde-media: legible y tranquilo
-        Function   = { fg = M.base_30.blue, bold = true },          -- teal: distinto de keywords
+        Function   = { fg = M.base_30.blue, bold = true },          -- verde-teal: distinto de keywords
         Keyword    = { fg = M.base_30.vibrant_green, bold = true },  -- verde saturado-pastel
         Type       = { fg = M.base_30.purple },                     -- dorado: tipos inconfundibles
         Constant   = { fg = M.base_30.pink },                       -- ámbar pastel: constantes
