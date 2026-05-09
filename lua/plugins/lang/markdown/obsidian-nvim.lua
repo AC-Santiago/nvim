@@ -99,15 +99,11 @@ return {
             workdays_only = false,
         },
 
-        preferred_link_style = "wiki",
-
-        wiki_link_func = function(opts)
-            if opts.label and opts.label ~= opts.id then
-                return string.format("[[%s|%s]]", opts.id, opts.label)
-            else
-                return string.format("[[%s]]", opts.id)
-            end
-        end,
+        link = {
+            style = "wiki",
+            format = "shortest",
+            auto_update = false,
+        },
 
         attachments = {
             folder = "attachments",

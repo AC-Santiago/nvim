@@ -19,7 +19,7 @@ M.base46 = {
     integrations = {
         "blink",
     },
-    transparency = true,
+    transparency = false,
 
     hl_override = {
         FloatTitle = { bg = "NONE" },

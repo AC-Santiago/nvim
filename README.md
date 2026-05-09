@@ -1,236 +1,284 @@
-# Configuración Personal de Neovim
+# Neovim Configuration
 
-Esta es mi configuración personal de Neovim optimizada para desarrollo en Linux. Esta configuración esta basado en la configuración de NvChad junto a la modificación  de ProgrammingRainbow, solo ha sido probada en Fedora.
+Personal Neovim configuration optimized for development on Linux. Based on NvChad with custom modifications.
 
-## Requisitos Previos
+## Requirements
 
-Antes de comenzar, asegúrate de tener instalado:
+- **Neovim 0.9+**
+- **Git**
+- **Node.js & npm**
+- **Python 3 & pip**
+- **C compiler** (gcc/clang)
+- **Nerd Font** (recommended: JetBrainsMono Nerd Font)
+- **Make**
+- **ripgrep**
+- **fd-find**
+- **luarocks**
 
-- Neovim (versión 0.9.0 o superior)
-- Git
-- Node.js y npm
-- Python 3 y pip
-- Compilador C (gcc/clang)
-- [Nerd Font](https://www.nerdfonts.com/) instalada (recomendada: JetBrainsMono Nerd Font)
-- Make
-- ripgrep
-- fd-find
-- luarocks
-
-### Requisitos para Jupyter y Quarto
-
-Para usar las funcionalidades de Jupyter Notebook y Quarto:
-
-- **uv** - Gestor de paquetes de Python (recomendado):
-  ```bash
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  ```
-
-- **Jupyter** - Para soporte de notebooks:
-  ```bash
-  uv tool install jupyter
-  # O con pip: pip install jupyter
-  ```
-
-- **Quarto** - Para publicación científica y técnica:
-  ```bash
-  # Descargar desde https://quarto.org/docs/get-started/
-  # O en Fedora:
-  sudo dnf install quarto
-  ```
-
-- **pynvim** - Proveedor de Python para Neovim:
-  ```bash
-  uv tool install pynvim
-  # O con pip: pip install pynvim
-  ```
-
-- **Opcional - Terminal con soporte de imágenes** (para visualización de gráficos):
-  - Kitty (recomendado)
-  - WezTerm
-  - iTerm2 (macOS)
-
-### Instalación de Dependencias en Fedora
+### Optional for Jupyter/Quarto
 
 ```bash
-sudo dnf install -y python3-neovim git nodejs npm python3-pip gcc make ripgrep fd-find luarocks quarto
-# Instalar uv para gestión de paquetes Python
+# Install uv (Python package manager)
 curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Jupyter support
+uv tool install jupyter
+
+# Quarto (Fedora)
+sudo dnf install quarto
+
+# Python provider for Neovim
+uv tool install pynvim
 ```
 
-### Instalación de Dependencias en Arch
+## Features
 
-```bash
-sudo pacman -S --needed neovim python-pynvim unzip luarocks xclip wl-clipboard quarto
-# Instalar uv para gestión de paquetes Python
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+### AI Integration
+- **Copilot** - Code completion via copilot.lua
+- **CopilotChat** - AI chat assistant for code explanation, review, and generation
 
-## Instalación
+### Language Support
+- **Python** - LSP, DAP, formatting, linting, Jupyter (Molten), Quarto, uv
+- **Rust** - LSP, DAP, formatting via rustaceanvim
+- **Typst** - LSP and preview via typst-preview.nvim
+- **HTML/CSS/JS** - LSP, formatting, linting
+- **SQL** - LSP and formatting
+- **Markdown** - LSP, Obsidian.nvim integration, rendering
 
-1. Clona este repositorio en tu directorio de configuración de Neovim:
+### Data Science
+- **Molten** - Jupyter notebooks in Neovim
+- **Quarto** - Scientific/technical publishing
+- **uv.nvim** - Python environment management
+
+### Productivity
+- **Telescope** - Fuzzy finding, grep, buffers, etc.
+- **Neo-tree** - File explorer
+- **Oil** - File explorer with git integration
+- **Noice** - Better notifications and messages
+- **ufo** - Code folding
+- **blink.cmp** - Enhanced completion
+- **Conform** - Code formatting
+- **nvim-lint** - Linting
+- **Mason** - LSP/DAP/Linter management
+
+### Note-taking
+- **Obsidian.nvim** - Obsidian vault integration with custom frontmatter
+
+## Installation
 
 ```bash
 git clone https://github.com/AC-Santiago/nvim.git ~/.config/nvim
+nvim  # Lazy will auto-install plugins on first run
 ```
 
-2. La primera vez que abras Neovim, el gestor de plugins Lazy.nvim se instalará automáticamente y comenzará a instalar todos los plugins configurados.
+## Keybindings
 
-```bash
-nvim
-```
+> `<Space>` is the leader key. `<leader>` in this table refers to Space.
 
-3. Espera a que se complete la instalación de todos los plugins.
+### General
 
-## Características Principales
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<Space>` | Normal | Leader key |
+| `\` | Normal | Local leader |
+| `;` | Normal | Enter command mode |
+| `jk` | Insert | Exit to Normal |
+| `<Esc>` | Normal | Clear highlights |
+| `<C-s>` | Normal | Save file |
+| `<C-h/j/k/l>` | Insert | Move in line |
+| `<C-h/j/k/l>` | Normal | Switch window |
+| `zR` | Normal | Open all folds |
+| `zM` | Normal | Close all folds |
 
-- 🤖 Integración con Copilot y Avante.nvim para asistencia de IA
-- 🌳 Soporte de TreeSitter para mejor resaltado de sintaxis
-- 📦 Gestor de paquetes LSP (Mason) para autocompletado y análisis de código
-- 🔍 Búsqueda difusa con Telescope
-- 🛠️ Depuración integrada con nvim-dap
-- 🎨 Resaltado de sintaxis mejorado
-- 📝 Autocompletado inteligente con nvim-cmp
-- 📓 **Soporte para Jupyter Notebooks** con Molten.nvim
-- 📊 **Soporte para Quarto** - Publicación científica y técnica
-- 🐍 Integración con **uv** para gestión de paquetes Python
+### File Exploration
 
-## Uso de Jupyter Notebooks y Quarto
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<C-n>` | Normal | Toggle Neo-tree |
+| `<leader>e` | Normal | Focus Neo-tree |
+| `-` | Normal | Open parent (Oil) |
 
-### Configuración de un proyecto con uv
+### Telescope
 
-```bash
-# Crear un nuevo proyecto
-uv init mi-proyecto
-cd mi-proyecto
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>ff` | Normal | Find files |
+| `<leader>fa` | Normal | Find all files |
+| `<leader>fw` | Normal | Live grep |
+| `<leader>fb` | Normal | Find buffers |
+| `<leader>fo` | Normal | Recent files |
+| `<leader>fz` | Normal | Search in buffer |
+| `<leader>cm` | Normal | Git commits |
+| `<leader>gt` | Normal | Git status |
+| `<leader>th` | Normal | NvChad themes |
 
-# Crear entorno virtual
-uv venv
+### LSP
 
-# Instalar dependencias de Jupyter
-uv add jupyter ipykernel
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>fm` | Normal | Format file |
+| `<leader>ds` | Normal | Diagnostics loclist |
+| `<leader>ca` | Normal/Visual | Code actions |
+| `gr` | Normal | References |
+| `gi` | Normal | Implementation |
+| `<leader>ih` | Normal | Toggle inlay hints |
 
-# Activar el entorno (opcional, Neovim lo detectará automáticamente)
-source .venv/bin/activate
-```
+### Git
 
-### Trabajar con Jupyter en Neovim
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>lg` | Normal | Open LazyGit |
+| `<leader>ga` | Normal | Git fetch all |
+| `<leader>gl` | Normal | Git pull |
 
-1. Abre un archivo Python o Quarto (.qmd)
-2. Inicializa Molten: `<leader>mi`
-3. Ejecuta código:
-   - `<leader>ml` - Ejecutar línea actual
-   - `<leader>mv` - Ejecutar selección visual
-   - `<leader>me` - Ejecutar operador
-4. Ver resultados: `<leader>mo`
-5. Navegación entre celdas: `]c` (siguiente), `[c` (anterior)
+### Debugging (DAP)
 
-### Crear documentos Quarto
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<localleader>db` | Normal | Toggle breakpoint |
+| `<localleader>dc` | Normal | Continue |
+| `<localleader>di` | Normal | Step into |
+| `<localleader>do` | Normal | Step out |
+| `<localleader>dO` | Normal | Step over |
+| `<localleader>dt` | Normal | Terminate |
 
-```bash
-# Crear un nuevo documento Quarto
-nvim documento.qmd
-```
+### Terminal
 
-En el documento `.qmd`, puedes mezclar Markdown con bloques de código ejecutables:
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<C-x>` | Terminal | Escape terminal mode |
+| `<leader>h` | Normal | New horizontal terminal |
+| `<leader>v` | Normal | New vertical terminal |
+| `<A-h>` | Normal/Term | Toggle horizontal |
+| `<A-v>` | Normal/Term | Toggle vertical |
+| `<A-i>` | Normal/Term | Toggle floating |
 
-````markdown
----
-title: "Mi Análisis"
-format: html
----
+### Jupyter (Molten)
 
-## Introducción
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>mi` | Normal | Initialize Molten |
+| `<leader>ml` | Normal | Evaluate line |
+| `<leader>mv` | Visual | Evaluate selection |
+| `<leader>me` | Normal | Evaluate operator |
+| `<leader>mr` | Normal | Re-evaluate cell |
+| `<leader>mo` | Normal | Show output |
+| `<leader>mh` | Normal | Hide output |
+| `]c` | Normal | Next cell |
+| `[c` | Normal | Previous cell |
 
-Este es un documento Quarto.
+### Quarto
 
-```{python}
-import pandas as pd
-import matplotlib.pyplot as plt
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<localleader>qp` | Normal | Preview |
+| `<localleader>qq` | Normal | Close preview |
+| `<localleader>rc` | Normal | Run cell |
+| `<localleader>ra` | Normal | Run cell and above |
 
-# Tu código aquí
-```
-````
+### Obsidian
 
-Para renderizar el documento:
-```bash
-quarto render documento.qmd
-```
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>on` | Normal | New note |
+| `<leader>oo` | Normal | Open in Obsidian app |
+| `<leader>os` | Normal | Search notes |
+| `<leader>oq` | Normal | Quick switch |
+| `<leader>ot` | Normal | Today's note |
+| `<leader>oy` | Normal | Yesterday's note |
+| `<leader>ob` | Normal | Backlinks |
+| `<leader>ol` | Normal | Links in note |
+| `<leader>og` | Normal | Search by tags |
+| `<leader>oc` | Normal | Toggle checkbox |
+| `<leader>op` | Normal | Paste image |
+| `<leader>oT` | Normal | Insert template |
 
-Para una guía completa de Jupyter y Quarto, consulta [docs/JUPYTER_QUARTO_GUIDE.md](docs/JUPYTER_QUARTO_GUIDE.md).
+### AI (CopilotChat)
 
-**Archivos de ejemplo**:
-- [ejemplo_jupyter.py](docs/examples/ejemplo_jupyter.py) - Ejemplo de uso de Jupyter con Python
-- [ejemplo.qmd](docs/examples/ejemplo.qmd) - Ejemplo de documento Quarto
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>cc` | Normal | Open chat |
+| `<leader>ce` | Normal/Visual | Explain code |
+| `<leader>ct` | Normal/Visual | Generate tests |
+| `<leader>cr` | Normal/Visual | Review code |
+| `<leader>cf` | Normal/Visual | Fix code |
+| `<leader>cd` | Normal/Visual | Generate docs |
 
-## Atajos de Teclado
+### Utilities
 
-Para ver una lista completa de todos los atajos de teclado disponibles, consulta [KEYBINDINGS.md](KEYBINDINGS.md).
+| Key | Mode | Description |
+|-----|------|-------------|
+| `<leader>cp` | Normal | Color picker (Minty) |
+| `<localleader>cp` | Normal | Save color |
+| `<leader>snl` | Normal | Noice last message |
+| `<leader>snh` | Normal | Noice history |
 
-### Atajos Generales
-- `<Space>` es la tecla líder
-- `<leader>ac` - Iniciar chat con IA
-- `<leader>ff` - Buscar archivos
-
-### Atajos para Jupyter/Molten
-- `<leader>mi` - Inicializar Molten (kernel de Jupyter)
-- `<leader>ml` - Ejecutar línea actual
-- `<leader>mv` - Ejecutar selección visual
-- `<leader>me` - Ejecutar con operador
-- `<leader>mr` - Re-ejecutar celda
-- `<leader>mo` - Mostrar salida
-- `<leader>mh` - Ocultar salida
-- `<leader>md` - Eliminar celda
-- `]c` - Ir a la siguiente celda
-- `[c` - Ir a la celda anterior
-
-## Personalización
-
-Puedes personalizar la configuración editando los archivos en `~/.config/nvim/lua/`:
-
-- `chadrc.lua` - Configuraciones visuales
-- `options.lua` - Configuraciones generales de Neovim
-- `mappings.lua` - Atajos de teclado personalizados
-- `plugins/` - Configuraciones específicas o sencillas de plugins
-- `configs/` - Configuraciones adicionales de los plugins
-
-## Estructura del Proyecto
+## Project Structure
 
 ```
 ~/.config/nvim/
-├── init.lua
-├── lazy-lock.json
-├── LICENSE
-├── lua
-│   ├── chadrc.lua
-│   ├── configs
-│   │   ├── conform.lua
-│   │   ├── DAP
-│   │   │   ├── init.lua
-│   │   │   └── lang
-│   │   │       ├── python.lua
-│   │   │       └── ...
-│   │   ├── lazy.lua
-│   │   └── ...
-│   ├── custom
-│   │   └── configs
-│   │       └── ...
-│   ├── mappings.lua
-│   ├── options.lua
-│   └── plugins
-│       ├── init.lua
-│       └── ...
-└── README.md
+├── init.lua              # Entry point
+├── lazy-lock.json        # Plugin lock file
+├── .stylua.toml          # Lua formatter config
+├── lua/
+│   ├── chadrc.lua        # NvChad config overrides
+│   ├── options.lua        # Neovim options
+│   ├── mappings.lua       # Keybindings
+│   ├── autocmds.lua       # Autocommands
+│   ├── configs/           # Plugin configurations
+│   │   ├── lsp.lua
+│   │   ├── conform.lua
+│   │   ├── lint.lua
+│   │   ├── treesitter.lua
+│   │   └── ...
+│   ├── plugins/           # Plugin definitions (per language)
+│   │   └── lang/
+│   │       ├── python/
+│   │       ├── rust/
+│   │       ├── typst/
+│   │       └── ...
+│   ├── utils/             # Utility modules
+│   │   ├── lang_loader.lua
+│   │   └── mason_cleanup.lua
+│   └── themes/            # Custom themes
+├── docs/                  # Documentation
+│   ├── README_LANGUAGE_SYSTEM.md
+│   └── MASON_CLEANUP_GUIDE.md
+├── KEYBINDINGS.md          # This file
+└── spell/                  # Spelling dictionaries
 ```
 
-## Solución de Problemas
+## Configuration
 
-Si encuentras algún problema:
+### Languages System
 
-1. Actualiza Neovim a la última versión
-2. Elimina la caché de plugins: `rm -rf ~/.local/share/nvim/`
-3. Actualiza todos los plugins dentro de Neovim: `:Lazy sync`
+Languages are enabled/disabled in `lua/configs/languages.lua`. The Mason Cleanup system automatically removes unused tools when languages are disabled.
 
-## Contribuciones
+### Custom Themes
 
-Las contribuciones son bienvenidas. Por favor, siente libre de hacer un fork y enviar pull requests.
+The theme is set to "toby-theme" in `lua/chadrc.lua`.
+
+### Statusline
+
+Uses "vscode_colored" theme from NvChad.
+
+## Troubleshooting
+
+### Update plugins
+```
+:Lazy sync
+```
+
+### Clean Mason tools
+```lua
+:lua require('utils.lang_loader').manual_cleanup()
+```
+
+### Check language state
+```lua
+:lua vim.print(require('utils.lang_loader').get_state_info())
+```
+
+## License
+
+MIT
