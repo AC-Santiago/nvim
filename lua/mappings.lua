@@ -157,15 +157,10 @@ map("i", "jk", "<ESC>")
 map({ "n", "v" }, "zR", function() require("ufo").openAllFolds() end, { desc = "Open all folds" })
 map({ "n", "v" }, "zM", function() require("ufo").closeAllFolds() end, { desc = "Close all folds" })
 
--- Minty Color Picker
-map("n", "<leader>cp", function()
-    require("plenary.reload").reload_module("minty.huefy")
-    require("minty.huefy").open()
-end, { desc = "Minty Color Picker" })
-
-map("n", "<localleader>cp", function()
-    require("minty.shades").open()
-end, { desc = "Minty save_color" })
+-- Python uv.nvim (uv for Python package management)
+map("n", "<localleader>xu", function()
+    require("telescope").extensions.uv.search_packages()
+end, { desc = "uv: Search packages" })
 
 -- Oil keymaps
 map("n", "-", "<cmd>Oil<CR>", { desc = "oil open parent directory" })

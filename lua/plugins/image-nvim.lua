@@ -5,7 +5,7 @@ return {
     cond = function()
         return not vim.g.neovide
     end,
-    ft = { "markdown", "quarto", "qmd", "python" },
+    ft = { "markdown", "python" },
     opts = {
         backend = "kitty", -- Works with Kitty, WezTerm, and iTerm2
         processor = "magick_cli", -- or "magick_rock"
@@ -17,7 +17,7 @@ return {
                 only_render_image_at_cursor = true,
                 only_render_image_at_cursor_mode = "popup", -- or "inline"
                 floating_windows = false, -- if true, images will be rendered in floating markdown windows
-                filetypes = { "markdown", "vimwiki", "quarto", "qmd" }, -- markdown extensions (ie. quarto) can go here
+                filetypes = { "markdown", "vimwiki" }, -- markdown extensions can go here
             },
             neorg = {
                 enabled = true,

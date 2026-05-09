@@ -6,7 +6,7 @@ Personal Neovim configuration optimized for development on Linux. Based on NvCha
 
 - **Neovim 0.9+**
 - **Git**
-- **Node.js & npm**
+- **Node.js & npm** (required for Copilot)
 - **Python 3 & pip**
 - **C compiler** (gcc/clang)
 - **Nerd Font** (recommended: JetBrainsMono Nerd Font)
@@ -15,40 +15,38 @@ Personal Neovim configuration optimized for development on Linux. Based on NvCha
 - **fd-find**
 - **luarocks**
 
-### Optional for Jupyter/Quarto
+### Optional for Python Development
 
 ```bash
 # Install uv (Python package manager)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Jupyter support
-uv tool install jupyter
-
-# Quarto (Fedora)
-sudo dnf install quarto
-
 # Python provider for Neovim
 uv tool install pynvim
+
+# Marimo (modern reactive notebooks - alternative to Jupyter)
+uv tool install marimo
 ```
 
 ## Features
 
 ### AI Integration
 - **Copilot** - Code completion via copilot.lua
-- **CopilotChat** - AI chat assistant for code explanation, review, and generation
+- **CopilotChat** - AI chat assistant using GitHub Models (Claude, GPT-4, etc.)
+  - Requires: Copilot Chat in IDE enabled at github.com/settings/copilot
+  - Run `:CopilotChat auth` on first use to authenticate
 
 ### Language Support
-- **Python** - LSP, DAP, formatting, linting, Jupyter (Molten), Quarto, uv
-- **Rust** - LSP, DAP, formatting via rustaceanvim
-- **Typst** - LSP and preview via typst-preview.nvim
+- **Python** - LSP (pyrefly, ruff), DAP (debugpy), formatting, linting, uv
+- **Rust** - LSP, DAP via rustaceanvim
+- **Typst** - LSP and preview
 - **HTML/CSS/JS** - LSP, formatting, linting
 - **SQL** - LSP and formatting
 - **Markdown** - LSP, Obsidian.nvim integration, rendering
 
 ### Data Science
-- **Molten** - Jupyter notebooks in Neovim
-- **Quarto** - Scientific/technical publishing
 - **uv.nvim** - Python environment management
+- **Marimo** - Modern reactive notebooks (replaces Jupyter, see below)
 
 ### Productivity
 - **Telescope** - Fuzzy finding, grep, buffers, etc.
@@ -63,6 +61,7 @@ uv tool install pynvim
 
 ### Note-taking
 - **Obsidian.nvim** - Obsidian vault integration with custom frontmatter
+  - Configure vault path via `OBSIDIAN_VAULT_PATH` environment variable
 
 ## Installation
 
@@ -153,29 +152,6 @@ nvim  # Lazy will auto-install plugins on first run
 | `<A-v>` | Normal/Term | Toggle vertical |
 | `<A-i>` | Normal/Term | Toggle floating |
 
-### Jupyter (Molten)
-
-| Key | Mode | Description |
-|-----|------|-------------|
-| `<leader>mi` | Normal | Initialize Molten |
-| `<leader>ml` | Normal | Evaluate line |
-| `<leader>mv` | Visual | Evaluate selection |
-| `<leader>me` | Normal | Evaluate operator |
-| `<leader>mr` | Normal | Re-evaluate cell |
-| `<leader>mo` | Normal | Show output |
-| `<leader>mh` | Normal | Hide output |
-| `]c` | Normal | Next cell |
-| `[c` | Normal | Previous cell |
-
-### Quarto
-
-| Key | Mode | Description |
-|-----|------|-------------|
-| `<localleader>qp` | Normal | Preview |
-| `<localleader>qq` | Normal | Close preview |
-| `<localleader>rc` | Normal | Run cell |
-| `<localleader>ra` | Normal | Run cell and above |
-
 ### Obsidian
 
 | Key | Mode | Description |
@@ -244,11 +220,17 @@ nvim  # Lazy will auto-install plugins on first run
 ├── docs/                  # Documentation
 │   ├── README_LANGUAGE_SYSTEM.md
 │   └── MASON_CLEANUP_GUIDE.md
-├── KEYBINDINGS.md          # This file
 └── spell/                  # Spelling dictionaries
 ```
 
 ## Configuration
+
+### Environment Variables
+
+```bash
+# Obsidian vault path (optional, defaults to ~/Escritorio/Notas/SantiagoAC-Vault/)
+export OBSIDIAN_VAULT_PATH=~/path/to/your/vault/
+```
 
 ### Languages System
 
@@ -262,12 +244,38 @@ The theme is set to "toby-theme" in `lua/chadrc.lua`.
 
 Uses "vscode_colored" theme from NvChad.
 
+## Marimo Notebooks
+
+[Marimo](https://marimo.io) is a modern reactive Python notebook that replaces Jupyter. It offers:
+
+- **Reactive execution** - cells automatically re-run when dependencies change
+- **Git-friendly** - notebooks are pure Python `.py` files
+- **Deployable** - run as scripts or web apps
+- **Modern editor** - vim keybindings, AI integration, variable explorer
+
+```bash
+# Create a new Marimo notebook
+uv venv
+source .venv/bin/activate
+uv pip install marimo
+marimo edit
+
+# Or run an existing notebook
+marimo run notebook.py
+```
+
 ## Troubleshooting
 
 ### Update plugins
 ```
 :Lazy sync
 ```
+
+### Copilot authentication issues
+```
+:Copilot auth
+```
+Make sure Copilot Chat in IDE is enabled at github.com/settings/copilot
 
 ### Clean Mason tools
 ```lua

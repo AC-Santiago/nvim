@@ -21,8 +21,9 @@ local prompts = {
 return {
     {
         "CopilotC-Nvim/CopilotChat.nvim",
+        build = "make tiktoken",
         keys = {
-            { "<leader>cc", "<cmd>CopilotChat<CR>", desc = "Abrir CopilotChat" },
+            { "<leader>cc", "<cmd>CopilotChatOpen<CR>", desc = "Abrir CopilotChat" },
             { "<leader>ce", "<cmd>CopilotChatExplain<CR>", desc = "Explicar código", mode = { "n", "v" } },
             { "<leader>ct", "<cmd>CopilotChatTests<CR>", desc = "Generar pruebas", mode = { "n", "v" } },
             { "<leader>cr", "<cmd>CopilotChatReview<CR>", desc = "Revisar código", mode = { "n", "v" } },
@@ -36,8 +37,11 @@ return {
             user = user:sub(1, 1):upper() .. user:sub(2)
             return {
                 prompts = prompts,
+                -- Use github_models provider for Claude and other models
+                -- Requires: Copilot Chat in IDE enabled at github.com/settings/copilot
+                provider = "github_models",
+                model = "claude-sonnet-4-20250514",
                 system_prompt = "Soy un estudiante de ingeniería de sistemas y ciencia de datos. Por favor, proporciona respuestas claras y concisas, enfocándote en buenas prácticas de programación y explicaciones técnicas precisas. Cuando expliques conceptos: \n\n2. Usa ejemplos prácticos en Python o Java cuando sea relevante\n2. Incluye referencias a librerías comunes de ciencia de datos (pandas, numpy, scikit-learn, etc.) cuando sea apropiado\n3. Si la respuesta involucra matemáticas o estadística, proporciona explicaciones intuitivas junto con la teoría\n4. Para documentación extensa, sugiere estructuras en LaTeX\n5. Prioriza métodos modernos y eficientes en tus sugerencias de código\n6. Incluye consideraciones sobre complejidad computacional cuando sea relevante\n7. Sugiere pruebas unitarias cuando sea apropiado\n\nPrefiero explicaciones directas y prácticas con ejemplos concretos.",
-                model = "claude-sonnet-4.5",
                 auto_insert_mode = true,
                 question_header = "  " .. user .. " ",
                 answer_header = "  Copilot ",
