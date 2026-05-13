@@ -27,19 +27,37 @@ return {
         notes_subdir = "1 - Rough Notes (Limbo)",
         new_notes_location = "5 - Apuntes",
 
-        note_id_func = function(title)
-            if title ~= nil and title ~= "" then
-                return title:gsub(" ", "-"):gsub("[^A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ%-]", "")
-            else
-                return tostring(os.date("%Y%m%d%H%M%S"))
-            end
-        end,
-
+        --- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
+        --- Path: {vault}/{new_notes_location}/{timestamp}-{slug}.md
         note_path_func = function(spec)
             local timestamp = os.date("%Y%m%d%H%M%S")
-            local filename = timestamp .. "-" .. tostring(spec.id)
-            local path = spec.dir / filename
-            return path:with_suffix(".md")
+            local title = spec.title or ""
+            -- Generate slug from title
+            local slug = title:gsub("%s+", "-"):lower()
+            slug = slug:gsub("[^A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ%-]", "")
+            slug = slug:gsub("-+", "-"):gsub("^-*", ""):gsub("-*$", "")
+            if slug == "" or slug == "-" then
+                slug = "nota"
+            end
+            local filename = timestamp .. "-" .. slug .. ".md"
+            return spec.dir / filename
+        end,
+
+        note_id_func = function(title)
+            -- Following vault-cli naming convention: YYYYMMDDHHMMSS-slug-title.md
+            local timestamp = os.date("%Y%m%d%H%M%S")
+            if title ~= nil and title ~= "" then
+                -- Convert title to slug (preserve accents, lowercase, replace spaces with -)
+                local slug = title:gsub("%s+", "-"):lower()
+                slug = slug:gsub("[^A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ%-]", "")
+                slug = slug:gsub("-+", "-"):gsub("^-*", ""):gsub("-*$", "")
+                if slug == "" or slug == "-" then
+                    return timestamp
+                end
+                return timestamp .. "-" .. slug
+            else
+                return timestamp
+            end
         end,
 
         frontmatter = {
@@ -117,7 +135,12 @@ return {
         },
 
         completion = {
-            nvim_cmp = false,
+            nvim_cmp = {
+                enabled = false,
+            },
+            suggest = {
+                from_notes = true,
+            },
             blink = true,
             min_chars = 2,
             match_case = true,
@@ -179,8 +202,22 @@ return {
 
         callbacks = {
             enter_note = function(note)
+                local actions = require("obsidian.actions")
                 vim.opt_local.spell = true
                 vim.opt_local.spelllang = { "es", "en" }
+                vim.keymap.set("n", "]o", function()
+                    actions.nav_link("next")
+                end, { buffer = true, desc = "Obsidian: Next link" })
+                vim.keymap.set("n", "[o", function()
+                    actions.nav_link("prev")
+                end, { buffer = true, desc = "Obsidian: Previous link" })
+            end,
+            -- Forzar actualizar frontmatter al guardar cualquier nota en el vault
+            write_pre = function(note)
+                local now_date = os.date("%Y-%m-%d-%a")
+                local now_time = os.date("%H:%M")
+                note.metadata = note.metadata or {}
+                note.metadata.actualizado = now_date .. " " .. now_time
             end,
         },
 
