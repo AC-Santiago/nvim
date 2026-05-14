@@ -1,12 +1,13 @@
+local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/SantiagoAC-Vault/")
+
 return {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
     enabled = function()
-        local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/SantiagoAC-Vault/")
         return vim.fn.isdirectory(vim.fn.expand(vault_path)) == 1
     end,
+    ft = "markdown",
     cmd = { "Obsidian" },
-    -- ft = "markdown",
     dependencies = {
         "nvim-lua/plenary.nvim",
     },
@@ -19,7 +20,7 @@ return {
             {
                 name = "SantiagoAC",
                 path = function()
-                    return os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/SantiagoAC-Vault/")
+                    return vault_path
                 end,
             },
         },
