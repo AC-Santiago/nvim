@@ -28,11 +28,20 @@ return {
         notes_subdir = "1 - Rough Notes (Limbo)",
         new_notes_location = "5 - Apuntes",
 
+        --- Default template for new notes
+        note = {
+          template = "Nota fugaz (fleeting).md",
+        },
+
 --- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
         --- Path: {vault}/{new_notes_location}/{timestamp}-{slug}.md
         note_path_func = function(spec)
             local timestamp = os.date("%Y%m%d%H%M%S")
-            local title = spec.title or "sin-titulo"
+            -- Workaround: note_path_func doesn't receive title due to plugin bug
+            -- (spec.title is nil). We stash the title in note_id_func since it's
+            -- called immediately before note_path_func.
+            local title = _G.__obsidian_note_title or spec.title or "sin-titulo"
+            _G.__obsidian_note_title = nil  -- Clear after use
             -- Generate slug from title
             local slug = title:gsub("%s+", "-"):lower()
             slug = slug:gsub("[^A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ%-]", "")
@@ -47,6 +56,8 @@ return {
         note_id_func = function(title)
             -- Following vault-cli naming convention: YYYYMMDDHHMMSS-slug-title.md
             local timestamp = os.date("%Y%m%d%H%M%S")
+            -- Stash title for note_path_func workaround (called after this)
+            _G.__obsidian_note_title = title
             if title ~= nil and title ~= "" then
                 -- Convert title to slug (preserve accents, lowercase, replace spaces with -)
                 local slug = title:gsub("%s+", "-"):lower()
