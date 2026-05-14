@@ -28,17 +28,17 @@ return {
         notes_subdir = "1 - Rough Notes (Limbo)",
         new_notes_location = "5 - Apuntes",
 
-        --- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
+--- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
         --- Path: {vault}/{new_notes_location}/{timestamp}-{slug}.md
         note_path_func = function(spec)
             local timestamp = os.date("%Y%m%d%H%M%S")
-            local title = spec.title or ""
+            local title = spec.title or "sin-titulo"
             -- Generate slug from title
             local slug = title:gsub("%s+", "-"):lower()
             slug = slug:gsub("[^A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ%-]", "")
             slug = slug:gsub("-+", "-"):gsub("^-*", ""):gsub("-*$", "")
             if slug == "" or slug == "-" then
-                slug = "nota"
+                slug = "sin-titulo"
             end
             local filename = timestamp .. "-" .. slug .. ".md"
             return spec.dir / filename
