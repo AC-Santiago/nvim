@@ -54,7 +54,7 @@ local M = {
             dap_adapters = {},
         },
         markdown = {
-            lsp_servers = { "marksman" },
+            lsp_servers = { "markdown_oxide" },
             linters = {},
             formatters = {},
             dap_adapters = {},
