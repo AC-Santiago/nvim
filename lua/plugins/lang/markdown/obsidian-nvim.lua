@@ -147,13 +147,6 @@ return {
         },
 
         completion = {
-            nvim_cmp = {
-                enabled = false,
-            },
-            suggest = {
-                from_notes = true,
-            },
-            blink = true,
             min_chars = 2,
             match_case = true,
             create_new = true,
