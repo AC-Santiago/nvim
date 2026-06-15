@@ -1,4 +1,4 @@
-local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/ZenVault/vault")
+local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/SantiagoAC-ZenVault")
 
 return {
     "obsidian-nvim/obsidian.nvim",
@@ -25,7 +25,7 @@ return {
             },
         },
 
-        notes_subdir = "rough",
+        notes_subdir = "vault/rough/",
         new_notes_location = "notes",
 
         --- Default template for new notes
@@ -103,7 +103,7 @@ return {
         },
 
         templates = {
-            folder = "templates",
+            folder = "vault/templates",
             date_format = "%Y-%m-%d-%a",
             time_format = "%H:%M",
             substitutions = {
@@ -124,7 +124,7 @@ return {
         },
 
         daily_notes = {
-            folder = "daily",
+            folder = "vault/daily",
             date_format = "%Y-%m-%d-%a",
             alias_format = "%A, %d de %B de %Y",
             default_tags = { "daily", "journal" },
@@ -139,7 +139,7 @@ return {
         },
 
         attachments = {
-            folder = "attachments",
+            folder = "vault/attachments",
             img_name_func = function()
                 return string.format("img-%s", os.date("%Y%m%d%H%M%S"))
             end,
