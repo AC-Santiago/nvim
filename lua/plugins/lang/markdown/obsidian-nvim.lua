@@ -1,4 +1,4 @@
-local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/SantiagoAC-ZenVault")
+local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/ZenVault")
 
 return {
     "obsidian-nvim/obsidian.nvim",
@@ -30,7 +30,7 @@ return {
 
         --- Default template for new notes
         note = {
-            template = "Nota fugaz (fleeting).md",
+            template = "nota-fugaz-fleeting.md",
         },
 
         --- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
