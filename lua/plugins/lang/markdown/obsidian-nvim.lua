@@ -1,4 +1,4 @@
-local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/SantiagoAC-Vault/")
+local vault_path = os.getenv("OBSIDIAN_VAULT_PATH") or (vim.fn.expand("~") .. "/Escritorio/Notas/ZenVault")
 
 return {
     "obsidian-nvim/obsidian.nvim",
@@ -25,15 +25,15 @@ return {
             },
         },
 
-        notes_subdir = "1 - Rough Notes (Limbo)",
-        new_notes_location = "5 - Apuntes",
+        notes_subdir = "vault/rough/",
+        new_notes_location = "notes",
 
         --- Default template for new notes
         note = {
-          template = "Nota fugaz (fleeting).md",
+            template = "nota-fugaz-fleeting.md",
         },
 
---- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
+        --- Follow vault-cli naming: YYYYMMDDHHMMSS-slug-title.md
         --- Path: {vault}/{new_notes_location}/{timestamp}-{slug}.md
         note_path_func = function(spec)
             local timestamp = os.date("%Y%m%d%H%M%S")
@@ -41,7 +41,7 @@ return {
             -- (spec.title is nil). We stash the title in note_id_func since it's
             -- called immediately before note_path_func.
             local title = _G.__obsidian_note_title or spec.title or "sin-titulo"
-            _G.__obsidian_note_title = nil  -- Clear after use
+            _G.__obsidian_note_title = nil -- Clear after use
             -- Generate slug from title
             local slug = title:gsub("%s+", "-"):lower()
             slug = slug:gsub("[^A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ%-]", "")
@@ -103,7 +103,7 @@ return {
         },
 
         templates = {
-            folder = "6 - Templates",
+            folder = "vault/templates",
             date_format = "%Y-%m-%d-%a",
             time_format = "%H:%M",
             substitutions = {
@@ -124,7 +124,7 @@ return {
         },
 
         daily_notes = {
-            folder = "0 - Daily",
+            folder = "vault/daily",
             date_format = "%Y-%m-%d-%a",
             alias_format = "%A, %d de %B de %Y",
             default_tags = { "daily", "journal" },
@@ -139,7 +139,7 @@ return {
         },
 
         attachments = {
-            folder = "attachments",
+            folder = "vault/attachments",
             img_name_func = function()
                 return string.format("img-%s", os.date("%Y%m%d%H%M%S"))
             end,
