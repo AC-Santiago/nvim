@@ -15,7 +15,7 @@ local getNeoTreeWidth = function()
 end
 
 M.base46 = {
-    theme = "toby-theme",
+    theme = "aquarium",
     integrations = {
         "blink",
     },
