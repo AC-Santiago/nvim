@@ -91,3 +91,20 @@ require("autocmds")
 vim.schedule(function()
     require("mappings")
 end)
+
+if vim.fn.executable("dms") == 1 then
+    vim.g.clipboard = {
+        name = "DankShell Clipboard",
+        copy = {
+            ["+"] = { "dms", "cl", "copy" },
+            ["*"] = { "dms", "cl", "copy" },
+        },
+        paste = {
+            ["+"] = { "dms", "cl", "paste" },
+            ["*"] = { "dms", "cl", "paste" },
+        },
+        cache_enabled = 0,
+    }
+
+    vim.opt.clipboard = "unnamedplus"
+end
