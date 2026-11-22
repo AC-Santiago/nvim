@@ -1,5 +1,6 @@
 vim.opt.rtp:prepend(vim.fn.getcwd())
 local registry = require("utils.language_registry")
+local inventory = registry.inventory
 local root = vim.uv.fs_mkdtemp(vim.fn.tempname() .. "-lsp-XXXXXX")
 local workspace, trusted = root .. "/project", root .. "/paths"
 vim.fn.mkdir(workspace, "p")
@@ -49,6 +50,31 @@ vim.fn.writefile({ "#!/bin/sh", "exit 0" }, workspace .. "/" .. command)
 assert(vim.uv.fs_chmod(workspace .. "/" .. command, 493))
 vim.env.PATH = workspace .. ":" .. vim.env.PATH
 configured.root_dir(buffer, function() error("workspace executable was accepted") end)
+
+vim.env.PATH = trusted .. ":" .. inherited_path
+assert(vim.uv.fs_symlink(path, trusted .. "/lua-language-server"))
+registry.inventory = inventory
+package.loaded["nvchad.configs.lspconfig"] = { capabilities = vim.lsp.protocol.make_client_capabilities() }
+require("configs.lsp")
+
+local lua_workspace = workspace .. "/nested Lua project"
+vim.fn.mkdir(lua_workspace, "p")
+vim.api.nvim_buf_set_name(buffer, lua_workspace .. "/main.lua")
+local function expect_lua_root(marker)
+    local selected
+    vim.lsp.config.lua_ls.root_dir(buffer, function(found) selected = found end)
+    assert(selected == lua_workspace, ("Lua LS should use the root with %s, got %s"):format(marker, tostring(selected)))
+end
+
+vim.fn.writefile({ "{}" }, workspace .. "/.luarc.json")
+vim.fn.writefile({ "{}" }, lua_workspace .. "/.luarc.jsonc")
+expect_lua_root(".luarc.jsonc")
+vim.fn.delete(workspace .. "/.luarc.json")
+vim.fn.delete(lua_workspace .. "/.luarc.jsonc")
+vim.fn.writefile({}, workspace .. "/.luacheckrc")
+vim.fn.writefile({}, lua_workspace .. "/.stylua.toml")
+expect_lua_root(".stylua.toml")
+
 vim.env.PATH = inherited_path
 vim.fn.delete(root, "rf")
-print("LSP ownership, settings and launch-time trust checks passed.")
+print("LSP ownership, settings, Lua roots and launch-time trust checks passed.")
