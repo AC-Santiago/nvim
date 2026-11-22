@@ -20,6 +20,10 @@ Se ejecutaron siete pruebas focalizadas y el smoke con herramientas reales. Desd
 nvim --headless -i NONE -n -c "luafile tests/neovim_language_smoke.lua"
 ```
 
+## Revisión de Lua en herdr
+
+Con Lua LS 3.19.1 se reprodujo la selección de la raíz padre cuando contenía una `.luarc.json` y el proyecto hijo tenía `.luarc.jsonc`. Tras agrupar los marcadores, Lua LS usó el ejecutable de Mason y la raíz del proyecto hijo en el primer búfer. Resolvió una definición entre archivos en una ruta con espacios y otra en un archivo suelto. También pasaron las siete pruebas focalizadas y el smoke de Markdown, Python, Typst y Lua. [Prueba de regresión](../../tests/language_lsp_spec.lua)
+
 ## Actualización y reversión
 
 La configuración nueva arrancó y pasó el smoke sobre una copia de los datos anteriores, en las rutas de configuración y datos originales. La prueba usó un espacio de montaje aislado con el directorio de usuario activo oculto y sin red. Los intentos de descarga de Copilot y websocat demostraron que las funciones opcionales requerían red y el smoke terminó con código 0.
@@ -28,4 +32,27 @@ Para revertir se montó una copia nueva de la configuración, el lockfile y los 
 
 ## Aceptación pendiente
 
-La prueba de extremo a extremo en Windows x64 se hará al final en una VM limpia de Windows 11 con PowerShell y sin WSL. Desde esa VM se usará `develop` y se comprobarán también el arranque, el aprovisionamiento explícito, Typstyle x64 y la declaración de Go. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
+La prueba de extremo a extremo en Windows x64 se hará al final en una VM limpia de Windows 11 con PowerShell y sin WSL. Desde esa VM se usará `develop` y se comprobarán el arranque, el aprovisionamiento explícito, Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
+
+### Ejecutar la aceptación en PowerShell
+
+En la VM, usa los [requisitos del README](../../README.md#requirements) y un perfil nuevo. Guarda el commit y el hash del lockfile con los resultados.
+
+```powershell
+$env:NVIM_APPNAME = 'nvim-egm'
+$cfg = nvim --headless -u NONE -i NONE -c 'lua io.write(vim.fn.stdpath([[config]]))' -c 'qa!'
+git clone --branch develop https://github.com/AC-Santiago/nvim.git $cfg
+Set-Location $cfg
+git rev-parse HEAD
+Get-FileHash .\lazy-lock.json -Algorithm SHA256
+nvim
+```
+
+1. Abre, guarda y ejecuta `:terminal` antes de instalar herramientas. Comprueba `:PythonPath` con y sin un entorno virtual.
+2. Prepara el [Typstyle x64 oficial](../README_LANGUAGE_SYSTEM.md#ejecutables-externos-y-typstyle-en-windows). Ejecuta `:TSInstall markdown markdown_inline python typst lua` y `:LanguageToolsInstall`. Comprueba en `:Mason` que se instalaron Lua LS, Markdown Oxide, Pyrefly, Ruff y Tinymist. Para un fallo, consulta `:MasonLog` y repite el comando después de corregirlo.
+3. Cuando terminen las instalaciones, cierra Neovim y ejecuta el smoke en la misma sesión de PowerShell. Registra el código de salida y cualquier fallo. Los casos de recibos y rutas se detallan en el plan de verificación.
+
+```powershell
+nvim --headless -i NONE -n -c "luafile tests/neovim_language_smoke.lua"
+$LASTEXITCODE
+```

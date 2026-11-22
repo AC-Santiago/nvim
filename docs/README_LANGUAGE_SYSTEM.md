@@ -21,6 +21,12 @@ Cada perfil declara `filetypes` y las listas `lsp`, `format` y `lint` que necesi
 
 El comando usa los ejecutables disponibles y solicita a Mason los paquetes faltantes de los perfiles activos. Varias entradas pueden compartir un paquete. Por ejemplo, el servidor, el linter y los formateadores de Ruff usan una sola instalación. Si el comando indica que una herramienta es externa, instálala con la distribución o el gestor de paquetes correspondiente. Para un fallo de Mason, consulta `:MasonLog`, corrige la causa y vuelve a ejecutar `:LanguageToolsInstall`.
 
+### Lua Language Server
+
+El perfil `base` incluye Lua LS y StyLua. Desde un proyecto, ejecuta `:LanguageToolsInstall` si faltan, abre un archivo `.lua` y consulta `:LspInfo`. Usa `gd` sobre una referencia para comprobar la navegación. Lua LS busca primero la `.luarc.json` o `.luarc.jsonc` más cercana, después los marcadores de lint o formato y por último `.git`. En Linux, Luacheck se instala por separado y aporta diagnósticos de lint.
+
+Si la raíz elegida abarca tu directorio de datos de Neovim y la ruta de Mason se rechaza como local al proyecto, abre Neovim desde el proyecto con una raíz propia. Para conservar esa raíz amplia, declara el `executable` absoluto de un Lua LS de confianza en `configs.base.lsp`.
+
 ### Agregar un linter a Python en Linux
 
 Añade la entrada de Pylint a la lista `configs.python.lint` existente.

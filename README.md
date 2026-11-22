@@ -38,6 +38,7 @@ uv tool install marimo
   - Run `:CopilotChatModels` and follow the sign-in prompt if shown. Select an available model for the current session. The plugin uses its own default until you select one.
 
 ### Language Support
+- **Lua** - Lua Language Server and StyLua. [Setup and verification](docs/README_LANGUAGE_SYSTEM.md#lua-language-server)
 - **Python** - LSP (pyrefly, ruff), DAP (debugpy), formatting, linting, uv
 - **Rust** - LSP, DAP via rustaceanvim
 - **Typst** - LSP and preview
@@ -80,7 +81,7 @@ nvim
 
 Use `:terminal` to open a terminal inside the editor. The Windows startup profile skips Copilot completion, Sidekick, DAP, image rendering and Typst browser preview. Copilot Chat loads on demand with `:CopilotChatModels`. Its tokenizer build is optional and runs automatically only outside Windows.
 
-Install missing parsers with `:TSInstall markdown markdown_inline python typst`. Run `:lua vim.print(require("configs.treesitter").parsers())` for the list suggested by the current profile. The editor can open and save files while their parsers are missing. Use `:PythonPath` to inspect the selected provider interpreter.
+Install missing parsers with `:TSInstall markdown markdown_inline python typst lua`. Run `:lua vim.print(require("configs.treesitter").parsers())` for the list suggested by the current profile. The editor can open and save files while their parsers are missing. Use `:PythonPath` to inspect the selected provider interpreter.
 
 ## Keybindings
 
