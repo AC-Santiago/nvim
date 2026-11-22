@@ -63,6 +63,12 @@ vim.env.PATH = link .. ":" .. trusted .. ":" .. path
 assert(not tools.command(implicit, project))
 vim.env.PATH = trusted .. ":" .. path
 assert(tools.command(implicit, project) == good)
+local gofmt = executable(trusted, "gofmt")
+package.preload["conform.formatters.gofmt"] = function() return { command = "gofmt" } end
+assert(tools.command({ id = "gofmt", role = "format" }, project) == gofmt)
+local gopls = executable(trusted, "gopls")
+vim.lsp.config("gopls", { cmd = { "gopls" } })
+assert(tools.command({ id = "gopls", role = "lsp" }, project) == gopls)
 vim.env.PATH = path
 
 local receipts = {
@@ -87,7 +93,11 @@ local native = executable(package_dir, "ruff.exe")
 local old_has, old_stdpath, old_exepath = vim.fn.has, vim.fn.stdpath, vim.fn.exepath
 vim.fn.has = function(name) return name == "win32" and 1 or old_has(name) end
 vim.fn.stdpath = function(name) return name == "data" and root or old_stdpath(name) end
-vim.fn.exepath = function() return wrapper end
+local implicit_windows_cwd = vim.env.NoDefaultCurrentDirectoryInExePath
+vim.fn.exepath = function()
+    assert(vim.env.NoDefaultCurrentDirectoryInExePath == "1")
+    return wrapper
+end
 local windows_tool = { id = "ruff", bin = "ruff", package = "ruff" }
 local bin_link = "ruff.exe"
 local bad_json = false
@@ -110,6 +120,7 @@ package.loaded["mason-registry"] = {
     end,
 }
 assert(tools.command(windows_tool, project) == native)
+assert(vim.env.NoDefaultCurrentDirectoryInExePath == implicit_windows_cwd)
 local outside = executable(root .. "/mason/packages", "elsewhere.exe")
 bin_link = "../elsewhere.exe"
 assert(not tools.command(windows_tool, project), outside)

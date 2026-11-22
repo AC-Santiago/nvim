@@ -3,10 +3,25 @@ local registry = require("utils.language_registry")
 
 local M = {}
 local running = false
+local retry = " Check :MasonLog, then rerun :LanguageToolsInstall or configure an absolute override."
+
+function M.report_key(record)
+    return ("%s (%s/%s)"):format(record.id, record.profile, record.role)
+end
 
 local function requests_for(workspace)
     local requests, report = {}, {}
-    for _, record in ipairs(registry.inventory()) do
+    local records = registry.inventory()
+    for _, record in ipairs(records) do
+        if record.enabled and record.role == "lsp" and not record.bin and not record.executable then
+            local ok, lazy = pcall(require, "lazy")
+            if ok then
+                lazy.load({ plugins = { "nvim-lspconfig" } })
+            end
+            break
+        end
+    end
+    for _, record in ipairs(records) do
         if record.enabled then
             local path, message, status = tools.command(record, workspace)
             if not path then
@@ -16,7 +31,7 @@ local function requests_for(workspace)
                     requests[record.package] = request
                 else
                     local external = not record.package or record.install == false
-                    report[record.id] = { status = external and "external" or "unavailable", message = message }
+                    report[M.report_key(record)] = { status = external and "external" or "unavailable", message = message }
                 end
             end
         end
@@ -39,9 +54,14 @@ local function install_package(mason, name, records, workspace, finish)
         return
     end
 
+    if not package:is_installable({}) then
+        finish("unsupported", "No Mason recipe for this platform. Configure an absolute executable override.")
+        return
+    end
+
     local started, failure = pcall(package.install, package, {}, vim.schedule_wrap(function(success, detail)
         if not success then
-            finish("failed", tostring(detail or "Mason did not complete the installation."))
+            finish("failed", tostring(detail or "Mason did not complete the installation.") .. retry)
             return
         end
         for _, record in ipairs(records) do
@@ -54,7 +74,7 @@ local function install_package(mason, name, records, workspace, finish)
         finish("installed")
     end))
     if not started then
-        finish("failed", tostring(failure))
+        finish("failed", tostring(failure) .. retry)
     end
 end
 
@@ -91,10 +111,10 @@ function M.run(workspace, complete)
             if success then
                 local ok, failure = pcall(install_package, require("mason-registry"), name, records, workspace, package_finished)
                 if not ok then
-                    package_finished("failed", tostring(failure))
+                    package_finished("failed", tostring(failure) .. retry)
                 end
             else
-                package_finished("failed", "Cannot refresh Mason registry: " .. tostring(detail))
+                package_finished("failed", "Cannot refresh Mason registry: " .. tostring(detail) .. retry)
             end
         end
     end

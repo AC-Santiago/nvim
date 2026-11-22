@@ -58,7 +58,12 @@ local M = {
         },
         html = {
             filetypes = { "html" },
-            lsp = { { id = "html", package = "html-lsp", bin = "vscode-html-language-server" } },
+            lsp = { {
+                id = "html",
+                package = "html-lsp",
+                bin = "vscode-html-language-server",
+                options = { cmd = { "vscode-html-language-server", "--stdio" } },
+            } },
             format = { { id = "prettier", package = "prettier", bin = "prettier", filetypes = { "html", "xhtml" } } },
             lsp_servers = { "html" },
             linters = {},
@@ -67,7 +72,12 @@ local M = {
         },
         css = {
             filetypes = { "css", "scss", "less" },
-            lsp = { { id = "cssls", package = "css-lsp", bin = "vscode-css-language-server" } },
+            lsp = { {
+                id = "cssls",
+                package = "css-lsp",
+                bin = "vscode-css-language-server",
+                options = { cmd = { "vscode-css-language-server", "--stdio" } },
+            } },
             format = { { id = "prettier", package = "prettier", bin = "prettier" } },
             lsp_servers = { "cssls" },
             linters = {},

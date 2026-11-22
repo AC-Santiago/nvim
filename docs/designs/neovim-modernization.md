@@ -185,7 +185,8 @@ enable flag: go = false
 configs.go:
   filetypes: [go]
   lsp: [{ id: gopls, package: gopls, bin: gopls,
-          options: { settings: { gopls: { hints: { variableTypes: true } } } } }]
+          options: { root_markers: [go.work, go.mod, .git],
+                     settings: { gopls: { hints: { variableTypes: true } } } } }]
   format: [{ id: gofmt, bin: gofmt }]
   lint: []
 ```
@@ -204,7 +205,7 @@ configs.go:
 
 Use an explicit absolute override from the user's configuration first. If it is invalid, report it and leave the tool unavailable. Otherwise take the first match for the bin on Neovim's effective PATH. If that implicit match is workspace-local, stop and report the path. Recovery is to remove the shadowing PATH entry or set an explicit trusted override. No later PATH candidate or adapter-local lookup is used.
 
-Use the selected LSP root for a server launch and the formatter or linter's configured workspace root when available. Otherwise use the nearest applicable marker from the tool settings or `.git`, followed by the named buffer's containing directory. Use Neovim's working directory for an unnamed buffer or a command without a file. Canonicalize roots and paths with symlink resolution, separator normalization, Windows case folding, and directory-boundary checks. Leave the tool unavailable if an implicit path cannot be canonicalized.
+Use the selected LSP root for a server launch and the formatter or linter's configured workspace root when available. Explicit LSP root markers replace the stock root callback unless the declaration also supplies its own callback. Otherwise use the nearest applicable marker from the tool settings or `.git`, followed by the named buffer's containing directory. Use Neovim's working directory for an unnamed buffer or a command without a file. Canonicalize roots and paths with symlink resolution, separator normalization, Windows case folding, and directory-boundary checks. Leave the tool unavailable if an implicit path cannot be canonicalized.
 
 Check trust just before dispatch in each LSP, formatter, and linter launch hook and before every Typstyle probe. Startup can resolve a path without launching it. Defer the first Typstyle probe until a Typst buffer or an explicit installation request provides a workspace. A cached probe never bypasses trust checks. Pass the same verified command to the adapter with its native arguments, roots, and conditions.
 

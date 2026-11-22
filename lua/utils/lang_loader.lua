@@ -17,7 +17,6 @@ function M.load_lang_configs(lang_name)
 
     -- Lista de archivos de configuración que SOLO retornan plugin specs
     local config_files = {
-        "conform",
         "dap",
     }
     -- Intentar cargar cada archivo de configuración que debe retornar plugin specs
@@ -150,38 +149,13 @@ function M.manual_cleanup()
     return mason_cleanup.cleanup_disabled_languages()
 end
 
--- Autocomando para detectar cambios en la configuración de lenguajes
-local function setup_autocmds()
-    local augroup = vim.api.nvim_create_augroup("LanguageStateTracking", { clear = true })
-
-    -- Ejecutar verificación cuando se modifique el archivo de configuración de lenguajes
-    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        group = augroup,
-        pattern = "*/configs/languages.lua",
-        callback = function()
-            vim.notify("Language configuration changed, checking for cleanup...", vim.log.levels.INFO)
-            -- Ejecutar con un pequeño delay para permitir que se recargue la configuración
-            vim.defer_fn(function()
-                M.check_and_cleanup_languages()
-            end, 1000)
-        end,
-        desc = "Check for language changes and cleanup tools",
-    })
-
-    -- También verificar al entrar a Neovim (por si los cambios se hicieron externamente)
-    vim.api.nvim_create_autocmd("VimEnter", {
-        group = augroup,
-        callback = function()
-            -- Ejecutar con delay para permitir que todo se cargue
-            vim.defer_fn(function()
-                M.init_state_tracking()
-            end, 2000)
-        end,
-        desc = "Initialize language state tracking on startup",
-    })
+function M.refresh_tools()
+    for _, module in ipairs({ "configs.lsp", "configs.conform", "configs.lint" }) do
+        local adapter = package.loaded[module]
+        if type(adapter) == "table" and adapter.refresh then
+            adapter.refresh()
+        end
+    end
 end
-
--- Configurar autocomandos al cargar el módulo
-setup_autocmds()
 
 return M

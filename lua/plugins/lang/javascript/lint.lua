@@ -1,15 +1,7 @@
-local lint = require("lint")
-
--- Configurar oxlint para JavaScript y TypeScript
-lint.linters_by_ft.javascript = { "oxlint" }
-lint.linters_by_ft.javascriptreact = { "oxlint" }
-lint.linters_by_ft.typescript = { "oxlint" }
-lint.linters_by_ft.typescriptreact = { "oxlint" }
-
 -- Configuración personalizada de oxlint
-lint.linters.oxlint = {
-    cmd = "oxlint",
+local oxlint = {
     stdin = false,
+    root_markers = { ".oxlintrc.json", "package.json" },
     args = {
         "--format",
         "json", -- Formato JSON para parsing más fácil
@@ -53,3 +45,5 @@ lint.linters.oxlint = {
         return diagnostics
     end,
 }
+
+return { oxlint = oxlint }

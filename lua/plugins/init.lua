@@ -2,6 +2,7 @@ return {
 
     {
         "williamboman/mason-lspconfig.nvim",
+        cond = false,
         event = "VeryLazy",
         dependencies = { "nvim-lspconfig" },
         config = function()
@@ -19,6 +20,7 @@ return {
 
     {
         "rshkarin/mason-nvim-lint",
+        cond = false,
         event = "VeryLazy",
         dependencies = { "nvim-lint" },
         config = function()
@@ -28,6 +30,7 @@ return {
 
     {
         "zapling/mason-conform.nvim",
+        cond = false,
         event = "VeryLazy",
         dependencies = { "conform.nvim" },
         config = function()

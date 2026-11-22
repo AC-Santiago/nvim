@@ -5,23 +5,6 @@ local capabilities = require("nvchad.configs.lspconfig").capabilities
 -- Native LSP configuration for Neovim 0.11+
 -- Using vim.lsp.config instead of lspconfig
 
--- list of all servers configured.
-local configured_servers = {
-    "lua_ls",
-}
-
--- list of servers configured with default config.
-local default_servers = {}
-
--- lsps with default config
-for _, lsp in ipairs(default_servers) do
-    vim.lsp.config(lsp, {
-        on_attach = on_attach,
-        on_init = on_init,
-        capabilities = capabilities,
-    })
-end
-
 -- Lua Language Server configuration
 vim.lsp.config("lua_ls", {
     cmd = { "lua-language-server" },
@@ -66,13 +49,12 @@ vim.lsp.config("lua_ls", {
     },
 })
 
-vim.lsp.enable("lua_ls")
 if vim.fn.has("win32") == 0 then
     vim.lsp.enable("copilot")
 end
 
 -- Store configured servers for compatibility
-vim.g.configured_lsp_servers = configured_servers
+vim.g.configured_lsp_servers = { "lua_ls" }
 
 -- .config/nvim/lua/configs/lspconfig.lua
 vim.diagnostic.config({
@@ -96,3 +78,7 @@ local lang_config = require("configs.languages")
 for _, lang in ipairs(lang_config.get_enabled_languages()) do
     lang_loader.apply_direct_configs(lang, "lsp")
 end
+
+local language_lsp = require("utils.language_lsp")
+language_lsp.refresh()
+return language_lsp

@@ -4,7 +4,7 @@ local tools = require("utils.language_tools")
 local kinds = {
     { id = "ruff", role = "lint", bin = "ruff", enabled = true, package = "ruff" },
     { id = "ruff", role = "lsp", bin = "ruff", enabled = true, package = "ruff" },
-    { id = "typstyle", bin = "typstyle", enabled = true, package = "typstyle", install = false },
+    { id = "typstyle", profile = "typst", role = "format", bin = "typstyle", enabled = true, package = "typstyle", install = false },
     { id = "pyrefly", bin = "pyrefly", enabled = true, package = "pyrefly" },
     { id = "prettier", bin = "prettier", enabled = false, package = "prettier" },
 }
@@ -16,6 +16,7 @@ tools.command = function(record)
 end
 
 local refreshes, attempts, answer = 0, 0, nil
+local supported = true
 package.loaded["mason-registry"] = {
     refresh = function(callback)
         refreshes = refreshes + 1
@@ -25,6 +26,7 @@ package.loaded["mason-registry"] = {
         assert(name == "ruff", "Requested unexpected package " .. name)
         return {
             is_installed = function() return false end,
+            is_installable = function() return supported end,
             is_installing = function() return false end,
             install = function(_, _, callback)
                 attempts = attempts + 1
@@ -48,7 +50,7 @@ assert(attempts == 1 and refreshes == 1)
 answer(false, "injected failure")
 wait_for(function() return result ~= nil end)
 assert(result.ruff.status == "failed" and result.ruff.message:find("injected failure", 1, true))
-assert(result.typstyle.status == "external" and not result.pyrefly and not result.prettier)
+assert(result[installer.report_key(kinds[3])].status == "external" and not result.pyrefly and not result.prettier)
 
 result, answer = nil, nil
 assert(installer.run("/", function(report) result = report end))
@@ -62,4 +64,8 @@ result = nil
 assert(installer.run("/", function(report) result = report end))
 wait_for(function() return result ~= nil end)
 assert(attempts == 2 and refreshes == 2 and not result.ruff)
+found.ruff, supported, result = false, false, nil
+assert(installer.run("/", function(report) result = report end))
+wait_for(function() return result ~= nil end)
+assert(attempts == 2 and result.ruff.status == "unsupported")
 print("Explicit provisioning, shared packages, exclusions and retry checks passed.")

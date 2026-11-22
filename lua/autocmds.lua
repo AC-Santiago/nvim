@@ -12,7 +12,7 @@ autocmd("BufDelete", {
 
 autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
     callback = function()
-        require("lint").try_lint()
+        require("configs.lint").try_lint()
     end,
 })
 
