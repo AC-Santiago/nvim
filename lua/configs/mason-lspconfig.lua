@@ -27,5 +27,4 @@ end
 
 require("mason-lspconfig").setup({
     ensure_installed = all_servers,
-    automatic_installation = false,
 })

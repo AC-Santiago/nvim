@@ -32,9 +32,9 @@ uv tool install marimo
 
 ### AI Integration
 - **Copilot** - Code completion via copilot.lua
-- **CopilotChat** - AI chat assistant using GitHub Models (Claude, GPT-4, etc.)
+- **CopilotChat** - GitHub Copilot chat in Neovim
   - Requires: Copilot Chat in IDE enabled at github.com/settings/copilot
-  - Run `:CopilotChat auth` on first use to authenticate
+  - Run `:CopilotChatModels` and follow the sign-in prompt if shown. Select an available model for the current session. The plugin uses its own default until you select one.
 
 ### Language Support
 - **Python** - LSP (pyrefly, ruff), DAP (debugpy), formatting, linting, uv
