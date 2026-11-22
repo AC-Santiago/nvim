@@ -1,6 +1,6 @@
 # Perfil candidato de herramientas de lenguaje
 
-La rama `modernization/language-tools` prepara la segunda etapa del [diseño EGM](./neovim-modernization.md#sequence-and-exit-checks). Se ejecuta en un perfil aislado con los tres adaptadores automáticos de Mason desactivados. La selección y la provisión separada de DAP para Linux siguen presentes.
+La rama `modernization/language-tools` preparó la segunda etapa del [diseño EGM](./neovim-modernization.md#sequence-and-exit-checks). La comprobación se ejecutó en un perfil aislado con los tres adaptadores automáticos de Mason desactivados. La selección y la provisión separada de DAP para Linux siguen presentes.
 
 ## Configuración y comando
 
@@ -16,4 +16,4 @@ Para la prueba de Go, añade `root_markers = { "go.work", "go.mod", ".git" }` en
 - La prueba en Linux repitió las 20 observaciones satisfactorias de la [línea base](./neovim-modernization-linux-baseline.md). Ruff publicó F401 y el comando explícito confirmó que las herramientas del perfil preparado ya estaban disponibles.
 - Los casos de CSS, HTML y JSONC verifican la configuración de Prettier por perfil con un ejecutable controlado. El caso de Oxlint usa su contrato CLI y la ruta de diagnósticos sobre una salida de prueba. Los casos de Ruff y Typstyle para Windows simulan el sistema y el proceso en Linux.
 
-Quedan pendientes la aceptación en Windows x64 nativo, los flujos con binarios reales de web y SQL, la conexión de Lua LS y la sesión DAP de Python. La migración definitiva y la limpieza manual del inventario se evalúan en el corte posterior. [Plan de verificación](./neovim-modernization.md#verification-plan)
+En este punto quedaban por comprobar los flujos con binarios reales de web y SQL, Lua LS, Python DAP y la limpieza manual del inventario. El corte posterior documenta sus resultados y deja la aceptación nativa de Windows para la VM de Windows 11. [Verificación de Linux](./neovim-modernization-linux-verification.md)
