@@ -72,13 +72,6 @@ vim.diagnostic.config({
     },
 })
 
--- Load language-specific LSP configurations
-local lang_loader = require("utils.lang_loader")
-local lang_config = require("configs.languages")
-for _, lang in ipairs(lang_config.get_enabled_languages()) do
-    lang_loader.apply_direct_configs(lang, "lsp")
-end
-
 local language_lsp = require("utils.language_lsp")
 language_lsp.refresh()
 return language_lsp

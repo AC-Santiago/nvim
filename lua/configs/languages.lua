@@ -49,7 +49,12 @@ local M = {
         },
         typst = {
             filetypes = { "typst" },
-            lsp = { { id = "tinymist", package = "tinymist", bin = "tinymist" } },
+            lsp = { {
+                id = "tinymist",
+                package = "tinymist",
+                bin = "tinymist",
+                options = { root_markers = { "typst.toml", ".git" } },
+            } },
             format = { { id = "typstyle", package = "typstyle", bin = "typstyle", install = not windows } },
             lsp_servers = { "tinymist" },
             linters = {},

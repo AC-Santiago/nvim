@@ -3,14 +3,26 @@ local registry = require("utils.language_registry")
 local M = {}
 local defaults, enabled = {}, {}
 
+local function profile_options(record)
+    local profile = record.profile
+    if profile then
+        local path = ("lua/plugins/lang/%s/lsp.lua"):format(profile)
+        if #vim.api.nvim_get_runtime_file(path, false) > 0 then
+            return require("plugins.lang." .. profile .. ".lsp")[record.id] or {}
+        end
+    end
+    return {}
+end
+
 local function configurations()
     local servers = {}
     for _, record in ipairs(registry.inventory()) do
         if record.enabled and record.role == "lsp" and not record.owner then
-            local server = servers[record.id] or { record = record, filetypes = {} }
+            local options = vim.tbl_deep_extend("force", {}, profile_options(record), record.options)
+            local server = servers[record.id] or { record = record, options = options, filetypes = {} }
             if record.bin ~= server.record.bin
                 or record.executable ~= server.record.executable
-                or not vim.deep_equal(record.options, server.record.options)
+                or not vim.deep_equal(options, server.options)
             then
                 server.conflict = true
             end
@@ -26,7 +38,7 @@ end
 local function activate(id, entry)
     local record = vim.deepcopy(entry.record)
     defaults[id] = defaults[id] or vim.deepcopy(vim.lsp.config[id] or {})
-    local config = vim.tbl_deep_extend("force", {}, defaults[id], record.options)
+    local config = vim.tbl_deep_extend("force", {}, defaults[id], entry.options)
     local cmd = config.cmd
     if type(cmd) ~= "table" then
         vim.notify_once("Language tools: configure the native arguments for " .. id, vim.log.levels.WARN)

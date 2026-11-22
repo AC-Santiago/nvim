@@ -2,151 +2,100 @@
 
 ## Descripción
 
-Este sistema permite gestionar configuraciones de lenguajes de programación de manera modular y automática. Puedes habilitar/deshabilitar lenguajes completos y agregar nuevas configuraciones fácilmente.
+Cada perfil declara los tipos de archivo y las herramientas que Neovim usa para LSP, formato y lint. Activa los perfiles que necesites y usa `:LanguageToolsInstall` para instalar sus herramientas faltantes.
 
 ## Archivos principales
 
-### 1. `lua/configs/languages.lua`
-Archivo de configuración central donde defines:
-- Qué lenguajes están habilitados
-- Qué herramientas instalar automáticamente para cada lenguaje
+- `lua/configs/languages.lua` contiene las opciones de activación y las declaraciones de `configs`. El perfil `base` siempre está activo.
+- `lua/utils/language_registry.lua` reúne las declaraciones en un inventario que consultan Neovim LSP, Conform y nvim-lint. La activación considera los perfiles habilitados.
 
-```lua
-local M = {
-    -- Lenguajes habilitados
-    python = true,
-    rust = true,
-    typst = false,  -- Cambiar a false para deshabilitar
-    
-    configs = {
-        python = {
-            lsp_servers = { "pyright", "ruff" },
-            linters = { "ruff" },
-            formatters = { "ruff" },
-            dap_adapters = { "debugpy" },
-        },
-        -- ...
-    }
-}
-```
-
-### 2. `lua/utils/lang_loader.lua`
-Utilidad que carga automáticamente todas las configuraciones de un lenguaje.
+Cada perfil declara `filetypes` y las listas `lsp`, `format` y `lint` que necesita. Las herramientas se identifican por el `id` de su integración. Usa `package` para indicar el nombre del paquete en Mason u omítelo para una herramienta externa. `bin` indica el nombre del comando en el `PATH` y puede omitirse si la integración ya lo define de forma estática. `options` contiene los ajustes de la integración. Una herramienta con sus propios `filetypes` usa esa lista en lugar de la del perfil.
 
 ## Cómo usar
 
-### Habilitar/Deshabilitar un lenguaje
+### Habilitar o deshabilitar un lenguaje
 
-1. Edita `lua/configs/languages.lua`
-2. Cambia `python = true` a `python = false` para deshabilitar Python
-3. Reinicia Neovim
+1. Edita `lua/configs/languages.lua` y cambia la opción del perfil. Por ejemplo, usa `python = false` para deshabilitar Python.
+2. Reinicia Neovim para aplicar el cambio. Los paquetes instalados permanecen disponibles en disco.
+3. Después de habilitar un perfil, ejecuta `:LanguageToolsInstall` desde el proyecto si te faltan herramientas.
 
-### Agregar un nuevo linter a Python
+El comando usa los ejecutables disponibles y solicita a Mason los paquetes faltantes de los perfiles activos. Varias entradas pueden compartir un paquete. Por ejemplo, el servidor, el linter y los formateadores de Ruff usan una sola instalación. Si el comando indica que una herramienta es externa, instálala con la distribución o el gestor de paquetes correspondiente. Para un fallo de Mason, consulta `:MasonLog`, corrige la causa y vuelve a ejecutar `:LanguageToolsInstall`.
 
-**Opción 1: Agregar a la configuración central**
+### Agregar un linter a Python en Linux
+
+Añade la entrada de Pylint a la lista `configs.python.lint` existente.
+
 ```lua
--- En lua/configs/languages.lua
-python = {
-    linters = { "ruff", "pylint" },  -- Agregar pylint
+lint = {
+    { id = "ruff", package = "ruff", bin = "ruff" },
+    { id = "pylint", package = "pylint", bin = "pylint" },
+},
+```
+
+Reinicia Neovim y ejecuta `:LanguageToolsInstall`. En Windows, la integración de lint actual ejecuta Ruff para Python mediante su lanzador nativo.
+
+### Agregar un lenguaje con herramientas existentes
+
+Este ejemplo habilita Go con una declaración. Instala la distribución de Go y comprueba que `go` y `gofmt` estén en el `PATH` de Neovim. Añade el bloque a `lua/configs/languages.lua` antes de `return M`.
+
+```lua
+M.go = true
+M.configs.go = {
+    filetypes = { "go" },
+    lsp = {
+        {
+            id = "gopls",
+            package = "gopls",
+            options = {
+                root_markers = { "go.work", "go.mod", ".git" },
+                settings = { gopls = { hints = { assignVariableTypes = true } } },
+            },
+        },
+    },
+    format = { { id = "gofmt" } },
 }
 ```
 
-**Opción 2: Crear archivo específico**
+Reinicia Neovim, ejecuta `:LanguageToolsInstall` y abre un archivo `.go`. `gopls` usa los marcadores de raíz de la declaración y ofrece sugerencias de tipos de variables. Puedes mostrar las sugerencias con `<leader>ih`. `gofmt` proviene de la distribución de Go y Conform lo usa al guardar. El ejemplo se verificó con gopls 0.24.0, que usa `assignVariableTypes`. [Opciones de gopls](https://go.dev/gopls/inlayHints)
+
+## Ejecutables externos y Typstyle en Windows
+
+El campo `executable` admite una ruta absoluta a un ejecutable de confianza y tiene prioridad sobre el `PATH`. Úsalo si la primera coincidencia en el `PATH` está dentro del proyecto o apunta a un ejecutable que necesitas reemplazar. Reinicia Neovim después de editar la declaración.
+
+En Windows x64, descarga la versión oficial 0.15.2 de Typstyle y agrega su ruta absoluta a la entrada `configs.typst.format`. Mantén `install = not windows` para usar Mason en Linux y el ejecutable externo en Windows. [Archivos oficiales de Typstyle 0.15.2](https://github.com/typstyle-rs/typstyle/releases/expanded_assets/v0.15.2)
+
 ```lua
--- Crear lua/plugins/lang/python/extra-lint.lua
-local lint = require("lint")
-
--- Agregar pylint a la configuración existente
-if lint.linters_by_ft.python then
-    table.insert(lint.linters_by_ft.python, "pylint")
-else
-    lint.linters_by_ft.python = { "pylint" }
-end
-
-return {}
+format = {
+    {
+        id = "typstyle",
+        package = "typstyle",
+        bin = "typstyle",
+        install = not windows,
+        executable = windows and "C:/Herramientas/Typstyle/typstyle-x86_64-pc-windows-msvc.exe" or nil,
+    },
+},
 ```
 
-### Agregar un nuevo lenguaje
+Después de reiniciar, ejecuta `:LanguageToolsInstall` para que Neovim compruebe `typstyle --version`. Abre un archivo `.typ` y consulta `:ConformInfo` para ver el formateador. La verificación de extremo a extremo en Windows x64 nativo está pendiente. [Plan de verificación](designs/neovim-modernization.md#verification-plan)
 
-1. **Crear la carpeta**: `lua/plugins/lang/nuevo_lenguaje/`
+## Depuración en Linux
 
-2. **Crear el init.lua**:
-```lua
--- lua/plugins/lang/nuevo_lenguaje/init.lua
-local lang_loader = require("utils.lang_loader")
-return lang_loader.load_lang_configs("nuevo_lenguaje")
-```
+Los perfiles de Linux declaran los paquetes de depuración en `dap_adapters`. Mason DAP gestiona su instalación por separado de `:LanguageToolsInstall`. En Python, `debugpy-adapter` inicia el adaptador y la configuración de lanzamiento elige el intérprete del proyecto, con `/usr/bin/python3` como alternativa. Usa los atajos de DAP para colocar un punto de interrupción e iniciar la sesión. [Atajos de depuración](../README.md#debugging-dap)
 
-3. **Agregar a la configuración**:
-```lua
--- En lua/configs/languages.lua
-local M = {
-    nuevo_lenguaje = true,
-    configs = {
-        nuevo_lenguaje = {
-            lsp_servers = { "servidor_lsp" },
-            linters = { "linter" },
-            formatters = { "formatter" },
-            dap_adapters = { "adaptador" },
-        }
-    }
+## SQL opcional en Linux
+
+Mason instala `sql-language-server` 1.7.1. Con Node 24.20.0 y `vscode-languageserver-protocol` 3.18.6, el servidor sale con `ERR_PACKAGE_PATH_NOT_EXPORTED`. El formato sigue disponible mediante `sql-formatter`. [Proyecto del servidor SQL](https://github.com/joe-re/sql-language-server)
+
+Para usar el LSP con esa versión, crea un directorio fuera de tus proyectos SQL, guarda allí este `package.json` y ejecuta `npm install` desde ese directorio.
+
+```json
+{
+  "private": true,
+  "dependencies": { "sql-language-server": "1.7.1" },
+  "overrides": {
+    "sql-language-server": { "vscode-languageserver-protocol": "3.17.5" }
+  }
 }
 ```
 
-4. **Importar en plugins**:
-```lua
--- En lua/plugins/init.lua
-return {
-    -- ...
-    { import = "plugins.lang.nuevo_lenguaje.init" },
-}
-```
-
-## Estructura de archivos por lenguaje
-
-Cada lenguaje puede tener estos archivos (todos opcionales):
-
-```
-lua/plugins/lang/python/
-├── init.lua          # Punto de entrada (requerido)
-├── lsp.lua           # Configuración LSP
-├── lint.lua          # Configuración de linting
-├── dap.lua           # Configuración de debug
-├── conform.lua       # Configuración de conform
-├── treesitter.lua    # Configuración de treesitter
-└── cualquier_otro.lua # Configuraciones personalizadas
-```
-
-## Ventajas del sistema
-
-✅ **Modular**: Cada lenguaje es independiente
-✅ **Automático**: Las herramientas se instalan automáticamente
-✅ **Flexible**: Fácil agregar/quitar configuraciones
-✅ **Organizado**: Estructura clara y consistente
-✅ **Extensible**: Fácil agregar nuevos lenguajes
-
-## Ejemplos de uso
-
-### Ejemplo 1: Solo Python con configuración mínima
-```lua
--- lua/configs/languages.lua
-local M = {
-    python = true,
-    rust = false,
-    typst = false,
-}
-```
-
-### Ejemplo 2: Python con linters adicionales
-```lua
--- lua/plugins/lang/python/extra-tools.lua
-local lint = require("lint")
-
--- Agregar más linters
-local additional_linters = { "pylint", "flake8", "mypy" }
-for _, linter in ipairs(additional_linters) do
-    table.insert(lint.linters_by_ft.python, linter)
-end
-
-return {}
-```
+Agrega `executable` a la entrada `sqlls` de `configs.sql.lsp` con la ruta absoluta de `node_modules/.bin/sql-language-server` en ese directorio y reinicia Neovim. Esta combinación se verificó hasta la conexión del LSP en un búfer SQL. [Configuración de perfiles](../lua/configs/languages.lua)

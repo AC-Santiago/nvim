@@ -1,7 +1,6 @@
 local dap = require("dap")
 local dap_python = require("dap-python")
 
--- configuracion al adaptador usando debugpy
 local path_python = function()
     local cwd = vim.fn.getcwd()
     if vim.fn.executable(cwd .. "/venv/bin/python3") == 1 then
@@ -17,7 +16,7 @@ local path_python = function()
     end
 end
 
-dap_python.setup(path_python())
+dap_python.setup("debugpy-adapter")
 
 -- configuracion para el lanzamiento de debug en python
 dap.configurations.python = {
@@ -29,6 +28,6 @@ dap.configurations.python = {
         -- Para ejecutar el archivo actual
         program = "${file}",
 
-        pythonPath = path_python(),
+        pythonPath = path_python,
     },
 }

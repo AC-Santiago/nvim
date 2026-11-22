@@ -2,44 +2,45 @@ local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
-local organize_imports = function()
-    local params = {
-        command = "_typescript.organizeImports",
-        arguments = { vim.api.nvim_buf_get_name(0) },
-    }
-    vim.lsp.buf.execute_command(params)
+local function organize_imports(_, context)
+    local client = vim.lsp.get_client_by_id(context.client_id)
+    if client then
+        client:exec_cmd({
+            command = "_typescript.organizeImports",
+            arguments = { vim.api.nvim_buf_get_name(context.bufnr) },
+        }, { bufnr = context.bufnr })
+    end
 end
 
-vim.lsp.config("vtsls", {
-    on_attach = on_attach,
-    on_init = on_init,
-    capabilities = capabilities,
+return {
+    vtsls = {
+        on_attach = on_attach,
+        on_init = on_init,
+        capabilities = capabilities,
 
-    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
 
-    init_options = {
-        preferences = {
-            disableSuggestions = true,
-            importModuleSpecifierPreference = "relative",
-        },
-    },
-
-    settings = {
-        javascript = {
-            format = {
-                enable = false,
+        init_options = {
+            preferences = {
+                disableSuggestions = true,
+                importModuleSpecifierPreference = "relative",
             },
         },
-        typescript = {
-            format = {
-                enable = false,
+
+        settings = {
+            javascript = {
+                format = {
+                    enable = false,
+                },
+            },
+            typescript = {
+                format = {
+                    enable = false,
+                },
             },
         },
-    },
-    commands = {
-        OrganizeImports = {
-            organize_imports,
-            description = "Organize Imports",
+        commands = {
+            OrganizeImports = organize_imports,
         },
     },
-})
+}

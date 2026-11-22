@@ -1,331 +1,297 @@
 local M = {}
 
--- Archivo de estado para rastrear lenguajes habilitados
+local languages = require("configs.languages")
+local registry = require("utils.language_registry")
 local state_file = vim.fn.stdpath("data") .. "/nvim_language_state.json"
+local protected_tools = { "lua-language-server", "stylua", "prettier" }
+local user_protected_tools = {}
+local running = false
 
--- Herramientas que NO deben desinstalarse automáticamente
-local protected_tools = {
-    -- Herramientas esenciales
-    "lua_ls", -- Neovim configuración
-    "stylua", -- Neovim configuración
-    "prettier", -- Formateador común
-}
+local function current_languages()
+    local enabled = {}
+    for profile in pairs(languages.configs) do
+        if profile ~= "base" and languages.is_enabled(profile) then
+            enabled[#enabled + 1] = profile
+        end
+    end
+    table.sort(enabled)
+    return enabled
+end
 
--- Configuración del sistema de limpieza
-local config = {
-    -- Habilitar limpieza automática
-    auto_cleanup = true,
-
-    -- Mostrar notificaciones al desinstalar
-    notify_on_uninstall = true,
-
-    -- Confirmar antes de desinstalar (cuando hay múltiples herramientas)
-    confirm_bulk_uninstall = true,
-
-    -- Herramientas adicionales protegidas (configurables por usuario)
-    user_protected_tools = {},
-}
-
--- Función para cargar el estado anterior de lenguajes
 function M.load_previous_state()
-    local file = io.open(state_file, "r")
-    if not file then
-        return {}
+    local stat, _, code = vim.uv.fs_lstat(state_file)
+    if not stat then
+        return nil, code == "ENOENT" and "missing" or "invalid"
+    end
+    if stat.type ~= "file" then
+        return nil, "invalid"
     end
 
-    local content = file:read("*all")
-    file:close()
-
-    if content == "" then
-        return {}
-    end
-
-    local success, data = pcall(vim.json.decode, content)
-    if success then
-        return data.enabled_languages or {}
-    else
-        vim.notify("Error loading language state: " .. tostring(data), vim.log.levels.WARN)
-        return {}
-    end
-end
-
--- Función para guardar el estado actual de lenguajes
-function M.save_current_state()
-    local lang_config = require("configs.languages")
-    local current_languages = lang_config.get_enabled_languages()
-
-    local data = {
-        enabled_languages = current_languages,
-        timestamp = os.time(),
-        nvim_version = vim.version(),
-    }
-
-    local file = io.open(state_file, "w")
-    if file then
-        file:write(vim.json.encode(data))
-        file:close()
-    else
-        vim.notify("Could not save language state", vim.log.levels.WARN)
-    end
-end
-
--- Función para detectar lenguajes que fueron desactivados
-function M.get_disabled_languages()
-    local previous_languages = M.load_previous_state()
-    local lang_config = require("configs.languages")
-    local current_languages = lang_config.get_enabled_languages()
-
-    local disabled = {}
-
-    for _, lang in ipairs(previous_languages) do
-        local is_currently_enabled = false
-        for _, current_lang in ipairs(current_languages) do
-            if current_lang == lang then
-                is_currently_enabled = true
-                break
+    local read, lines = pcall(vim.fn.readfile, state_file)
+    if read then
+        local decoded, snapshot = pcall(vim.json.decode, table.concat(lines, "\n"))
+        local enabled = decoded and type(snapshot) == "table" and snapshot.enabled_languages
+        if type(enabled) == "table" and vim.islist(enabled) then
+            if
+                not vim.iter(enabled):any(function(profile)
+                    return type(profile) ~= "string" or profile == ""
+                end)
+            then
+                return enabled, "valid"
             end
         end
+    end
+    return nil, "invalid"
+end
 
-        if not is_currently_enabled then
-            table.insert(disabled, lang)
-        end
+local function write_state(replace)
+    local content = vim.json.encode({
+        enabled_languages = current_languages(),
+        timestamp = os.time(),
+        nvim_version = vim.version(),
+    }) .. "\n"
+
+    local mkdir_ok, mkdir_error = pcall(vim.fn.mkdir, vim.fs.dirname(state_file), "p")
+    if not mkdir_ok then
+        return nil, mkdir_error
     end
 
+    local fd, path, open_error
+    if replace then
+        fd, path = vim.uv.fs_mkstemp(state_file .. ".XXXXXX")
+        if not fd then
+            return nil, path
+        end
+    else
+        local code
+        fd, open_error, code = vim.uv.fs_open(state_file, "wx", tonumber("600", 8))
+        if not fd then
+            return code == "EEXIST", open_error
+        end
+        path = state_file
+    end
+
+    local bytes, write_error = vim.uv.fs_write(fd, content, 0)
+    local closed, close_error = vim.uv.fs_close(fd)
+    if bytes == #content and closed then
+        if not replace then
+            return true
+        end
+        local renamed, rename_error = vim.uv.fs_rename(path, state_file)
+        if renamed then
+            return true
+        end
+        write_error = rename_error
+    end
+    vim.uv.fs_unlink(path)
+    return nil, write_error or close_error or "Incomplete write"
+end
+
+local function state_notice(written, error_message, success_message)
+    if written then
+        if success_message then
+            vim.notify(success_message, vim.log.levels.INFO)
+        end
+    else
+        vim.notify(
+            ("Could not write language snapshot %s (%s)."):format(state_file, error_message),
+            vim.log.levels.WARN
+        )
+    end
+    return written
+end
+
+function M.init_state()
+    local _, state = M.load_previous_state()
+    if state == "missing" then
+        local written, err = write_state(false)
+        return state_notice(written, err)
+    end
+    return state == "valid"
+end
+
+function M.save_current_state()
+    if running then
+        vim.notify("Wait for Mason cleanup to finish before updating the baseline.", vim.log.levels.WARN)
+        return false
+    end
+    local written, err = write_state(true)
+    return state_notice(written, err, "Language cleanup baseline updated.")
+end
+
+function M.setup(config)
+    config = config or {}
+    vim.list_extend(user_protected_tools, config.user_protected_tools or {})
+    vim.list_extend(user_protected_tools, config.protected_tools or {})
+end
+
+function M.get_protected_tools()
+    return vim.list_extend(vim.deepcopy(protected_tools), user_protected_tools)
+end
+
+local function disabled_languages(previous)
+    local disabled = {}
+    for _, profile in ipairs(previous or {}) do
+        if profile ~= "base" and (not languages.configs[profile] or not languages.is_enabled(profile)) then
+            disabled[#disabled + 1] = profile
+        end
+    end
     return disabled
 end
 
--- Función para obtener todas las herramientas protegidas
-function M.get_protected_tools()
-    local all_protected = vim.deepcopy(protected_tools)
-    vim.list_extend(all_protected, config.user_protected_tools)
-    return all_protected
-end
-
--- Función para verificar si una herramienta está protegida
-function M.is_tool_protected(tool_name)
-    local protected = M.get_protected_tools()
-    for _, protected_tool in ipairs(protected) do
-        if protected_tool == tool_name then
-            return true
-        end
-    end
-    return false
-end
-
--- Función para obtener herramientas que ya no son necesarias
-function M.get_unused_tools(disabled_languages)
-    if not disabled_languages or #disabled_languages == 0 then
-        return {}
-    end
-
-    local lang_config = require("configs.languages")
-    local current_languages = lang_config.get_enabled_languages()
-
-    -- Obtener todas las herramientas de lenguajes desactivados
-    local unused_tools = {}
-
-    for _, disabled_lang in ipairs(disabled_languages) do
-        local lang_tools = lang_config.get_config(disabled_lang)
-
-        -- Recopilar todas las herramientas del lenguaje desactivado
-        local all_lang_tools = {}
-        if lang_tools.lsp_servers then
-            vim.list_extend(all_lang_tools, lang_tools.lsp_servers)
-        end
-        if lang_tools.formatters then
-            vim.list_extend(all_lang_tools, lang_tools.formatters)
-        end
-        if lang_tools.linters then
-            vim.list_extend(all_lang_tools, lang_tools.linters)
-        end
-        if lang_tools.dap_adapters then
-            vim.list_extend(all_lang_tools, lang_tools.dap_adapters)
-        end
-
-        -- Verificar cada herramienta del lenguaje desactivado
-        for _, tool in ipairs(all_lang_tools) do
-            -- Saltar herramientas protegidas
-            if not M.is_tool_protected(tool) then
-                -- Verificar si la herramienta es usada por otros lenguajes habilitados
-                local is_used_elsewhere = false
-
-                for _, enabled_lang in ipairs(current_languages) do
-                    local enabled_lang_tools = lang_config.get_config(enabled_lang)
-                    local all_enabled_tools = {}
-
-                    if enabled_lang_tools.lsp_servers then
-                        vim.list_extend(all_enabled_tools, enabled_lang_tools.lsp_servers)
-                    end
-                    if enabled_lang_tools.formatters then
-                        vim.list_extend(all_enabled_tools, enabled_lang_tools.formatters)
-                    end
-                    if enabled_lang_tools.linters then
-                        vim.list_extend(all_enabled_tools, enabled_lang_tools.linters)
-                    end
-                    if enabled_lang_tools.dap_adapters then
-                        vim.list_extend(all_enabled_tools, enabled_lang_tools.dap_adapters)
-                    end
-
-                    for _, enabled_tool in ipairs(all_enabled_tools) do
-                        if enabled_tool == tool then
-                            is_used_elsewhere = true
-                            break
-                        end
-                    end
-
-                    if is_used_elsewhere then
-                        break
-                    end
-                end
-
-                -- Si la herramienta no es usada por otros lenguajes, marcarla para desinstalación
-                if not is_used_elsewhere then
-                    table.insert(unused_tools, {
-                        name = tool,
-                        from_language = disabled_lang,
-                    })
-                end
-            end
-        end
-    end
-
-    return unused_tools
-end
-
--- Función para desinstalar herramientas Mason
-function M.uninstall_mason_tools(tools)
-    if not tools or #tools == 0 then
-        return true
-    end
-
-    local mason_registry = require("mason-registry")
-    local uninstalled = {}
-    local failed = {}
-
-    for _, tool_info in ipairs(tools) do
-        local tool_name = string.gsub(tool_info.name, "_", "-")
-
-        if mason_registry.is_installed(tool_name) then
-            local package = mason_registry.get_package(tool_name)
-
-            local success, err = pcall(function()
-                package:uninstall()
-            end)
-
-            if success then
-                table.insert(uninstalled, tool_name)
-                if config.notify_on_uninstall then
-                    vim.notify(
-                        "Uninstalled " .. tool_name .. " (was used by " .. tool_info.from_language .. ")",
-                        vim.log.levels.INFO
-                    )
-                end
-            else
-                table.insert(failed, { tool = tool_name, error = err })
-                vim.notify("Failed to uninstall " .. tool_name .. ": " .. tostring(err), vim.log.levels.WARN)
-            end
-        else
-            -- Herramienta ya no está instalada
-            table.insert(uninstalled, tool_name)
-        end
-    end
-
-    return {
-        uninstalled = uninstalled,
-        failed = failed,
-        success = #failed == 0,
-    }
-end
-
--- Función principal para ejecutar limpieza automática
-function M.cleanup_disabled_languages()
-    if not config.auto_cleanup then
-        return { success = false, reason = "Auto cleanup is disabled" }
-    end
-
-    local disabled_languages = M.get_disabled_languages()
-
-    if #disabled_languages == 0 then
-        return { success = true, reason = "No languages were disabled" }
-    end
-
-    local unused_tools = M.get_unused_tools(disabled_languages)
-
-    if #unused_tools == 0 then
-        if config.notify_on_uninstall then
-            vim.notify(
-                "Languages disabled: "
-                    .. table.concat(disabled_languages, ", ")
-                    .. " but no tools need to be uninstalled",
-                vim.log.levels.INFO
-            )
-        end
-        return { success = true, reason = "No tools need to be uninstalled" }
-    end
-
-    -- Confirmar si hay múltiples herramientas y la confirmación está habilitada
-    if config.confirm_bulk_uninstall and #unused_tools > 3 then
-        local tool_names = {}
-        for _, tool in ipairs(unused_tools) do
-            table.insert(tool_names, tool.name)
-        end
-
-        local confirmation = vim.fn.confirm(
-            "Uninstall " .. #unused_tools .. " Mason tools?\n" .. table.concat(tool_names, ", "),
-            "&Yes\n&No\n&Show details",
-            2 -- default to No
-        )
-
-        if confirmation == 2 then -- No
-            return { success = false, reason = "User cancelled uninstallation" }
-        elseif confirmation == 3 then -- Show details
-            for _, tool in ipairs(unused_tools) do
-                print("- " .. tool.name .. " (from " .. tool.from_language .. ")")
-            end
-
-            local second_confirmation = vim.fn.confirm("Proceed with uninstallation?", "&Yes\n&No", 2)
-
-            if second_confirmation == 2 then
-                return { success = false, reason = "User cancelled after reviewing details" }
-            end
-        end
-    end
-
-    -- Ejecutar desinstalación
-    local result = M.uninstall_mason_tools(unused_tools)
-
-    if result.success then
-        vim.notify(
-            "Cleaned up "
-                .. #result.uninstalled
-                .. " Mason tools from disabled languages: "
-                .. table.concat(disabled_languages, ", "),
-            vim.log.levels.INFO
-        )
-    end
-
-    return result
-end
-
--- Función para configurar el sistema de limpieza
-function M.setup(user_config)
-    config = vim.tbl_deep_extend("force", config, user_config or {})
-
-    -- Agregar herramientas protegidas por el usuario
-    if user_config and user_config.protected_tools then
-        vim.list_extend(config.user_protected_tools, user_config.protected_tools)
-    end
-end
-
--- Función para obtener el estado actual del sistema
 function M.get_status()
+    local previous, state = M.load_previous_state()
     return {
-        auto_cleanup_enabled = config.auto_cleanup,
+        auto_cleanup_enabled = false,
         protected_tools = M.get_protected_tools(),
         state_file = state_file,
-        previous_languages = M.load_previous_state(),
-        current_languages = require("configs.languages").get_enabled_languages(),
+        snapshot_status = state,
+        previous_languages = previous or {},
+        current_languages = current_languages(),
+        disabled_languages = disabled_languages(previous),
     }
+end
+
+local function removable_packages(disabled)
+    local protected = {}
+    for _, name in ipairs(M.get_protected_tools()) do
+        protected[name] = true
+    end
+
+    local candidates, by_role = {}, { lsp = {}, format = {}, lint = {} }
+    local function track(profile, package)
+        if profile == "base" or languages.is_enabled(profile) then
+            protected[package] = true
+        elseif disabled[profile] then
+            candidates[package] = true
+        end
+    end
+
+    for _, record in ipairs(registry.inventory()) do
+        if record.package then
+            track(record.profile, record.package)
+            if protected[record.id] then
+                protected[record.package] = true
+            end
+            if by_role[record.role] then
+                by_role[record.role][record.id] = record.package
+            end
+        end
+    end
+
+    for profile, config in pairs(languages.configs) do
+        for role, field in pairs({ lsp = "lsp_servers", format = "formatters", lint = "linters" }) do
+            if not config[role] then
+                for _, name in ipairs(config[field] or {}) do
+                    track(profile, by_role[role][name] or name)
+                end
+            end
+        end
+        for _, name in ipairs(config.dap_adapters or {}) do
+            track(profile, name)
+        end
+    end
+
+    for name in pairs(protected) do
+        candidates[name] = nil
+    end
+    local names = vim.tbl_keys(candidates)
+    table.sort(names)
+    return names
+end
+
+function M.cleanup_disabled_languages()
+    if running then
+        vim.notify("Mason cleanup is already running.", vim.log.levels.INFO)
+        return false
+    end
+    local previous, state = M.load_previous_state()
+    if state == "missing" then
+        local initialized = M.init_state()
+        if initialized then
+            vim.notify("Language cleanup baseline initialized.", vim.log.levels.INFO)
+        end
+        return initialized
+    end
+    if state == "invalid" then
+        vim.notify(
+            (
+                "Unreadable or invalid language snapshot at %s. Restore it or run "
+                .. ":lua require('utils.lang_loader').update_language_state() to accept the current baseline."
+            ):format(state_file),
+            vim.log.levels.WARN
+        )
+        return false
+    end
+
+    local disabled, unknown = {}, {}
+    for _, profile in ipairs(disabled_languages(previous)) do
+        if languages.configs[profile] then
+            disabled[profile] = true
+        else
+            unknown[#unknown + 1] = profile
+        end
+    end
+    if #unknown > 0 then
+        vim.notify(
+            ("No declaration found for previous language profiles %s. Kept installed packages."):format(
+                table.concat(unknown, ", ")
+            ),
+            vim.log.levels.WARN
+        )
+        return false
+    end
+
+    local candidates = next(disabled) and removable_packages(disabled) or {}
+    local mason
+    if #candidates > 0 then
+        local ok, result = pcall(require, "mason-registry")
+        if not ok then
+            vim.notify("Cannot load Mason's registry. Check :MasonLog and rerun cleanup.", vim.log.levels.WARN)
+            return false
+        end
+        mason = result
+        candidates = vim.tbl_filter(mason.is_installed, candidates)
+    end
+    if #candidates == 0 then
+        vim.notify("No installed Mason packages need cleanup.", vim.log.levels.INFO)
+        return true
+    end
+    if vim.fn.confirm("Uninstall these Mason packages?\n" .. table.concat(candidates, "\n"), "&Yes\n&No", 2) ~= 1 then
+        return false
+    end
+
+    running = true
+    local remaining = #candidates
+    for _, name in ipairs(candidates) do
+        local finished = false
+        local function finish(success, detail)
+            if finished then
+                return
+            end
+            finished = true
+            remaining = remaining - 1
+            running = remaining > 0
+            if success and not mason.is_installed(name) then
+                vim.notify("Uninstalled " .. name .. ".", vim.log.levels.INFO)
+            else
+                if success then
+                    detail = "Mason still reports the package as installed"
+                end
+                vim.notify(
+                    ("Could not uninstall %s (%s). Check :MasonLog and rerun cleanup."):format(name, tostring(detail)),
+                    vim.log.levels.WARN
+                )
+            end
+        end
+        local started, err = pcall(function()
+            mason.get_package(name):uninstall({}, vim.schedule_wrap(finish))
+        end)
+        if not started then
+            finish(false, err)
+        end
+    end
+    return true
 end
 
 return M

@@ -24,13 +24,13 @@ languages.configs.go = {
     filetypes = { "go" },
     lsp = {
         { id = "gopls", package = "gopls", bin = "gopls", options = {
-            settings = { gopls = { hints = { variableTypes = true } } },
+            settings = { gopls = { hints = { assignVariableTypes = true } } },
         } },
     },
     format = { { id = "gofmt", bin = "gofmt" } },
 }
 records = registry.inventory()
-assert(find(records, "go", "lsp", "gopls", "go").options.settings.gopls.hints.variableTypes)
+assert(find(records, "go", "lsp", "gopls", "go").options.settings.gopls.hints.assignVariableTypes)
 assert(find(records, "go", "format", "gofmt", "go").package == nil)
 assert(find(records, "markdown", "lsp", "markdown_oxide", "markdown").enabled)
 

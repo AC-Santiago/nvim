@@ -1,17 +1,17 @@
 # Neovim Configuration
 
-Personal Neovim configuration optimized for development on Linux. Based on NvChad with custom modifications.
+Personal Neovim configuration based on NvChad for Linux and native Windows x64.
 
 ## Requirements
 
 - **Neovim 0.12+**
 - **Git**
 - **Tree-sitter CLI 0.26.1+, tar and curl** (for installing parsers)
-- **Node.js & npm** (required for Copilot)
+- **Node.js & npm** (for Copilot and Node-based language tools)
 - **Python 3 & pip**
 - **C compiler** (gcc/clang)
 - **Nerd Font** (recommended: JetBrainsMono Nerd Font)
-- **Make**
+- **Make** (optional tokenizer build outside Windows)
 - **ripgrep**
 - **fd-find**
 - **luarocks**
@@ -42,7 +42,7 @@ uv tool install marimo
 - **Rust** - LSP, DAP via rustaceanvim
 - **Typst** - LSP and preview
 - **HTML/CSS/JS** - LSP, formatting, linting
-- **SQL** - LSP and formatting
+- **SQL** - Opt-in LSP and formatting. [Linux setup](docs/README_LANGUAGE_SYSTEM.md#sql-opcional-en-linux)
 - **Markdown** - LSP, Obsidian.nvim integration, rendering
 
 ### Data Science
@@ -67,14 +67,14 @@ uv tool install marimo
 ## Installation
 
 ```bash
-git clone https://github.com/AC-Santiago/nvim.git ~/.config/nvim
+git clone --branch develop https://github.com/AC-Santiago/nvim.git ~/.config/nvim
 nvim  # Lazy will auto-install plugins on first run
 ```
 
 On native Windows, run this from PowerShell with Git and Neovim on PATH.
 
 ```powershell
-git clone https://github.com/AC-Santiago/nvim.git (Join-Path $env:LOCALAPPDATA 'nvim')
+git clone --branch develop https://github.com/AC-Santiago/nvim.git (Join-Path $env:LOCALAPPDATA 'nvim')
 nvim
 ```
 
@@ -246,7 +246,7 @@ export OBSIDIAN_VAULT_PATH=~/path/to/your/vault/
 
 ### Languages System
 
-Languages are enabled/disabled in `lua/configs/languages.lua`. The Mason Cleanup system automatically removes unused tools when languages are disabled.
+Set enabled languages and declare their tools in `lua/configs/languages.lua`. Markdown, Python and Typst are enabled by default. Run `:LanguageToolsInstall` to install missing tools. Disabling a profile stops tool activation after restart. Use the manual cleanup command to review and remove unused Mason packages. [Language system](./docs/README_LANGUAGE_SYSTEM.md) · [Manual cleanup](./docs/MASON_CLEANUP_GUIDE.md)
 
 ### Custom Themes
 

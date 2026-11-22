@@ -1,4 +1,4 @@
 {
-    "uppercase": true,
-    "indent": "    "
+    "keywordCase": "upper",
+    "tabWidth": 4
 }

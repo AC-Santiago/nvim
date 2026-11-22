@@ -156,7 +156,7 @@ end, {})
 require("nvchad.autocmds")
 require("autocmds")
 
--- Cargar comandos de limpieza
+require("utils.lang_loader").init_state_tracking()
 
 vim.schedule(function()
     require("mappings")

@@ -39,6 +39,15 @@ local function requests_for(workspace)
     return requests, report
 end
 
+local function failure_message(detail)
+    local message = tostring(detail or "Mason did not complete the operation.")
+    local length = vim.fn.strchars(message)
+    if length > 1200 then
+        message = "… " .. vim.fn.strcharpart(message, length - 1200)
+    end
+    return message .. retry
+end
+
 local function install_package(mason, name, records, workspace, finish)
     local ok, package = pcall(mason.get_package, name)
     if not ok then
@@ -61,7 +70,7 @@ local function install_package(mason, name, records, workspace, finish)
 
     local started, failure = pcall(package.install, package, {}, vim.schedule_wrap(function(success, detail)
         if not success then
-            finish("failed", tostring(detail or "Mason did not complete the installation.") .. retry)
+            finish("failed", failure_message(detail))
             return
         end
         for _, record in ipairs(records) do
@@ -74,7 +83,7 @@ local function install_package(mason, name, records, workspace, finish)
         finish("installed")
     end))
     if not started then
-        finish("failed", tostring(failure) .. retry)
+        finish("failed", failure_message(failure))
     end
 end
 
@@ -111,10 +120,10 @@ function M.run(workspace, complete)
             if success then
                 local ok, failure = pcall(install_package, require("mason-registry"), name, records, workspace, package_finished)
                 if not ok then
-                    package_finished("failed", tostring(failure) .. retry)
+                    package_finished("failed", failure_message(failure))
                 end
             else
-                package_finished("failed", "Cannot refresh Mason registry: " .. tostring(detail) .. retry)
+                package_finished("failed", "Cannot refresh Mason registry. " .. failure_message(detail))
             end
         end
     end

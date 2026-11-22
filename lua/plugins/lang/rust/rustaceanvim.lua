@@ -36,15 +36,11 @@ return {
                 default_settings = {
                     ["rust-analyzer"] = {
                         cargo = {
-                            allFeatures = true,
-                            loadOutDirsFromCheck = true,
-                            runBuildScripts = true,
+                            features = "all",
+                            buildScripts = { enable = true },
                         },
-                        -- Habilitar características experimentales
-                        checkOnSave = {
-                            command = "clippy",
-                            allFeatures = true,
-                        },
+                        checkOnSave = true,
+                        check = { command = "clippy" },
                         procMacro = {
                             enable = true,
                             ignored = {
@@ -60,10 +56,9 @@ return {
                             },
                         },
                         inlayHints = {
-                            enable = true,
-                            typeHints = true,
-                            parameterHints = true,
-                            chainingHints = true,
+                            typeHints = { enable = true },
+                            parameterHints = { enable = true },
+                            chainingHints = { enable = true },
                         },
                         hover = {
                             actions = {
