@@ -10,27 +10,35 @@ local icons = function()
     end
     return icons
 end
+
+local windows = vim.fn.has("win32") == 1
+local dependencies = {
+    "ribru17/blink-cmp-spell",
+    "kristijanhusak/vim-dadbod-completion",
+    {
+        "saghen/blink.compat",
+        version = "2.*",
+        lazy = true,
+        opts = {},
+    },
+}
+if not windows then
+    table.insert(dependencies, 1, "fang2hou/blink-copilot")
+    table.insert(dependencies, 2, "rcarriga/cmp-dap")
+end
+
 return {
     { import = "nvchad.blink.lazyspec" },
     {
         "Saghen/blink.cmp",
-        dependencies = {
-            "fang2hou/blink-copilot",
-            "rcarriga/cmp-dap",
-            "ribru17/blink-cmp-spell",
-            "kristijanhusak/vim-dadbod-completion",
-            -- { "MattiasMTS/cmp-dbee", opts = {} },
-            {
-                "saghen/blink.compat",
-                version = "2.*",
-                lazy = true,
-                opts = {},
-            },
-        },
+        dependencies = dependencies,
         opts = {
             sources = {
                 default = function()
-                    local sources = { "lazydev", "copilot", "lsp", "path", "snippets", "buffer", "html-css" }
+                    local sources = { "lazydev", "lsp", "path", "snippets", "buffer", "html-css" }
+                    if not windows then
+                        table.insert(sources, 2, "copilot")
+                    end
                     -- Add spell source when spell is enabled in the buffer
                     if vim.wo.spell then
                         table.insert(sources, "spell")
@@ -38,12 +46,13 @@ return {
                     if pcall(require, "vim_dadbod_completion") then
                         table.insert(sources, "dadbod")
                     end
-                    local dap_ok, cmp_dap = pcall(require, "cmp_dap")
-                    if dap_ok and cmp_dap.is_dap_buffer() then
-                        return vim.list_extend(sources, { "dap" })
-                    else
-                        return sources
+                    if not windows then
+                        local dap_ok, cmp_dap = pcall(require, "cmp_dap")
+                        if dap_ok and cmp_dap.is_dap_buffer() then
+                            table.insert(sources, "dap")
+                        end
                     end
+                    return sources
                 end,
                 -- per_filetype = {
                 --     -- sql = { "dbee", "dadbod", "lsp", "path", "snippets", "buffer" },
@@ -55,7 +64,7 @@ return {
                         module = "lazydev.integrations.blink",
                         score_offset = 100,
                     },
-                    copilot = {
+                    copilot = not windows and {
                         name = "copilot",
                         module = "blink-copilot",
                         score_offset = 100,
@@ -64,11 +73,11 @@ return {
                             max_completions = 1,
                             max_attempts = 2,
                         },
-                    },
-                    dap = {
+                    } or nil,
+                    dap = not windows and {
                         name = "dap",
                         module = "blink.compat.source",
-                    },
+                    } or nil,
                     spell = {
                         name = "Spell",
                         module = "blink-cmp-spell",

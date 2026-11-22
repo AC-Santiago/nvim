@@ -8,6 +8,7 @@ end
 
 local M = {
     "mfussenegger/nvim-dap",
+    cond = vim.fn.has("win32") == 0,
     event = {
         "VeryLazy",
     },

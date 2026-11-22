@@ -2,9 +2,7 @@ return {
     "3rd/image.nvim",
     build = false,
     enabled = not vim.g.neovide,
-    cond = function()
-        return not vim.g.neovide
-    end,
+    cond = vim.fn.has("win32") == 0,
     ft = { "markdown", "python" },
     opts = {
         backend = "kitty", -- Works with Kitty, WezTerm, and iTerm2

@@ -2,6 +2,7 @@
 -- Integra Copilot NES (Next Edit Suggestions) + Terminal CLI para herramientas AI
 local M = {
     "folke/sidekick.nvim",
+    cond = vim.fn.has("win32") == 0,
     event = "LspAttach",
     dependencies = {
         "zbirenbaum/copilot.lua", -- necesario: incluye el copilot-language-server
@@ -28,15 +29,8 @@ M.opts = {
                 height = 20,
             },
         },
-        -- Tmux mux: persistencia de sesiones en tmux
         mux = {
-            enabled = true,
-            backend = "tmux",
-            create = "split", -- crear en nuevo split de tmux
-            split = {
-                vertical = true,
-                size = 0.5,
-            },
+            enabled = false,
         },
         -- Herramientas AI disponibles en el sistema
         tools = {

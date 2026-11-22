@@ -86,38 +86,30 @@ map(
     "<cmd>Telescope find_files follow=true no_ignore=true hidden=true<CR>",
     { desc = "telescope find all files" }
 )
-map("n", "<leader>fp", function()
+local function find_lua_files(title, directory)
+    local cwd = vim.fn.stdpath("config") .. "/" .. directory
     require("telescope.builtin").find_files({
-        prompt_title = "Plugins",
-        cwd = vim.fn.stdpath("config") .. "/lua/plugins",
+        prompt_title = title,
+        cwd = cwd,
         attach_mappings = function(_, map)
             local actions = require("telescope.actions")
             local action_state = require("telescope.actions.state")
             map("i", "<c-y>", function(prompt_bufnr)
-                local new_plugin = action_state.get_current_line()
+                local filename = cwd .. "/" .. action_state.get_current_line() .. ".lua"
                 actions.close(prompt_bufnr)
-                vim.cmd(string.format("edit ~/.config/nvim/lua/plugins/%s.lua", new_plugin))
+                vim.cmd.edit({ args = { filename }, magic = { file = false, bar = false } })
             end)
             return true
         end,
     })
+end
+
+map("n", "<leader>fp", function()
+    find_lua_files("Plugins", "lua/plugins")
 end, { desc = "telescope find plugins" })
 
 map("n", "<leader>fc", function()
-    require("telescope.builtin").find_files({
-        prompt_title = "Config",
-        cwd = vim.fn.stdpath("config") .. "/lua",
-        attach_mappings = function(_, map)
-            local actions = require("telescope.actions")
-            local action_state = require("telescope.actions.state")
-            map("i", "<c-y>", function(prompt_bufnr)
-                local new_config = action_state.get_current_line()
-                actions.close(prompt_bufnr)
-                vim.cmd(string.format("edit ~/.config/nvim/lua/%s.lua", new_config))
-            end)
-            return true
-        end,
-    })
+    find_lua_files("Config", "lua")
 end, { desc = "telescope find config" })
 -- terminal
 map("t", "<C-x>", "<C-\\><C-N>", { desc = "terminal escape terminal mode" })

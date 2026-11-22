@@ -4,8 +4,9 @@ Personal Neovim configuration optimized for development on Linux. Based on NvCha
 
 ## Requirements
 
-- **Neovim 0.9+**
+- **Neovim 0.12+**
 - **Git**
+- **Tree-sitter CLI 0.26.1+, tar and curl** (for installing parsers)
 - **Node.js & npm** (required for Copilot)
 - **Python 3 & pip**
 - **C compiler** (gcc/clang)
@@ -69,6 +70,17 @@ uv tool install marimo
 git clone https://github.com/AC-Santiago/nvim.git ~/.config/nvim
 nvim  # Lazy will auto-install plugins on first run
 ```
+
+On native Windows, run this from PowerShell with Git and Neovim on PATH.
+
+```powershell
+git clone https://github.com/AC-Santiago/nvim.git (Join-Path $env:LOCALAPPDATA 'nvim')
+nvim
+```
+
+Use `:terminal` to open a terminal inside the editor. The Windows startup profile skips Copilot completion, Sidekick, DAP, image rendering and Typst browser preview. Copilot Chat loads on demand with `:CopilotChatModels`. Its tokenizer build is optional and runs automatically only outside Windows.
+
+Install missing parsers with `:TSInstall markdown markdown_inline python typst`. Run `:lua vim.print(require("configs.treesitter").parsers())` for the list suggested by the current profile. The editor can open and save files while their parsers are missing. Use `:PythonPath` to inspect the selected provider interpreter.
 
 ## Keybindings
 

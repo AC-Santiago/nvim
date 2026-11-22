@@ -22,7 +22,7 @@ return {
     {
         "CopilotC-Nvim/CopilotChat.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
-        build = "make tiktoken",
+        build = vim.fn.has("win32") == 0 and "make tiktoken" or false,
         cmd = { "CopilotChat", "CopilotChatOpen", "CopilotChatToggle", "CopilotChatModels", "CopilotChatPrompts" },
         keys = {
             { "<leader>cc", "<cmd>CopilotChatOpen<CR>", desc = "Abrir CopilotChat" },

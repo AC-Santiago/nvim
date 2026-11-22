@@ -1,7 +1,7 @@
 local M = {
     "zbirenbaum/copilot.lua",
+    cond = vim.fn.has("win32") == 0,
     cmd = "Copilot",
-    build = ":Copilot auth",
     event = "InsertEnter",
 }
 

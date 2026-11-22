@@ -1,10 +1,7 @@
 vim.opt.spell = true
 vim.opt.spelllang = "es"
 
--- TreeSitter configuración
-vim.treesitter.start()
-vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+require("configs.treesitter").start()
 
 vim.opt.conceallevel = 2
 
