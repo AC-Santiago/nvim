@@ -36,16 +36,22 @@ El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde Powe
 
 ### Preparar MSVC para Tree-sitter
 
-En el primer intento de `:TSInstall` en Windows se descargaron las cinco gramáticas. El paso `tree-sitter build` dio `program not found` al ejecutar `cl.exe`. El reintento creó un `markdown.so` en el directorio de datos que Windows rechazó como aplicación Win32 inválida. El usuario confirmó que el parser incluido cargó con `--clean`. La arquitectura del archivo rechazado sigue por comprobar.
+En el primer intento de `:TSInstall` en Windows se descargaron las cinco gramáticas. El paso `tree-sitter build` dio `program not found` al ejecutar `cl.exe`. El reintento creó un `markdown.so` en el directorio de datos que Windows rechazó como aplicación Win32 inválida. El usuario confirmó que el parser incluido cargó con `--clean`. El usuario comprobó con `dumpbin` que el `tree-sitter.exe` activo era x86 (`14C`). Esa arquitectura concuerda con el destino `i686` observado al probar Zig y con los errores de carga en Neovim x64.
 
 Si falta el compilador, instala o modifica **Build Tools for Visual Studio** y selecciona **Desarrollo para el escritorio con C++**, con las herramientas MSVC x64/x86 y un SDK de Windows. Abre **x64 Native Tools Command Prompt for VS** desde Inicio y ejecuta `powershell -NoLogo` allí. Así PowerShell hereda las rutas del compilador, los encabezados y las bibliotecas del SDK. Si usas `NVIM_APPNAME`, vuelve a definir en esa sesión el valor del perfil que probaste. [Instalación de C y C++](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170) · [Entorno de compilación x64](https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170)
 
+Descarga el CLI de Tree-sitter para **Windows x64**. En PowerShell, confirma qué ejecutable selecciona el `PATH` antes de abrir Neovim. [Distribuciones oficiales de Tree-sitter](https://github.com/tree-sitter/tree-sitter/releases)
+
 ```powershell
+$treeSitter = (Get-Command tree-sitter.exe -ErrorAction Stop).Source
+$treeSitter
+dumpbin /headers $treeSitter | Select-String 'machine'
 Get-Command cl.exe -ErrorAction Stop
-nvim
 ```
 
-En Neovim, comprueba que `:echo executable('cl.exe')` devuelve `1` e instala los parsers adicionales con `:TSInstall python typst`. Usa los parsers de Lua y Markdown incluidos con Neovim.
+Busca `8664 machine (x64)`. Si aparece `14C machine (x86)`, usa `Get-Command tree-sitter.exe -All` para identificar la copia que está primero en el `PATH` y dale prioridad a la versión x64. [Tipos de máquina de Windows](https://learn.microsoft.com/en-us/windows/win32/debug/pe-format#machine-types)
+
+Abre Neovim desde esa PowerShell y comprueba que `:echo executable('cl.exe')` devuelve `1`. Si Python y Typst se instalaron con el CLI x86 y Windows rechaza sus binarios, ejecuta `:TSUninstall python typst`, espera a que termine y vuelve a instalarlos con `:TSInstall python typst`. Usa los parsers de Lua y Markdown incluidos con Neovim.
 
 El perfil de Windows rechazó también `markdown_inline.so`. Si los parsers incluidos cargan con `--clean` y el perfil rechaza las copias de `nvim-data/site/parser`, retira ambas copias con `:TSUninstall markdown markdown_inline` y reinicia. Si Lua da el mismo error, confirma su copia incluida y recupera el parser con `:TSUninstall lua`. [Resolución de parsers de Neovim](https://neovim.io/doc/user/treesitter/#treesitter-parsers)
 
