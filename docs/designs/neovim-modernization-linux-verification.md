@@ -34,6 +34,8 @@ Para revertir se montó una copia nueva de la configuración, el lockfile y los 
 
 El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde PowerShell en un equipo físico con Windows 11. La aceptación continúa en ese equipo con la edición, la terminal, el aprovisionamiento explícito y el smoke de Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
 
+El intento siguiente del smoke completó la carga de los cinco parsers, la conexión de Markdown Oxide y la navegación entre notas. Se detuvo al esperar la conexión de Pyrefly. El equipo aún no tenía Python instalado, según informó el usuario. La verificación de Python, Tinymist y Lua LS mediante el smoke continúa pendiente.
+
 ### Preparar MSVC para Tree-sitter
 
 En el primer intento de `:TSInstall` en Windows se descargaron las cinco gramáticas. El paso `tree-sitter build` dio `program not found` al ejecutar `cl.exe`. El reintento creó un `markdown.so` en el directorio de datos que Windows rechazó como aplicación Win32 inválida. El usuario confirmó que el parser incluido cargó con `--clean`. El usuario comprobó con `dumpbin` que el `tree-sitter.exe` activo era x86 (`14C`). Esa arquitectura concuerda con el destino `i686` observado al probar Zig y con los errores de carga en Neovim x64.
@@ -67,6 +69,13 @@ Set-Location $cfg
 git rev-parse HEAD
 Get-FileHash .\lazy-lock.json -Algorithm SHA256
 nvim
+```
+
+Antes de ejecutar `:LanguageToolsInstall`, instala Python para Windows y confirma que el intérprete y pip funcionan en esa misma PowerShell. Mason instala Pyrefly desde PyPI en un entorno virtual. [Python para Windows](https://www.python.org/downloads/windows/) · [Receta de Pyrefly](https://github.com/mason-org/mason-registry/blob/main/packages/pyrefly/package.yaml)
+
+```powershell
+python --version
+python -m pip --version
 ```
 
 1. Abre, guarda y ejecuta `:terminal` antes de instalar herramientas. Comprueba `:PythonPath` con y sin un entorno virtual.
