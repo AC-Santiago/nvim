@@ -30,13 +30,13 @@ La configuración nueva arrancó y pasó el smoke sobre una copia de los datos a
 
 Para revertir se montó una copia nueva de la configuración, el lockfile y los datos de la línea base. La prueba en pseudoterminal recuperó las 20 observaciones satisfactorias iniciales y Lua LS también se conectó. Se reprodujeron los dos fallos de referencia, Ruff lint y Python DAP, que están corregidos en el candidato. [Línea base](./neovim-modernization-linux-baseline.md)
 
-## Aceptación pendiente
+## Aceptación de Windows 11
 
-La prueba de extremo a extremo en Windows x64 se hará al final en una VM limpia de Windows 11 con PowerShell y sin WSL. Desde esa VM se usará `develop` y se comprobarán el arranque, el aprovisionamiento explícito, Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
+El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde PowerShell en un equipo físico con Windows 11. La aceptación continúa en ese equipo con la edición, la terminal, el aprovisionamiento explícito y el smoke de Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
 
 ### Ejecutar la aceptación en PowerShell
 
-En la VM, usa los [requisitos del README](../../README.md#requirements) y un perfil nuevo. Guarda el commit y el hash del lockfile con los resultados.
+Si el perfil ya arranca, continúa desde la carpeta donde clonaste el repositorio en la misma sesión de PowerShell. Para repetir el arranque con un perfil limpio, usa los [requisitos del README](../../README.md#requirements) y el bloque siguiente. Guarda el commit y el hash del lockfile con los resultados.
 
 ```powershell
 $env:NVIM_APPNAME = 'nvim-egm'
