@@ -9,7 +9,7 @@ Personal Neovim configuration based on NvChad for Linux and native Windows x64.
 - **Tree-sitter CLI 0.26.1+, tar and curl** (for installing parsers)
 - **Node.js & npm** (for Copilot and Node-based language tools)
 - **Python 3 & pip**
-- **C compiler** (gcc/clang)
+- **C compiler** (GCC or Clang on Linux, MSVC in an initialized developer shell on Windows x64). [Windows parser setup](docs/designs/neovim-modernization-linux-verification.md#preparar-msvc-para-tree-sitter)
 - **Nerd Font** (recommended: JetBrainsMono Nerd Font)
 - **Make** (optional tokenizer build outside Windows)
 - **ripgrep**

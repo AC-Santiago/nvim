@@ -34,6 +34,19 @@ Para revertir se montó una copia nueva de la configuración, el lockfile y los 
 
 El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde PowerShell en un equipo físico con Windows 11. La aceptación continúa en ese equipo con la edición, la terminal, el aprovisionamiento explícito y el smoke de Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
 
+### Preparar MSVC para Tree-sitter
+
+En el primer intento de `:TSInstall` en Windows se descargaron las cinco gramáticas. El paso `tree-sitter build` dio `program not found` al ejecutar `cl.exe`. La compilación sigue pendiente de verificación.
+
+Si falta el compilador, instala o modifica **Build Tools for Visual Studio** y selecciona **Desarrollo para el escritorio con C++**, con las herramientas MSVC x64/x86 y un SDK de Windows. Abre **x64 Native Tools Command Prompt for VS** desde Inicio y ejecuta `powershell -NoLogo` allí. Así PowerShell hereda las rutas del compilador, los encabezados y las bibliotecas del SDK. Si usas `NVIM_APPNAME`, vuelve a definir en esa sesión el valor del perfil que probaste. [Instalación de C y C++](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170) · [Entorno de compilación x64](https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170)
+
+```powershell
+Get-Command cl.exe -ErrorAction Stop
+nvim
+```
+
+En Neovim, comprueba que `:echo executable('cl.exe')` devuelve `1` y vuelve a ejecutar `:TSInstall markdown markdown_inline python typst lua`.
+
 ### Ejecutar la aceptación en PowerShell
 
 Si el perfil ya arranca, continúa desde la carpeta donde clonaste el repositorio en la misma sesión de PowerShell. Para repetir el arranque con un perfil limpio, usa los [requisitos del README](../../README.md#requirements) y el bloque siguiente. Guarda el commit y el hash del lockfile con los resultados.
