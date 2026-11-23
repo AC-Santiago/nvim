@@ -21,4 +21,4 @@
 
 Los resultados estructurados se guardaron en `.atl/linux-pre-modernization-2026-11-22.mttNjl/startup-results/`.
 
-Quedan pendientes el primer arranque desde PowerShell en Windows x64 y la instalación allí de los parsers faltantes. Las comprobaciones de la fase siguiente quedan en el [plan de verificación](./neovim-modernization.md#verification-plan).
+En este checkpoint quedaron pendientes el primer arranque desde PowerShell en Windows x64 y la instalación de los parsers faltantes. El registro posterior recoge el resultado en Windows. [Verificación y cierre](./neovim-modernization-linux-verification.md#cierre-egm)

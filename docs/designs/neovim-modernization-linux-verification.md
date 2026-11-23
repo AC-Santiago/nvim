@@ -1,4 +1,4 @@
-# Verificación de la modernización en Linux
+# Verificación de la modernización de Neovim
 
 22 de noviembre de 2026. Perfil desechable en Ubuntu 26.04.1 x86_64 con Neovim 0.12.5, Tree-sitter CLI 0.27.2, Python 3.14.4 y Node.js 24.20.0. El candidato usa NvChad v2.5 y retira tres adaptadores redundantes de Mason. [Línea base](./neovim-modernization-linux-baseline.md) · [Diseño](./neovim-modernization.md)
 
@@ -32,9 +32,9 @@ Para revertir se montó una copia nueva de la configuración, el lockfile y los 
 
 ## Aceptación de Windows 11
 
-El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde PowerShell en un equipo físico con Windows 11. La aceptación continúa en ese equipo con la edición, la terminal, el aprovisionamiento explícito y el smoke de Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
+El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde PowerShell en un equipo físico con Windows 11. La prueba continuó en ese equipo con el aprovisionamiento y los flujos de Markdown, Python, Typst y Lua. Go sirve para verificar el registro con un perfil optativo. SQL queda fuera de la aceptación. La conexión autenticada de Sidekick Next Edit Suggestions sigue siendo la condición para retirar el servidor nativo de Copilot. [Plan de verificación](./neovim-modernization.md#verification-plan)
 
-El intento siguiente del smoke completó la carga de los cinco parsers, la conexión de Markdown Oxide y la navegación entre notas. Se detuvo al esperar la conexión de Pyrefly. El equipo aún no tenía Python instalado, según informó el usuario. La verificación de Python, Tinymist y Lua LS mediante el smoke continúa pendiente.
+El intento siguiente del smoke completó la carga de los cinco parsers, la conexión de Markdown Oxide y la navegación entre notas. Ese intento se detuvo al esperar la conexión de Pyrefly. El equipo aún no tenía Python instalado, según informó el usuario. La confirmación final se recoge en el cierre.
 
 ### Preparar MSVC para Tree-sitter
 
@@ -86,3 +86,11 @@ python -m pip --version
 nvim --headless -i NONE -n -c "luafile tests/neovim_language_smoke.lua"
 $LASTEXITCODE
 ```
+
+## Cierre EGM
+
+El 23 de noviembre de 2026 el usuario confirmó que la configuración funcionaba en su equipo físico con Windows 11 después de resolver la arquitectura de Tree-sitter y el requisito de Python. Esa confirmación constituye la aceptación de los flujos principales en Windows. El registro conserva los intentos previos y distingue la confirmación final de las salidas de consola observadas.
+
+En Linux se volvieron a ejecutar las siete pruebas focalizadas y el smoke con los binarios reales sobre la configuración de `develop` en `0ab1a2b`. El smoke terminó con código `0` y confirmó Markdown, Python, Typst y Lua. La evidencia anterior de actualización y reversión queda registrada en sus secciones.
+
+Go sigue disponible como ejemplo optativo y tiene evidencia en Linux. El ejercicio de Go en Windows, la comprobación autenticada de Sidekick NES y los detalles de diagnóstico para fallos de procesos LSP quedan como seguimientos. [Informe de divergencias de cierre](../../2026-11-23_DRIFT_REPORT.md)

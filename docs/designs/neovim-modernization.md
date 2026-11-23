@@ -1,19 +1,19 @@
 # Neovim modernization for native Windows and Linux
 
 - **Author** — AC-Santiago
-- **Status** — Proposed
+- **Status** — Implemented. Required workflows accepted on 2026-11-23.
 - **Date** — 2026-11-21
-- **EGM review** — Stage 9 complete on 2026-11-22. Runtime acceptance pending.
+- **EGM review** — Stage 9 complete on 2026-11-22. Linux verification passed and the owner confirmed native Windows 11 operation. [Verification and closure](./neovim-modernization-linux-verification.md#cierre-egm)
 
 ## Overview
 
-Use one Neovim configuration with NvChad on native Windows x64 and Linux. The first release makes Markdown, Python, and Typst usable from a clean Windows installation and preserves those workflows on Linux. Adding a language should take one declaration for its supported tools, with room for tool-specific settings. [Approved concept brief](../../concepts_brief.md)
+Use one Neovim configuration with NvChad on native Windows x64 and Linux. The first release makes Markdown, Python, Typst, and Lua usable from a clean Windows installation and preserves those workflows on Linux. Adding a language should take one declaration for its supported tools, with room for tool-specific settings. [Approved concept brief](../../concepts_brief.md)
 
 ## The Problem
 
-The current configuration records which tools belong to a language, while plugin imports and per-language modules decide which tools actually run. Adding a language requires changes in several places, and successful installation alone does not show whether a tool can launch or attach to a buffer. [Language inventory](../../lua/configs/languages.lua) · [Plugin imports](../../lua/plugins/init.lua#L44)
+Before this modernization, configuration recorded which tools belonged to a language, while plugin imports and per-language modules decided which tools ran. Adding a language required changes in several places, and successful installation alone did not show whether a tool could launch or attach to a buffer. [Language inventory](../../lua/configs/languages.lua) · [Plugin imports](../../lua/plugins/init.lua)
 
-Several paths and plugin settings assume a Linux environment. Python discovery uses POSIX virtual environment paths and a POSIX root condition. Sidekick selects tmux explicitly, although the author now uses herdr. These assumptions can affect startup or workflows on an otherwise valid native Windows installation. [Python discovery](../../init.lua#L44) · [Sidekick configuration](../../lua/plugins/sidekick.lua#L31)
+The previous Python discovery used POSIX virtual environment paths and a POSIX root condition. Sidekick selected tmux explicitly, and the author had moved to herdr. These assumptions affected native Windows startup and workflows. [Startup configuration](../../init.lua) · [Sidekick configuration](../../lua/plugins/sidekick.lua)
 
 ## Goals
 
@@ -40,7 +40,7 @@ Several paths and plugin settings assume a Linux environment. Python discovery u
 
 - **Given** a clean Neovim profile on Windows x64, the documented native prerequisites, and a project path that may contain spaces.
 - **When** the user starts Neovim from PowerShell, opens and saves a file, and starts an editor terminal before running `:LanguageToolsInstall`.
-- **Then** the editor can open, save, and launch a terminal without WSL or tmux. The command reports found commands, verified launches where a probe is required, missing native prerequisites, and failed installs in Neovim messages. The user can reopen them with `:messages`. If all package requirements are met, it reports that no packages need installation. Markdown, Python, and Typst pass their named tool checks after provisioning completes.
+- **Then** the editor can open, save, and launch a terminal without WSL or tmux. The command reports found commands, verified launches where a probe is required, missing native prerequisites, and failed installs in Neovim messages. The user can reopen them with `:messages`. If all package requirements are met, it reports that no packages need installation. Markdown, Python, Typst, and Lua pass their named tool checks after provisioning completes.
 
 ### Add or disable a language
 
@@ -97,7 +97,7 @@ Keep provisioning and activation separate. Provisioning obtains declared tools f
 
 A resolved executable has been found and is eligible for use. That result is distinct from a verified launch. On Windows x64, run one asynchronous, noninteractive `--version` probe with a five-second timeout for each selected Typstyle path after checking it against the requesting workspace. Use the same verified absolute path in Conform. Each adapter evaluates its buffer conditions and workspace root. If an unprobed command fails on first use, its adapter reports the failing executable and a recovery step. [LSP integration](../../lua/utils/language_lsp.lua) · [Typstyle integration](../../lua/plugins/lang/typst/conform.lua)
 
-Enable language servers from the declarations rather than from the set of packages already installed. Once ready, a server becomes eligible to attach to matching buffers. Formatter and linter registration follows the same enabled filetypes. Disabling a language and restarting stops its registrations. Keep existing packages and parsers on disk during migration. Preserve shared tools used by other enabled languages. [LSP configuration](../../lua/configs/lsp.lua) · [Cleanup entry point](../../lua/utils/lang_loader.lua) · [Parser cleanup](../../lua/configs/treesitter.lua#L39)
+Enable language servers from the declarations rather than from the set of packages already installed. Once ready, a server becomes eligible to attach to matching buffers. Formatter and linter registration follows the same enabled filetypes. Disabling a language and restarting stops its registrations. Keep existing packages and parsers on disk during migration. Preserve shared tools used by other enabled languages. [LSP configuration](../../lua/configs/lsp.lua) · [Cleanup entry point](../../lua/utils/lang_loader.lua) · [Parser startup](../../lua/configs/treesitter.lua)
 
 #### User-initiated installation
 
