@@ -36,7 +36,7 @@ El usuario confirmó que Neovim arrancó y mostró el panel de NvChad desde Powe
 
 ### Preparar MSVC para Tree-sitter
 
-En el primer intento de `:TSInstall` en Windows se descargaron las cinco gramáticas. El paso `tree-sitter build` dio `program not found` al ejecutar `cl.exe`. La compilación sigue pendiente de verificación.
+En el primer intento de `:TSInstall` en Windows se descargaron las cinco gramáticas. El paso `tree-sitter build` dio `program not found` al ejecutar `cl.exe`. El reintento creó un `markdown.so` en el directorio de datos que Windows rechazó como aplicación Win32 inválida. El usuario confirmó que el parser incluido cargó con `--clean`. La arquitectura del archivo rechazado sigue por comprobar.
 
 Si falta el compilador, instala o modifica **Build Tools for Visual Studio** y selecciona **Desarrollo para el escritorio con C++**, con las herramientas MSVC x64/x86 y un SDK de Windows. Abre **x64 Native Tools Command Prompt for VS** desde Inicio y ejecuta `powershell -NoLogo` allí. Así PowerShell hereda las rutas del compilador, los encabezados y las bibliotecas del SDK. Si usas `NVIM_APPNAME`, vuelve a definir en esa sesión el valor del perfil que probaste. [Instalación de C y C++](https://learn.microsoft.com/en-us/cpp/build/vscpp-step-0-installation?view=msvc-170) · [Entorno de compilación x64](https://learn.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-170)
 
@@ -45,7 +45,9 @@ Get-Command cl.exe -ErrorAction Stop
 nvim
 ```
 
-En Neovim, comprueba que `:echo executable('cl.exe')` devuelve `1` y vuelve a ejecutar `:TSInstall markdown markdown_inline python typst lua`.
+En Neovim, comprueba que `:echo executable('cl.exe')` devuelve `1` e instala los parsers adicionales con `:TSInstall python typst`. Usa los parsers de Lua y Markdown incluidos con Neovim.
+
+Si el parser de Markdown carga con `--clean` y el perfil rechaza la copia de `nvim-data/site/parser/markdown.so`, ejecuta `:TSUninstall markdown` en el perfil y reinicia. El parser incluido vuelve a tener prioridad cuando se retira la copia instalada. [Resolución de parsers de Neovim](https://neovim.io/doc/user/treesitter/#treesitter-parsers)
 
 ### Ejecutar la aceptación en PowerShell
 
@@ -62,8 +64,8 @@ nvim
 ```
 
 1. Abre, guarda y ejecuta `:terminal` antes de instalar herramientas. Comprueba `:PythonPath` con y sin un entorno virtual.
-2. Prepara el [Typstyle x64 oficial](../README_LANGUAGE_SYSTEM.md#ejecutables-externos-y-typstyle-en-windows). Ejecuta `:TSInstall markdown markdown_inline python typst lua` y `:LanguageToolsInstall`. Comprueba en `:Mason` que se instalaron Lua LS, Markdown Oxide, Pyrefly, Ruff y Tinymist. Para un fallo, consulta `:MasonLog` y repite el comando después de corregirlo.
-3. Cuando terminen las instalaciones, cierra Neovim y ejecuta el smoke en la misma sesión de PowerShell. Registra el código de salida y cualquier fallo. Los casos de recibos y rutas se detallan en el plan de verificación.
+2. Prepara el [Typstyle x64 oficial](../README_LANGUAGE_SYSTEM.md#ejecutables-externos-y-typstyle-en-windows). Ejecuta `:TSInstall python typst` si faltan esos parsers y después `:LanguageToolsInstall`. Comprueba en `:Mason` que se instalaron Lua LS, Markdown Oxide, Pyrefly, Ruff y Tinymist. Para un fallo, consulta `:MasonLog` y repite el comando después de corregirlo.
+3. Cuando terminen las instalaciones, cierra Neovim y ejecuta el smoke en la misma sesión de PowerShell. El smoke comprueba primero que cargan los cinco parsers. Registra el código de salida y cualquier fallo. Los casos de recibos y rutas se detallan en el plan de verificación.
 
 ```powershell
 nvim --headless -i NONE -n -c "luafile tests/neovim_language_smoke.lua"

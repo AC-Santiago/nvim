@@ -72,6 +72,11 @@ end
 local function smoke()
     assert(vim.fn.exists(":LanguageToolsInstall") == 2, "Load the modernized config in a disposable profile.")
 
+    for _, language in ipairs({ "markdown", "markdown_inline", "python", "typst", "lua" }) do
+        local loaded, err = vim.treesitter.language.add(language)
+        assert(loaded, err)
+    end
+
     local marker = fixture("notes/.moxide.toml", {})
     vim.fn.mkdir(vim.fs.joinpath(root, "notes", ".git"), "p")
     local target = fixture("notes/target.md", { "# Target" })
