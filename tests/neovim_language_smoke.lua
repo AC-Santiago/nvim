@@ -72,10 +72,14 @@ end
 local function smoke()
     assert(vim.fn.exists(":LanguageToolsInstall") == 2, "Load the modernized config in a disposable profile.")
 
+    local parser_errors = {}
     for _, language in ipairs({ "markdown", "markdown_inline", "python", "typst", "lua" }) do
-        local loaded, err = vim.treesitter.language.add(language)
-        assert(loaded, err)
+        local ok, loaded, err = pcall(vim.treesitter.language.add, language)
+        if not ok or not loaded then
+            parser_errors[#parser_errors + 1] = ("%s: %s"):format(language, tostring(ok and err or loaded))
+        end
     end
+    assert(#parser_errors == 0, "Tree-sitter parser errors:\n" .. table.concat(parser_errors, "\n"))
 
     local marker = fixture("notes/.moxide.toml", {})
     vim.fn.mkdir(vim.fs.joinpath(root, "notes", ".git"), "p")

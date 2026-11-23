@@ -47,7 +47,7 @@ nvim
 
 En Neovim, comprueba que `:echo executable('cl.exe')` devuelve `1` e instala los parsers adicionales con `:TSInstall python typst`. Usa los parsers de Lua y Markdown incluidos con Neovim.
 
-Si el parser de Markdown carga con `--clean` y el perfil rechaza la copia de `nvim-data/site/parser/markdown.so`, ejecuta `:TSUninstall markdown` en el perfil y reinicia. El parser incluido vuelve a tener prioridad cuando se retira la copia instalada. [Resolución de parsers de Neovim](https://neovim.io/doc/user/treesitter/#treesitter-parsers)
+El perfil de Windows rechazó también `markdown_inline.so`. Si los parsers incluidos cargan con `--clean` y el perfil rechaza las copias de `nvim-data/site/parser`, retira ambas copias con `:TSUninstall markdown markdown_inline` y reinicia. Si Lua da el mismo error, confirma su copia incluida y recupera el parser con `:TSUninstall lua`. [Resolución de parsers de Neovim](https://neovim.io/doc/user/treesitter/#treesitter-parsers)
 
 ### Ejecutar la aceptación en PowerShell
 
@@ -65,7 +65,7 @@ nvim
 
 1. Abre, guarda y ejecuta `:terminal` antes de instalar herramientas. Comprueba `:PythonPath` con y sin un entorno virtual.
 2. Prepara el [Typstyle x64 oficial](../README_LANGUAGE_SYSTEM.md#ejecutables-externos-y-typstyle-en-windows). Ejecuta `:TSInstall python typst` si faltan esos parsers y después `:LanguageToolsInstall`. Comprueba en `:Mason` que se instalaron Lua LS, Markdown Oxide, Pyrefly, Ruff y Tinymist. Para un fallo, consulta `:MasonLog` y repite el comando después de corregirlo.
-3. Cuando terminen las instalaciones, cierra Neovim y ejecuta el smoke en la misma sesión de PowerShell. El smoke comprueba primero que cargan los cinco parsers. Registra el código de salida y cualquier fallo. Los casos de recibos y rutas se detallan en el plan de verificación.
+3. Cuando terminen las instalaciones, cierra Neovim y ejecuta el smoke en la misma sesión de PowerShell. El smoke comprueba primero los cinco parsers y enumera todos los fallos de carga antes de probar los LSP. Registra el código de salida y cualquier fallo. Los casos de recibos y rutas se detallan en el plan de verificación.
 
 ```powershell
 nvim --headless -i NONE -n -c "luafile tests/neovim_language_smoke.lua"
